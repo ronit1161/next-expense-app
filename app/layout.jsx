@@ -1,4 +1,5 @@
 import './globals.css';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
 export const viewport = {
   width: 'device-width',
@@ -39,12 +40,26 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ExpenseWise" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const stored = localStorage.getItem('expensewise-theme');
+                if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body
-        className="min-h-screen bg-[#EAE6DF] text-[#1E2025] antialiased selection:bg-[#0047FF] selection:text-white"
+        className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] antialiased selection:bg-[#0047FF] selection:text-white"
         suppressHydrationWarning
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

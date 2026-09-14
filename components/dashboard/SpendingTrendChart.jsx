@@ -33,7 +33,7 @@ export default function SpendingTrendChart({ data = [] }) {
           </defs>
           <XAxis
             dataKey="period"
-            stroke="#A3A3A3"
+            stroke="var(--text-muted)"
             fontSize={9}
             tickLine={false}
             axisLine={false}
@@ -49,7 +49,7 @@ export default function SpendingTrendChart({ data = [] }) {
             }}
           />
           <YAxis
-            stroke="#A3A3A3"
+            stroke="var(--text-muted)"
             fontSize={9}
             tickLine={false}
             axisLine={false}
@@ -60,14 +60,15 @@ export default function SpendingTrendChart({ data = [] }) {
           />
           <Tooltip
             formatter={(val) => [`₹${Number(val).toLocaleString()}`, 'Outflow']}
-            labelStyle={{ color: '#171717', fontWeight: 600, marginBottom: '2px', fontSize: '10px' }}
+            labelStyle={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: '2px', fontSize: '10px' }}
             contentStyle={{
-              backgroundColor: '#FFFFFF',
-              borderColor: '#E4E1D8',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+              backgroundColor: 'var(--bg-surface)',
+              color: 'var(--text-primary)',
+              borderColor: 'var(--border-subtle)',
+              borderRadius: '10px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
               fontSize: '11px',
-              padding: '6px 10px',
+              padding: '8px 12px',
             }}
           />
           <Area

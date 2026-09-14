@@ -5,14 +5,33 @@
     --bg-main: #EAE6DF;
     --bg-surface: #EAE6DF;
     --bg-subtle: #E5E1D9;
+    --bg-deep: #E2DDD4;
     --text-primary: #1E2025;
     --text-secondary: #6E727A;
     --text-muted: #9598A0;
+    --border-subtle: #D8D2C6;
     --accent-blue: #0047FF;
     --accent-blue-hover: #003BD6;
     --accent-blue-subtle: #DDE7FF;
     --neu-shadow-dark: rgba(168, 162, 149, 0.48);
     --neu-shadow-light: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Refined Midnight Obsidian & Titanium Cyber Theme */
+  .dark {
+    --bg-main: #0B0D13;
+    --bg-surface: #141721;
+    --bg-subtle: #1A1E2B;
+    --bg-deep: #0E1018;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --border-subtle: #222838;
+    --accent-blue: #3B82F6;
+    --accent-blue-hover: #60A5FA;
+    --accent-blue-subtle: rgba(59, 130, 246, 0.15);
+    --neu-shadow-dark: rgba(0, 0, 0, 0.88);
+    --neu-shadow-light: rgba(255, 255, 255, 0.05);
   }
 
   html {
@@ -31,52 +50,105 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 
 /* ==========================================================================
+   DYNAMIC TEXT & BORDER SHADE ADAPTATION
+   ========================================================================== */
+
+.text-charcoal {
+  color: var(--text-primary) !important;
+}
+
+.text-pencil {
+  color: var(--text-secondary) !important;
+}
+
+.dark thead {
+  background-color: rgba(26, 30, 43, 0.8) !important;
+  color: #94A3B8 !important;
+}
+
+.dark tr:hover {
+  background-color: rgba(26, 30, 43, 0.5) !important;
+}
+
+.dark option {
+  background-color: #141721 !important;
+  color: #F8FAFC !important;
+}
+
+/* ==========================================================================
    NEUMORPHISM (SOFT UI) TOKENS & UTILITIES
-   Dual 45-degree angle: Top-Left Highlight (#FFFFFF) + Bottom-Right Dark Shadow
+   Dual 45-degree angle: Light Paper vs. Dark Obsidian Slate
    ========================================================================== */
 
 /* Raised / Extruded Cushion Modules (Cards & Sections) */
 .neu-card,
 .journal-card {
-  background-color: #EAE6DF !important;
+  background-color: var(--bg-surface) !important;
   border: none !important;
   box-shadow: 7px 7px 16px rgba(168, 162, 149, 0.46), -7px -7px 16px rgba(255, 255, 255, 0.95);
   border-radius: 20px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .neu-card,
+.dark .journal-card {
+  box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.85), -4px -4px 14px rgba(255, 255, 255, 0.045);
 }
 
 .neu-card-sm,
 .journal-card-subtle {
-  background-color: #EAE6DF !important;
+  background-color: var(--bg-surface) !important;
   border: none !important;
   box-shadow: 4px 4px 10px rgba(168, 162, 149, 0.42), -4px -4px 10px rgba(255, 255, 255, 0.95);
   border-radius: 14px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .neu-card-sm,
+.dark .journal-card-subtle {
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.75), -3px -3px 8px rgba(255, 255, 255, 0.045);
 }
 
 /* Deep Recessed / Indented Containers (Observations, Notices) */
 .neu-inset {
-  background-color: #E5E1D9 !important;
+  background-color: var(--bg-subtle) !important;
   border: none !important;
   box-shadow: inset 4px 4px 9px rgba(168, 162, 149, 0.52), inset -4px -4px 9px rgba(255, 255, 255, 0.95);
   border-radius: 16px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .neu-inset {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.85), inset -3px -3px 8px rgba(255, 255, 255, 0.045);
 }
 
 .neu-inset-deep {
-  background-color: #E2DDD4 !important;
+  background-color: var(--bg-deep) !important;
   border: none !important;
   box-shadow: inset 5px 5px 12px rgba(168, 162, 149, 0.58), inset -5px -5px 12px rgba(255, 255, 255, 0.95);
   border-radius: 18px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .neu-inset-deep {
+  box-shadow: inset 5px 5px 14px rgba(0, 0, 0, 0.92), inset -4px -4px 10px rgba(255, 255, 255, 0.035);
 }
 
 /* Indented Slider & Progress Groove Tracks */
 .neu-groove {
-  background-color: #E2DDD4 !important;
+  background-color: var(--bg-deep) !important;
   border: none !important;
   box-shadow: inset 2px 2px 5px rgba(168, 162, 149, 0.55), inset -2px -2px 5px rgba(255, 255, 255, 0.95);
   border-radius: 9999px;
+}
+
+.dark .neu-groove {
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.88), inset -2px -2px 5px rgba(255, 255, 255, 0.035);
 }
 
 /* Molded Progress Fill */
@@ -85,15 +157,24 @@
   border-radius: 9999px;
 }
 
+.dark .neu-progress-fill {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7), -1px -1px 4px rgba(255, 255, 255, 0.06);
+}
+
 /* Neumorphic Input Fields */
 .neu-input,
 .journal-input {
-  background-color: #E6E2DA !important;
+  background-color: var(--bg-subtle) !important;
   border: none !important;
-  color: #1E2025;
+  color: var(--text-primary) !important;
   box-shadow: inset 3px 3px 7px rgba(168, 162, 149, 0.48), inset -3px -3px 7px rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.dark .neu-input,
+.dark .journal-input {
+  box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.85), inset -3px -3px 7px rgba(255, 255, 255, 0.045);
 }
 
 .neu-input:focus,
@@ -102,11 +183,16 @@
   box-shadow: inset 3px 3px 7px rgba(0, 71, 255, 0.28), inset -3px -3px 7px rgba(255, 255, 255, 0.95), 0 0 0 1.5px rgba(0, 71, 255, 0.3);
 }
 
+.dark .neu-input:focus,
+.dark .journal-input:focus {
+  box-shadow: inset 3px 3px 7px rgba(59, 130, 246, 0.35), inset -3px -3px 7px rgba(255, 255, 255, 0.045), 0 0 0 1.5px rgba(59, 130, 246, 0.45);
+}
+
 /* Tactile Chunky Buttons */
 .neu-btn,
 .journal-btn-secondary {
-  background-color: #EAE6DF !important;
-  color: #1E2025 !important;
+  background-color: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
   border: none !important;
   box-shadow: 5px 5px 12px rgba(168, 162, 149, 0.45), -5px -5px 12px rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -115,9 +201,19 @@
   cursor: pointer;
 }
 
+.dark .neu-btn,
+.dark .journal-btn-secondary {
+  box-shadow: 5px 5px 14px rgba(0, 0, 0, 0.8), -4px -4px 10px rgba(255, 255, 255, 0.045);
+}
+
 .neu-btn:hover,
 .journal-btn-secondary:hover {
   box-shadow: 6px 6px 14px rgba(168, 162, 149, 0.5), -6px -6px 14px rgba(255, 255, 255, 1);
+}
+
+.dark .neu-btn:hover,
+.dark .journal-btn-secondary:hover {
+  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.9), -5px -5px 12px rgba(255, 255, 255, 0.07);
 }
 
 .neu-btn:active,
@@ -125,6 +221,27 @@
 .journal-btn-secondary:active {
   box-shadow: inset 3px 3px 6px rgba(168, 162, 149, 0.55), inset -3px -3px 6px rgba(255, 255, 255, 0.95) !important;
   transform: translateY(1px);
+}
+
+.dark .neu-btn:active,
+.dark .neu-btn-active,
+.dark .journal-btn-secondary:active {
+  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.9), inset -3px -3px 6px rgba(255, 255, 255, 0.045) !important;
+}
+
+.neu-btn-sm {
+  background-color: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+  box-shadow: 3px 3px 8px rgba(168, 162, 149, 0.4), -3px -3px 8px rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.dark .neu-btn-sm {
+  box-shadow: 3px 3px 9px rgba(0, 0, 0, 0.75), -2px -2px 6px rgba(255, 255, 255, 0.045);
 }
 
 /* Electric Blue Floating Action Button / Primary Neumorphic Button */
@@ -140,10 +257,22 @@
   cursor: pointer;
 }
 
+.dark .neu-btn-blue,
+.dark .journal-btn-primary {
+  background-color: #2563EB !important;
+  box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.5), -4px -4px 12px rgba(255, 255, 255, 0.06);
+}
+
 .neu-btn-blue:hover,
 .journal-btn-primary:hover {
   background-color: #003BD6 !important;
   box-shadow: 6px 6px 18px rgba(0, 71, 255, 0.5), -6px -6px 18px rgba(255, 255, 255, 0.95);
+}
+
+.dark .neu-btn-blue:hover,
+.dark .journal-btn-primary:hover {
+  background-color: #1D4ED8 !important;
+  box-shadow: 6px 6px 20px rgba(37, 99, 235, 0.6), -5px -5px 15px rgba(255, 255, 255, 0.08);
 }
 
 .neu-btn-blue:active,
@@ -152,17 +281,31 @@
   transform: translateY(1px);
 }
 
+.dark .neu-btn-blue:active,
+.dark .journal-btn-primary:active {
+  box-shadow: inset 3px 3px 8px rgba(10, 30, 80, 0.85), inset -3px -3px 8px rgba(96, 165, 250, 0.5) !important;
+}
+
 /* Neumorphic Tab Bar Navigation */
 .neu-tabbar {
-  background-color: #EAE6DF;
+  background-color: var(--bg-surface) !important;
   box-shadow: 0 -6px 18px rgba(168, 162, 149, 0.38), 0 -1px 6px rgba(255, 255, 255, 0.9);
   border: none;
+  transition: background-color 0.25s ease;
+}
+
+.dark .neu-tabbar {
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.85), 0 -1px 4px rgba(255, 255, 255, 0.045);
 }
 
 .neu-tab-active {
-  background-color: #E4E0D7;
+  background-color: var(--bg-subtle);
   box-shadow: inset 3px 3px 6px rgba(168, 162, 149, 0.5), inset -3px -3px 6px rgba(255, 255, 255, 0.95);
   border-radius: 12px;
+}
+
+.dark .neu-tab-active {
+  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.85), inset -3px -3px 6px rgba(255, 255, 255, 0.045);
 }
 
 /* Journal Typography & Numbers */
@@ -175,7 +318,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #6E727A;
+  color: var(--text-secondary);
 }
 
 /* Custom Minimal Scrollbar */
@@ -184,14 +327,20 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #EAE6DF;
+  background: var(--bg-main);
 }
 ::-webkit-scrollbar-thumb {
   background: #C7C2B7;
   border-radius: 4px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #252B3A;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #B0AAA0;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #333B4F;
 }
 
 /* Hide scrollbar */
@@ -206,5 +355,3 @@
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
-
-

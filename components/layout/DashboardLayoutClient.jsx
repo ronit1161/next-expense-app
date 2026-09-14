@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { logoutAction } from '@/actions/auth-actions';
 import InstallPwaButton from '@/components/ui/InstallPwaButton';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function DashboardLayoutClient({ user, children }) {
   const pathname = usePathname();
@@ -46,15 +47,15 @@ export default function DashboardLayoutClient({ user, children }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#EAE6DF] text-[#1E2025] w-full max-w-full overflow-x-hidden">
+    <div className="flex min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] w-full max-w-full overflow-x-hidden">
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-[#EAE6DF] shadow-[6px_0_18px_rgba(168,160,146,0.32)] p-6 justify-between z-20">
+      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-[var(--bg-main)] shadow-[6px_0_18px_rgba(168,160,146,0.22)] dark:shadow-[6px_0_18px_rgba(0,0,0,0.5)] p-6 justify-between z-20 transition-colors">
         <div className="flex flex-col gap-7">
           {/* Brand Wordmark */}
           <div>
             <div className="flex items-center gap-2.5">
               <span className="h-3 w-3 rounded-full bg-[#0047FF] shadow-[0_0_8px_rgba(0,71,255,0.6)]"></span>
-              <span className="font-display font-bold tracking-tight text-lg text-[#1E2025]">
+              <span className="font-display font-bold tracking-tight text-lg text-charcoal">
                 ExpenseWise
               </span>
             </div>
@@ -113,7 +114,7 @@ export default function DashboardLayoutClient({ user, children }) {
                 />
                 <span className="flex items-center justify-between flex-1">
                   Admin Portal
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700 font-bold border border-purple-200">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold border border-purple-200 dark:border-purple-800">
                     STAFF
                   </span>
                 </span>
@@ -122,8 +123,11 @@ export default function DashboardLayoutClient({ user, children }) {
           </nav>
         </div>
 
-        {/* User Account & Sign Out */}
-        <div className="pt-4 flex flex-col gap-3">
+        {/* User Account & Theme Toggle */}
+        <div className="pt-4 flex flex-col gap-2.5">
+          {/* Theme Switcher in Sidebar */}
+          <ThemeToggle variant="sidebar" />
+
           {/* Desktop Install App Trigger (Hidden in standalone app) */}
           <InstallPwaButton className="w-full justify-center" />
 
@@ -152,9 +156,9 @@ export default function DashboardLayoutClient({ user, children }) {
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex flex-1 flex-col md:pl-64 min-h-screen w-full min-w-0 max-w-full overflow-x-hidden bg-[#EAE6DF]">
+      <div className="flex flex-1 flex-col md:pl-64 min-h-screen w-full min-w-0 max-w-full overflow-x-hidden bg-[var(--bg-main)] transition-colors">
         {/* MOBILE TOP BAR (Neumorphic Header) */}
-        <header className="flex md:hidden h-14 items-center justify-between px-4 bg-[#EAE6DF] shadow-[0_4px_12px_rgba(168,160,146,0.22)] sticky top-0 z-30 w-full min-w-0">
+        <header className="flex md:hidden h-14 items-center justify-between px-4 bg-[var(--bg-main)] shadow-[0_4px_12px_rgba(168,160,146,0.22)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.5)] sticky top-0 z-30 w-full min-w-0 transition-colors">
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-[#0047FF] shadow-[0_0_6px_rgba(0,71,255,0.5)]"></span>
             <span className="font-display font-bold text-sm tracking-tight text-charcoal">
@@ -163,17 +167,20 @@ export default function DashboardLayoutClient({ user, children }) {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Header Theme Switcher */}
+            <ThemeToggle variant="header" />
+
             {/* Mobile Header Install App Trigger (Hidden in standalone app) */}
             <InstallPwaButton variant="header" />
 
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#EAE6DF] text-charcoal neu-card-sm text-[11px] font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--bg-surface)] text-charcoal neu-card-sm text-[11px] font-bold">
               {user?.name ? user.name[0].toUpperCase() : 'U'}
             </div>
           </div>
         </header>
 
         {/* SCROLLING PAGE BODY */}
-        <main className="flex-1 px-4 py-5 md:px-10 md:py-8 max-w-5xl w-full min-w-0 mx-auto pb-24 md:pb-12 bg-[#EAE6DF]">
+        <main className="flex-1 px-4 py-5 md:px-10 md:py-8 max-w-5xl w-full min-w-0 mx-auto pb-24 md:pb-12 bg-[var(--bg-main)] transition-colors">
           {children}
         </main>
       </div>
@@ -204,7 +211,7 @@ export default function DashboardLayoutClient({ user, children }) {
         <button
           onClick={handleQuickAdd}
           aria-label="Record Expense"
-          className="neu-btn-blue flex h-13 w-13 items-center justify-center rounded-full text-white active:scale-95 transition-all -mt-6 border-4 border-[#EAE6DF] cursor-pointer"
+          className="neu-btn-blue flex h-13 w-13 items-center justify-center rounded-full text-white active:scale-95 transition-all -mt-6 border-4 border-[var(--bg-main)] cursor-pointer"
         >
           <Plus className="h-6 w-6 stroke-[2.5]" />
         </button>
@@ -222,7 +229,7 @@ export default function DashboardLayoutClient({ user, children }) {
         <button
           onClick={() => setMoreDrawerOpen(true)}
           className={`flex flex-col items-center gap-1 text-[10px] font-semibold py-1 px-3 cursor-pointer transition-colors ${
-            pathname === '/debts' || pathname === '/reports'
+            pathname === '/debts' || pathname === '/reports' || pathname.startsWith('/admin')
               ? 'text-[#0047FF] font-bold'
               : 'text-pencil'
           }`}
@@ -234,11 +241,11 @@ export default function DashboardLayoutClient({ user, children }) {
 
       {/* MOBILE MORE ACTIONS DRAWER */}
       {moreDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-xs md:hidden animate-fadeIn">
-          <div className="w-full bg-[#EAE6DF] rounded-t-3xl p-6 shadow-2xl space-y-4 animate-scaleIn">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs md:hidden animate-fadeIn">
+          <div className="w-full bg-[var(--bg-surface)] rounded-t-3xl p-6 shadow-2xl space-y-4 animate-scaleIn border-t border-[#D8D2C6]/40 dark:border-[#252A36]">
             <div className="flex items-center justify-between pb-3">
               <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                Additional Ledgers
+                Additional Ledgers & Settings
               </span>
               <button
                 onClick={() => setMoreDrawerOpen(false)}
@@ -273,14 +280,17 @@ export default function DashboardLayoutClient({ user, children }) {
                 <Link
                   href="/admin"
                   onClick={() => setMoreDrawerOpen(false)}
-                  className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98] border border-purple-300/40"
+                  className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98] border border-purple-300/40 dark:border-purple-700/40"
                 >
-                  <ShieldAlert className="h-5 w-5 text-purple-600" />
-                  <span className="text-xs font-bold text-purple-700">Admin Portal</span>
-                  <span className="text-[9px] text-purple-500">System metrics</span>
+                  <ShieldAlert className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                  <span className="text-xs font-bold text-purple-700 dark:text-purple-300">Admin Portal</span>
+                  <span className="text-[9px] text-purple-500 dark:text-purple-400">System metrics</span>
                 </Link>
               )}
             </div>
+
+            {/* In-Drawer Theme Switcher */}
+            <ThemeToggle variant="sidebar" />
 
             {/* In-Drawer Install App Action */}
             <InstallPwaButton className="w-full justify-center py-2.5" />

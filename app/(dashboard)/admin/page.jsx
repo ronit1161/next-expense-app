@@ -791,10 +791,11 @@ export default function AdminPage() {
                       />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#EAE6DF',
+                          backgroundColor: 'var(--bg-surface)',
+                          color: 'var(--text-primary)',
                           borderRadius: '12px',
-                          border: '1px solid #D8D2C6',
-                          boxShadow: '4px 4px 12px rgba(168,160,146,0.4)',
+                          border: '1px solid var(--border-subtle)',
+                          boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                         }}
                         formatter={(val) => [formatCurrency(val), 'Platform Spend']}
                       />
@@ -842,9 +843,11 @@ export default function AdminPage() {
                         <Tooltip
                           formatter={(val) => [formatCurrency(val), 'Volume']}
                           contentStyle={{
-                            backgroundColor: '#EAE6DF',
+                            backgroundColor: 'var(--bg-surface)',
+                            color: 'var(--text-primary)',
                             borderRadius: '12px',
-                            border: '1px solid #D8D2C6',
+                            border: '1px solid var(--border-subtle)',
+                            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                           }}
                         />
                       </PieChart>
@@ -899,9 +902,11 @@ export default function AdminPage() {
                         <Tooltip
                           formatter={(val) => [formatCurrency(val), 'Total Volume']}
                           contentStyle={{
-                            backgroundColor: '#EAE6DF',
+                            backgroundColor: 'var(--bg-surface)',
+                            color: 'var(--text-primary)',
                             borderRadius: '12px',
-                            border: '1px solid #D8D2C6',
+                            border: '1px solid var(--border-subtle)',
+                            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                           }}
                         />
                         <Bar dataKey="amount" radius={[0, 6, 6, 0]}>
