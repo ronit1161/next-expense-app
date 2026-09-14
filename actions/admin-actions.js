@@ -420,3 +420,353 @@ export async function deleteCategoryAction(categoryId) {
     return { success: false, error: error.message || 'Failed to delete category.' };
   }
 }
+
+/**
+ * Get Platform-Wide Analytics & Macro Trends
+ */
+export async function getAdminAnalyticsAction() {
+  try {
+    await requireAdmin();
+
+    const now = new Date();
+    // 6-Month Trend Window
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+
+    const [expenses, allUsers, categories] = await Promise.all([
+      prisma.expense.findMany({
+        where: {
+          expenseDate: { gte: sixMonthsAgo },
+        },
+        include: {
+          category: {
+            select: { id: true, name: true, color: true },
+          },
+        },
+        orderBy: { expenseDate: 'asc' },
+      }),
+      prisma.user.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+          expenses: {
+            select: { expenseDate: true },
+            orderBy: { expenseDate: 'desc' },
+            take: 1,
+          },
+        },
+      }),
+      prisma.category.findMany({
+        select: { id: true, name: true, color: true },
+      }),
+    ]);
+
+    // 1. Monthly Gross Volume Trend (Last 6 Months)
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthlyMap = {};
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${monthNames[d.getMonth()]} ${d.getFullYear().toString().slice(-2)}`;
+      monthlyMap[key] = { month: key, grossSpend: 0, transactionsCount: 0 };
+    }
+
+    expenses.forEach((e) => {
+      const d = new Date(e.expenseDate);
+      const key = `${monthNames[d.getMonth()]} ${d.getFullYear().toString().slice(-2)}`;
+      if (monthlyMap[key]) {
+        monthlyMap[key].grossSpend += Number(e.amount);
+        monthlyMap[key].transactionsCount += 1;
+      }
+    });
+
+    const monthlyTrend = Object.values(monthlyMap);
+
+    // 2. Category Spend Breakdown
+    const catMap = {};
+    categories.forEach((c) => {
+      catMap[c.name] = { name: c.name, amount: 0, count: 0, color: c.color || '#0047FF' };
+    });
+
+    expenses.forEach((e) => {
+      const cName = e.category?.name || 'Other';
+      if (!catMap[cName]) {
+        catMap[cName] = { name: cName, amount: 0, count: 0, color: e.category?.color || '#0047FF' };
+      }
+      catMap[cName].amount += Number(e.amount);
+      catMap[cName].count += 1;
+    });
+
+    const categoryDistribution = Object.values(catMap)
+      .filter((c) => c.amount > 0)
+      .sort((a, b) => b.amount - a.amount);
+
+    // 3. Payment Method Distribution
+    const paymentMap = {
+      UPI: { name: 'UPI', amount: 0, count: 0, fill: '#0047FF' },
+      CASH: { name: 'Cash', amount: 0, count: 0, fill: '#10B981' },
+      CREDIT_CARD: { name: 'Credit Card', amount: 0, count: 0, fill: '#8B5CF6' },
+      DEBIT_CARD: { name: 'Debit Card', amount: 0, count: 0, fill: '#F59E0B' },
+      NET_BANKING: { name: 'Net Banking', amount: 0, count: 0, fill: '#EC4899' },
+      OTHER: { name: 'Other', amount: 0, count: 0, fill: '#6B7280' },
+    };
+
+    expenses.forEach((e) => {
+      const method = e.paymentMethod || 'OTHER';
+      if (paymentMap[method]) {
+        paymentMap[method].amount += Number(e.amount);
+        paymentMap[method].count += 1;
+      } else {
+        paymentMap.OTHER.amount += Number(e.amount);
+        paymentMap.OTHER.count += 1;
+      }
+    });
+
+    const paymentDistribution = Object.values(paymentMap).filter((p) => p.count > 0);
+
+    // 4. User Activity Tiers (Active < 7d, Occasional < 30d, Dormant > 30d)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    let activeUsers = 0;
+    let occasionalUsers = 0;
+    let dormantUsers = 0;
+
+    allUsers.forEach((u) => {
+      if (u.expenses && u.expenses.length > 0) {
+        const lastDate = new Date(u.expenses[0].expenseDate);
+        if (lastDate >= sevenDaysAgo) {
+          activeUsers++;
+        } else if (lastDate >= thirtyDaysAgo) {
+          occasionalUsers++;
+        } else {
+          dormantUsers++;
+        }
+      } else {
+        dormantUsers++;
+      }
+    });
+
+    return {
+      success: true,
+      analytics: {
+        monthlyTrend,
+        categoryDistribution,
+        paymentDistribution,
+        userTiers: {
+          total: allUsers.length,
+          active: activeUsers,
+          occasional: occasionalUsers,
+          dormant: dormantUsers,
+        },
+      },
+    };
+  } catch (error) {
+    console.error('Admin analytics error:', error);
+    return { success: false, error: error.message || 'Failed to fetch platform analytics.' };
+  }
+}
+
+/**
+ * Get Database & System Health Diagnostics
+ */
+export async function getAdminSystemHealthAction() {
+  try {
+    await requireAdmin();
+
+    const startTime = Date.now();
+    // Test Neon PostgreSQL connection ping & query latency
+    const pingResult = await prisma.$queryRaw`SELECT 1 as ping`;
+    const latencyMs = Date.now() - startTime;
+
+    const [
+      usersCount,
+      expensesCount,
+      budgetsCount,
+      loansCount,
+      settlementsCount,
+      categoriesCount,
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.expense.count(),
+      prisma.budget.count(),
+      prisma.loan.count(),
+      prisma.loanSettlement.count(),
+      prisma.category.count(),
+    ]);
+
+    // Memory usage info in MB
+    const memory = process.memoryUsage ? process.memoryUsage() : null;
+    const memoryUsage = memory
+      ? {
+          heapUsedMb: (memory.heapUsed / 1024 / 1024).toFixed(1),
+          heapTotalMb: (memory.heapTotal / 1024 / 1024).toFixed(1),
+          rssMb: (memory.rss / 1024 / 1024).toFixed(1),
+        }
+      : null;
+
+    return {
+      success: true,
+      health: {
+        status: latencyMs < 500 ? 'HEALTHY' : 'DEGRADED',
+        databaseLatencyMs: latencyMs,
+        dbConnected: Boolean(pingResult),
+        timestamp: new Date().toISOString(),
+        tableCounts: {
+          users: usersCount,
+          expenses: expensesCount,
+          budgets: budgetsCount,
+          loans: loansCount,
+          settlements: settlementsCount,
+          categories: categoriesCount,
+          totalRecords:
+            usersCount +
+            expensesCount +
+            budgetsCount +
+            loansCount +
+            settlementsCount +
+            categoriesCount,
+        },
+        runtime: {
+          nodeVersion: process.version,
+          environment: process.env.NODE_ENV || 'development',
+          uptimeSeconds: Math.floor(process.uptime ? process.uptime() : 0),
+          memoryUsage,
+        },
+      },
+    };
+  } catch (error) {
+    console.error('System health error:', error);
+    return {
+      success: false,
+      error: error.message || 'Failed to perform system health check.',
+    };
+  }
+}
+
+/**
+ * Export Full Platform Snapshot (JSON Backup)
+ */
+export async function getAdminBackupSnapshotAction() {
+  try {
+    await requireAdmin();
+
+    const [users, expenses, budgets, loans, categories] = await Promise.all([
+      prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+        },
+      }),
+      prisma.expense.findMany({
+        include: {
+          category: { select: { id: true, name: true } },
+          user: { select: { email: true, name: true } },
+        },
+      }),
+      prisma.budget.findMany({
+        include: {
+          category: { select: { id: true, name: true } },
+          user: { select: { email: true } },
+        },
+      }),
+      prisma.loan.findMany({
+        include: {
+          contact: { select: { name: true, phone: true } },
+          settlements: true,
+          user: { select: { email: true } },
+        },
+      }),
+      prisma.category.findMany(),
+    ]);
+
+    const backupData = {
+      meta: {
+        exportDate: new Date().toISOString(),
+        exportedBy: 'ExpenseWise Admin Portal',
+        appVersion: '1.0.0',
+        totalUsers: users.length,
+        totalExpenses: expenses.length,
+      },
+      categories,
+      users,
+      expenses,
+      budgets,
+      loans,
+    };
+
+    return {
+      success: true,
+      backupData,
+    };
+  } catch (error) {
+    console.error('Admin backup snapshot error:', error);
+    return { success: false, error: error.message || 'Failed to generate backup snapshot.' };
+  }
+}
+
+/**
+ * Generate Master Platform CSV Data
+ */
+export async function getAdminMasterCsvAction({ startDate, endDate } = {}) {
+  try {
+    await requireAdmin();
+
+    const where = {};
+    if (startDate && endDate) {
+      where.expenseDate = {
+        gte: new Date(startDate),
+        lte: new Date(endDate),
+      };
+    }
+
+    const expenses = await prisma.expense.findMany({
+      where,
+      include: {
+        user: { select: { name: true, email: true } },
+        category: { select: { name: true } },
+      },
+      orderBy: { expenseDate: 'desc' },
+      take: 5000,
+    });
+
+    const headers = [
+      'Transaction ID',
+      'Date',
+      'User Name',
+      'User Email',
+      'Category',
+      'Amount (INR)',
+      'Payment Method',
+      'Description',
+      'Tags',
+      'Created At',
+    ];
+
+    const rows = expenses.map((e) => [
+      e.id,
+      e.expenseDate.toISOString().split('T')[0],
+      `"${(e.user.name || '').replace(/"/g, '""')}"`,
+      `"${(e.user.email || '').replace(/"/g, '""')}"`,
+      `"${(e.category.name || '').replace(/"/g, '""')}"`,
+      Number(e.amount).toFixed(2),
+      e.paymentMethod,
+      `"${(e.description || '').replace(/"/g, '""')}"`,
+      `"${(e.tags || []).join('; ')}"`,
+      e.createdAt.toISOString(),
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+
+    return {
+      success: true,
+      csvContent,
+      count: expenses.length,
+    };
+  } catch (error) {
+    console.error('Admin master CSV error:', error);
+    return { success: false, error: error.message || 'Failed to generate master CSV.' };
+  }
+}
