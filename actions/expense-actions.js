@@ -263,3 +263,54 @@ export async function deleteExpenseAction(id) {
     return { success: false, error: error.message || 'Failed to delete expense' };
   }
 }
+
+export async function createBatchExpensesAction(expensesList) {
+  try {
+    const user = await requireAuth();
+
+    if (!Array.isArray(expensesList) || expensesList.length === 0) {
+      return { success: false, error: 'No expenses provided for batch creation.' };
+    }
+
+    const recordsToCreate = expensesList.map((item) => {
+      const validated = expenseSchema.parse({
+        categoryId: Number(item.categoryId),
+        amount: Number(item.amount),
+        description: item.description || 'Auto-Parsed Transaction',
+        paymentMethod: item.paymentMethod || 'UPI',
+        expenseDate: item.expenseDate || new Date().toISOString().split('T')[0],
+      });
+
+      return {
+        userId: user.id,
+        categoryId: validated.categoryId,
+        amount: validated.amount,
+        description: validated.description,
+        paymentMethod: validated.paymentMethod,
+        expenseDate: new Date(validated.expenseDate),
+      };
+    });
+
+    const result = await prisma.expense.createMany({
+      data: recordsToCreate,
+    });
+
+    revalidatePath('/dashboard');
+    revalidatePath('/expenses');
+    revalidatePath('/budgets');
+    revalidatePath('/reports');
+
+    return {
+      success: true,
+      count: result.count,
+      message: `Successfully logged ${result.count} transaction${result.count > 1 ? 's' : ''}.`,
+    };
+  } catch (error) {
+    console.error('Batch expense creation error:', error);
+    return {
+      success: false,
+      error: error.errors?.[0]?.message || error.message || 'Failed to create batch expenses.',
+    };
+  }
+}
+

@@ -12,8 +12,10 @@ import {
   CreditCard,
   SlidersHorizontal,
   RotateCcw,
+  Sparkles,
 } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
+import SmsParserModal from '@/components/expenses/SmsParserModal';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import {
   getExpensesAction,
@@ -50,6 +52,7 @@ export default function ExpensesPage() {
 
   // Form Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [editingExpenseId, setEditingExpenseId] = useState(null);
   const [amount, setAmount] = useState('');
@@ -248,15 +251,27 @@ export default function ExpensesPage() {
           </h1>
         </div>
 
-        {/* Quick Add Button - Accessible on both mobile and desktop */}
-        <button
-          onClick={openAddModal}
-          className="neu-btn-blue inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs font-semibold text-white cursor-pointer shrink-0 min-h-[36px]"
-        >
-          <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">New Entry</span>
-          <span className="sm:hidden">Add</span>
-        </button>
+        {/* Action Buttons: Smart SMS Parser + New Entry */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setIsSmsModalOpen(true)}
+            className="neu-btn inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs font-bold text-[#0047FF] hover:text-[#0038D1] cursor-pointer min-h-[36px]"
+            title="Auto-detect and log expenses from bank SMS or UPI alerts"
+          >
+            <Sparkles className="h-4 w-4" />
+            <span className="hidden sm:inline">Paste SMS / UPI</span>
+            <span className="sm:hidden">SMS</span>
+          </button>
+
+          <button
+            onClick={openAddModal}
+            className="neu-btn-blue inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs font-semibold text-white cursor-pointer shrink-0 min-h-[36px]"
+          >
+            <Plus className="h-4 w-4" />
+            <span className="hidden sm:inline">New Entry</span>
+            <span className="sm:hidden">Add</span>
+          </button>
+        </div>
       </div>
 
       {/* FEEDBACK BANNERS */}
@@ -672,6 +687,14 @@ export default function ExpensesPage() {
           </div>
         </div>
       )}
+
+      {/* 6. SMART SMS & UPI PARSER MODAL */}
+      <SmsParserModal
+        isOpen={isSmsModalOpen}
+        onClose={() => setIsSmsModalOpen(false)}
+        categories={categories}
+        onBatchCreated={fetchExpenses}
+      />
     </div>
   );
 }
