@@ -13,25 +13,24 @@
     --accent-blue: #0047FF;
     --accent-blue-hover: #003BD6;
     --accent-blue-subtle: #DDE7FF;
-    --neu-shadow-dark: rgba(168, 162, 149, 0.48);
-    --neu-shadow-light: rgba(255, 255, 255, 0.95);
   }
 
-  /* Refined Midnight Obsidian & Titanium Cyber Theme */
+  /* ==========================================================================
+     LINEAR / VERCEL INSPIRED SLEEK MODERN DARK THEME
+     Deep Onyx Canvas (#090A0F) + Crisp Glass Surface (#12151F) + Top Light Rim
+     ========================================================================== */
   .dark {
-    --bg-main: #0B0D13;
-    --bg-surface: #141721;
-    --bg-subtle: #1A1E2B;
-    --bg-deep: #0E1018;
-    --text-primary: #F8FAFC;
+    --bg-main: #090A0F;
+    --bg-surface: #12151F;
+    --bg-subtle: #171B27;
+    --bg-deep: #0D0F17;
+    --text-primary: #FFFFFF;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
-    --border-subtle: #222838;
+    --border-subtle: rgba(255, 255, 255, 0.08);
     --accent-blue: #3B82F6;
     --accent-blue-hover: #60A5FA;
     --accent-blue-subtle: rgba(59, 130, 246, 0.15);
-    --neu-shadow-dark: rgba(0, 0, 0, 0.88);
-    --neu-shadow-light: rgba(255, 255, 255, 0.05);
   }
 
   html {
@@ -55,7 +54,7 @@
 }
 
 /* ==========================================================================
-   DYNAMIC TEXT & BORDER SHADE ADAPTATION
+   DYNAMIC TEXT & COMPONENT ADAPTATIONS FOR DARK MODE
    ========================================================================== */
 
 .text-charcoal {
@@ -66,44 +65,105 @@
   color: var(--text-secondary) !important;
 }
 
-.dark thead {
-  background-color: rgba(26, 30, 43, 0.8) !important;
-  color: #94A3B8 !important;
+/* Dark Mode Glowing Status Pills & Badges */
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #60A5FA !important;
+  border: 1px solid rgba(59, 130, 246, 0.25) !important;
 }
 
-.dark tr:hover {
-  background-color: rgba(26, 30, 43, 0.5) !important;
+.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  color: #34D399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+.dark .bg-purple-50 {
+  background-color: rgba(168, 85, 247, 0.12) !important;
+  color: #C084FC !important;
+  border: 1px solid rgba(168, 85, 247, 0.25) !important;
+}
+
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #FBBF24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.12) !important;
+  color: #FB7185 !important;
+  border: 1px solid rgba(244, 63, 94, 0.25) !important;
+}
+
+.dark .bg-purple-100 {
+  background-color: rgba(147, 51, 234, 0.18) !important;
+  color: #D8B4FE !important;
+  border-color: rgba(147, 51, 234, 0.3) !important;
+}
+
+.dark .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.18) !important;
+  color: #6EE7B7 !important;
+}
+
+.dark .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.18) !important;
+  color: #FDE68A !important;
+}
+
+.dark .bg-rose-100 {
+  background-color: rgba(244, 63, 94, 0.18) !important;
+  color: #FDA4AF !important;
+}
+
+/* Dark Table Styles */
+.dark table {
+  color: #E2E8F0;
+}
+
+.dark thead tr {
+  background-color: #171B27 !important;
+  color: #94A3B8 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark tbody tr {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.dark tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
 }
 
 .dark option {
-  background-color: #141721 !important;
-  color: #F8FAFC !important;
+  background-color: #12151F !important;
+  color: #FFFFFF !important;
 }
 
 /* ==========================================================================
-   NEUMORPHISM (SOFT UI) TOKENS & UTILITIES
-   Dual 45-degree angle: Light Paper vs. Dark Obsidian Slate
+   CARDS & SURFACES (DUAL LIGHT / DARK ENGINE)
    ========================================================================== */
 
-/* Raised / Extruded Cushion Modules (Cards & Sections) */
+/* Raised Cushion Modules (Cards & Sections) */
 .neu-card,
 .journal-card {
   background-color: var(--bg-surface) !important;
-  border: none !important;
   box-shadow: 7px 7px 16px rgba(168, 162, 149, 0.46), -7px -7px 16px rgba(255, 255, 255, 0.95);
   border-radius: 20px;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .dark .neu-card,
 .dark .journal-card {
-  box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.85), -4px -4px 14px rgba(255, 255, 255, 0.045);
+  background: linear-gradient(180deg, #151824 0%, #11131C 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.09) !important;
 }
 
 .neu-card-sm,
 .journal-card-subtle {
   background-color: var(--bg-surface) !important;
-  border: none !important;
   box-shadow: 4px 4px 10px rgba(168, 162, 149, 0.42), -4px -4px 10px rgba(255, 255, 255, 0.95);
   border-radius: 14px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -111,44 +171,49 @@
 
 .dark .neu-card-sm,
 .dark .journal-card-subtle {
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.75), -3px -3px 8px rgba(255, 255, 255, 0.045);
+  background: #141722 !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Deep Recessed / Indented Containers (Observations, Notices) */
+/* Recessed Insets (Inputs, Tracks, Group Holders) */
 .neu-inset {
   background-color: var(--bg-subtle) !important;
-  border: none !important;
   box-shadow: inset 4px 4px 9px rgba(168, 162, 149, 0.52), inset -4px -4px 9px rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dark .neu-inset {
-  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.85), inset -3px -3px 8px rgba(255, 255, 255, 0.045);
+  background: #0E1018 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6) !important;
 }
 
 .neu-inset-deep {
   background-color: var(--bg-deep) !important;
-  border: none !important;
   box-shadow: inset 5px 5px 12px rgba(168, 162, 149, 0.58), inset -5px -5px 12px rgba(255, 255, 255, 0.95);
   border-radius: 18px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dark .neu-inset-deep {
-  box-shadow: inset 5px 5px 14px rgba(0, 0, 0, 0.92), inset -4px -4px 10px rgba(255, 255, 255, 0.035);
+  background: #090B10 !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Indented Slider & Progress Groove Tracks */
+/* Grooves & Sliders */
 .neu-groove {
   background-color: var(--bg-deep) !important;
-  border: none !important;
   box-shadow: inset 2px 2px 5px rgba(168, 162, 149, 0.55), inset -2px -2px 5px rgba(255, 255, 255, 0.95);
   border-radius: 9999px;
 }
 
 .dark .neu-groove {
-  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.88), inset -2px -2px 5px rgba(255, 255, 255, 0.035);
+  background: #090B10 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7) !important;
 }
 
 /* Molded Progress Fill */
@@ -158,7 +223,7 @@
 }
 
 .dark .neu-progress-fill {
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7), -1px -1px 4px rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
 }
 
 /* Neumorphic Input Fields */
@@ -169,12 +234,15 @@
   color: var(--text-primary) !important;
   box-shadow: inset 3px 3px 7px rgba(168, 162, 149, 0.48), inset -3px -3px 7px rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .dark .neu-input,
 .dark .journal-input {
-  box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.85), inset -3px -3px 7px rgba(255, 255, 255, 0.045);
+  background: #0E1018 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
 .neu-input:focus,
@@ -185,10 +253,11 @@
 
 .dark .neu-input:focus,
 .dark .journal-input:focus {
-  box-shadow: inset 3px 3px 7px rgba(59, 130, 246, 0.35), inset -3px -3px 7px rgba(255, 255, 255, 0.045), 0 0 0 1.5px rgba(59, 130, 246, 0.45);
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 1px #3B82F6, 0 0 14px rgba(59, 130, 246, 0.3) !important;
 }
 
-/* Tactile Chunky Buttons */
+/* Secondary & Action Buttons */
 .neu-btn,
 .journal-btn-secondary {
   background-color: var(--bg-surface) !important;
@@ -203,7 +272,10 @@
 
 .dark .neu-btn,
 .dark .journal-btn-secondary {
-  box-shadow: 5px 5px 14px rgba(0, 0, 0, 0.8), -4px -4px 10px rgba(255, 255, 255, 0.045);
+  background: linear-gradient(180deg, #181C2A 0%, #131622 100%) !important;
+  color: #F8FAFC !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
 .neu-btn:hover,
@@ -213,7 +285,9 @@
 
 .dark .neu-btn:hover,
 .dark .journal-btn-secondary:hover {
-  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.9), -5px -5px 12px rgba(255, 255, 255, 0.07);
+  background: linear-gradient(180deg, #1E2335 0%, #161A28 100%) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 .neu-btn:active,
@@ -226,13 +300,13 @@
 .dark .neu-btn:active,
 .dark .neu-btn-active,
 .dark .journal-btn-secondary:active {
-  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.9), inset -3px -3px 6px rgba(255, 255, 255, 0.045) !important;
+  background: #0F121C !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7) !important;
 }
 
 .neu-btn-sm {
   background-color: var(--bg-surface) !important;
   color: var(--text-primary) !important;
-  border: none !important;
   box-shadow: 3px 3px 8px rgba(168, 162, 149, 0.4), -3px -3px 8px rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   font-weight: 600;
@@ -241,15 +315,17 @@
 }
 
 .dark .neu-btn-sm {
-  box-shadow: 3px 3px 9px rgba(0, 0, 0, 0.75), -2px -2px 6px rgba(255, 255, 255, 0.045);
+  background: #161926 !important;
+  color: #F8FAFC !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Electric Blue Floating Action Button / Primary Neumorphic Button */
+/* Primary Hero Accent Button */
 .neu-btn-blue,
 .journal-btn-primary {
   background-color: #0047FF !important;
   color: #FFFFFF !important;
-  border: none !important;
   box-shadow: 5px 5px 15px rgba(0, 71, 255, 0.42), -5px -5px 15px rgba(255, 255, 255, 0.85);
   border-radius: 14px;
   font-weight: 600;
@@ -259,8 +335,9 @@
 
 .dark .neu-btn-blue,
 .dark .journal-btn-primary {
-  background-color: #2563EB !important;
-  box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.5), -4px -4px 12px rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
 .neu-btn-blue:hover,
@@ -271,22 +348,11 @@
 
 .dark .neu-btn-blue:hover,
 .dark .journal-btn-primary:hover {
-  background-color: #1D4ED8 !important;
-  box-shadow: 6px 6px 20px rgba(37, 99, 235, 0.6), -5px -5px 15px rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%) !important;
+  box-shadow: 0 6px 22px rgba(37, 99, 235, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 
-.neu-btn-blue:active,
-.journal-btn-primary:active {
-  box-shadow: inset 3px 3px 8px rgba(0, 25, 120, 0.7), inset -3px -3px 8px rgba(120, 170, 255, 0.6) !important;
-  transform: translateY(1px);
-}
-
-.dark .neu-btn-blue:active,
-.dark .journal-btn-primary:active {
-  box-shadow: inset 3px 3px 8px rgba(10, 30, 80, 0.85), inset -3px -3px 8px rgba(96, 165, 250, 0.5) !important;
-}
-
-/* Neumorphic Tab Bar Navigation */
+/* Mobile Tab Bar */
 .neu-tabbar {
   background-color: var(--bg-surface) !important;
   box-shadow: 0 -6px 18px rgba(168, 162, 149, 0.38), 0 -1px 6px rgba(255, 255, 255, 0.9);
@@ -295,7 +361,10 @@
 }
 
 .dark .neu-tabbar {
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.85), 0 -1px 4px rgba(255, 255, 255, 0.045);
+  background-color: rgba(13, 16, 24, 0.95) !important;
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.7) !important;
 }
 
 .neu-tab-active {
@@ -305,7 +374,9 @@
 }
 
 .dark .neu-tab-active {
-  box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.85), inset -3px -3px 6px rgba(255, 255, 255, 0.045);
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Journal Typography & Numbers */
