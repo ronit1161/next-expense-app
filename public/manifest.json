@@ -1,0 +1,37 @@
+{
+  "name": "ExpenseWise - Financial Journal",
+  "short_name": "ExpenseWise",
+  "description": "Tactile, mobile-first personal finance ledger and expense tracker.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#EAE6DF",
+  "theme_color": "#EAE6DF",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "productivity", "utilities"]
+}
