@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import { logoutAction } from '@/actions/auth-actions';
+import InstallPwaButton from '@/components/ui/InstallPwaButton';
 
 export default function DashboardLayoutClient({ user, children }) {
   const pathname = usePathname();
@@ -98,26 +99,31 @@ export default function DashboardLayoutClient({ user, children }) {
         </div>
 
         {/* User Account & Sign Out */}
-        <div className="pt-4 neu-inset p-3 rounded-xl flex flex-col gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-charcoal text-white text-xs font-bold neu-card-sm">
-              {user?.name ? user.name[0].toUpperCase() : 'U'}
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-xs font-semibold text-charcoal truncate leading-tight">
-                {user?.name}
-              </p>
-              <p className="text-[11px] text-pencil truncate">{user?.email}</p>
-            </div>
-          </div>
+        <div className="pt-4 flex flex-col gap-3">
+          {/* Desktop Install App Trigger (Hidden in standalone app) */}
+          <InstallPwaButton className="w-full justify-center" />
 
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-xs font-medium text-pencil hover:text-loss transition-colors pt-1 cursor-pointer"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            <span>Sign Out</span>
-          </button>
+          <div className="neu-inset p-3 rounded-xl flex flex-col gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-charcoal text-white text-xs font-bold neu-card-sm">
+                {user?.name ? user.name[0].toUpperCase() : 'U'}
+              </div>
+              <div className="overflow-hidden">
+                <p className="text-xs font-semibold text-charcoal truncate leading-tight">
+                  {user?.name}
+                </p>
+                <p className="text-[11px] text-pencil truncate">{user?.email}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-xs font-medium text-pencil hover:text-loss transition-colors pt-1 cursor-pointer"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -133,6 +139,9 @@ export default function DashboardLayoutClient({ user, children }) {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Mobile Header Install App Trigger (Hidden in standalone app) */}
+            <InstallPwaButton variant="header" />
+
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#EAE6DF] text-charcoal neu-card-sm text-[11px] font-bold">
               {user?.name ? user.name[0].toUpperCase() : 'U'}
             </div>
@@ -236,6 +245,9 @@ export default function DashboardLayoutClient({ user, children }) {
                 <span className="text-[10px] text-pencil">Statements & export</span>
               </Link>
             </div>
+
+            {/* In-Drawer Install App Action */}
+            <InstallPwaButton className="w-full justify-center py-2.5" />
 
             <div className="pt-3 neu-inset p-3 rounded-xl flex items-center justify-between">
               <div className="overflow-hidden">
