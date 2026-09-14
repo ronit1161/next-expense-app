@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 enum PaymentMethod {
   CASH
   CREDIT_CARD
@@ -31,6 +36,7 @@ model User {
   name         String
   email        String     @unique
   passwordHash String     @map("password_hash")
+  role         Role       @default(USER)
   createdAt    DateTime   @default(now()) @map("created_at")
   updatedAt    DateTime   @updatedAt @map("updated_at")
 

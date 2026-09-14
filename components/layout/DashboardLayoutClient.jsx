@@ -13,6 +13,7 @@ import {
   Plus,
   Menu,
   X,
+  ShieldAlert,
 } from 'lucide-react';
 import { logoutAction } from '@/actions/auth-actions';
 import InstallPwaButton from '@/components/ui/InstallPwaButton';
@@ -95,6 +96,29 @@ export default function DashboardLayoutClient({ user, children }) {
                 </Link>
               );
             })}
+
+            {user?.role === 'ADMIN' && (
+              <Link
+                href="/admin"
+                className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all mt-2 ${
+                  pathname.startsWith('/admin')
+                    ? 'neu-inset text-purple-700 bg-purple-500/10'
+                    : 'text-pencil hover:text-purple-600 hover:neu-card-sm'
+                }`}
+              >
+                <ShieldAlert
+                  className={`h-4 w-4 ${
+                    pathname.startsWith('/admin') ? 'text-purple-600' : 'text-pencil'
+                  }`}
+                />
+                <span className="flex items-center justify-between flex-1">
+                  Admin Portal
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700 font-bold border border-purple-200">
+                    STAFF
+                  </span>
+                </span>
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -224,26 +248,38 @@ export default function DashboardLayoutClient({ user, children }) {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className={`grid ${user?.role === 'ADMIN' ? 'grid-cols-3' : 'grid-cols-2'} gap-2.5`}>
               <Link
                 href="/debts"
                 onClick={() => setMoreDrawerOpen(false)}
-                className="neu-card p-4 rounded-xl flex flex-col gap-2 transition-transform active:scale-[0.98]"
+                className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98]"
               >
                 <ArrowLeftRight className="h-5 w-5 text-[#0047FF]" />
                 <span className="text-xs font-bold text-charcoal">Peer Ledgers</span>
-                <span className="text-[10px] text-pencil">Lending & Borrowing</span>
+                <span className="text-[9px] text-pencil">Lending & Debt</span>
               </Link>
 
               <Link
                 href="/reports"
                 onClick={() => setMoreDrawerOpen(false)}
-                className="neu-card p-4 rounded-xl flex flex-col gap-2 transition-transform active:scale-[0.98]"
+                className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98]"
               >
                 <FileSpreadsheet className="h-5 w-5 text-[#0047FF]" />
                 <span className="text-xs font-bold text-charcoal">Reports & CSV</span>
-                <span className="text-[10px] text-pencil">Statements & export</span>
+                <span className="text-[9px] text-pencil">Export data</span>
               </Link>
+
+              {user?.role === 'ADMIN' && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMoreDrawerOpen(false)}
+                  className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98] border border-purple-300/40"
+                >
+                  <ShieldAlert className="h-5 w-5 text-purple-600" />
+                  <span className="text-xs font-bold text-purple-700">Admin Portal</span>
+                  <span className="text-[9px] text-purple-500">System metrics</span>
+                </Link>
+              )}
             </div>
 
             {/* In-Drawer Install App Action */}
