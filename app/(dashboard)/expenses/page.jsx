@@ -207,16 +207,22 @@ export default function ExpensesPage() {
   const handleDeleteExpense = async (id) => {
     if (!window.confirm('Delete this transaction from your journal?')) return;
 
+    // Optimistically remove from state immediately for 0ms perceived latency
+    const prevExpenses = [...expenses];
+    setExpenses((current) => current.filter((e) => e.id !== id));
+
     try {
       const res = await deleteExpenseAction(id);
       if (res.success) {
         setSuccessMsg('Entry deleted.');
         setTimeout(() => setSuccessMsg(''), 3000);
-        fetchExpenses();
       } else {
+        // Rollback on server failure
+        setExpenses(prevExpenses);
         setError(res.error || 'Failed to delete entry.');
       }
     } catch (err) {
+      setExpenses(prevExpenses);
       setError(err.message || 'Failed to delete entry.');
     }
   };

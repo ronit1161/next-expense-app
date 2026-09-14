@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 /**
  * Get Platform-wide Executive KPI Overview
@@ -378,6 +378,7 @@ export async function createCategoryAction(data) {
     revalidatePath('/dashboard');
     revalidatePath('/expenses');
     revalidatePath('/budgets');
+    revalidateTag('categories');
 
     return { success: true, category };
   } catch (error) {
@@ -413,6 +414,7 @@ export async function deleteCategoryAction(categoryId) {
     revalidatePath('/dashboard');
     revalidatePath('/expenses');
     revalidatePath('/budgets');
+    revalidateTag('categories');
 
     return { success: true };
   } catch (error) {

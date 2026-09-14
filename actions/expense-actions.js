@@ -3,13 +3,21 @@
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { expenseSchema } from '@/lib/validations';
-import { revalidatePath } from 'next/cache';
+import { unstable_cache, revalidatePath } from 'next/cache';
+
+const getCachedCategories = unstable_cache(
+  async () => {
+    return prisma.category.findMany({
+      orderBy: { name: 'asc' },
+    });
+  },
+  ['categories-list'],
+  { tags: ['categories'], revalidate: 3600 }
+);
 
 export async function getCategoriesAction() {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    });
+    const categories = await getCachedCategories();
     return { success: true, categories };
   } catch (error) {
     console.error('Failed to get categories:', error);
