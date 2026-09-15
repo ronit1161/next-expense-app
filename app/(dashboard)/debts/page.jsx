@@ -3,15 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Plus,
-  Trash2,
-  CheckCircle2,
-  History,
-  X,
   CreditCard,
   RefreshCw,
-  Users2,
+  X,
 } from 'lucide-react';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
 import {
   getLoansAction,
   getContactsAction,
@@ -21,14 +17,10 @@ import {
   deleteLoanAction,
 } from '@/actions/loan-actions';
 import { DebtsLedgerSkeleton } from '@/components/ui/skeletons';
-
-const PAYMENT_METHODS = [
-  { label: 'UPI / QR', value: 'UPI' },
-  { label: 'Cash', value: 'CASH' },
-  { label: 'Credit Card', value: 'CREDIT_CARD' },
-  { label: 'Debit Card', value: 'DEBIT_CARD' },
-  { label: 'Net Banking', value: 'NET_BANKING' },
-];
+import DebtCard from '@/components/debts/DebtCard';
+import AddLoanModal from '@/components/debts/AddLoanModal';
+import SettlementModal from '@/components/debts/SettlementModal';
+import ContactsDirectoryTab from '@/components/debts/ContactsDirectoryTab';
 
 export default function DebtsPage() {
   const [loans, setLoans] = useState([]);
@@ -44,10 +36,7 @@ export default function DebtsPage() {
 
   // Create Loan Modal
   const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
-  const [selectedContactId, setSelectedContactId] = useState('new');
   const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
   const [loanType, setLoanType] = useState('LENT');
   const [amount, setAmount] = useState('');
   const [loanDate, setLoanDate] = useState(new Date().toISOString().split('T')[0]);
@@ -100,10 +89,7 @@ export default function DebtsPage() {
 
   // Modal Openers
   const openAddLoanModal = () => {
-    setSelectedContactId('new');
     setContactName('');
-    setContactEmail('');
-    setContactPhone('');
     setLoanType('LENT');
     setAmount('');
     setLoanDate(new Date().toISOString().split('T')[0]);
@@ -149,12 +135,7 @@ export default function DebtsPage() {
     e.preventDefault();
     setLoanError('');
 
-    const resolvedName =
-      selectedContactId === 'new'
-        ? contactName.trim()
-        : contacts.find((c) => c.id === selectedContactId)?.name;
-
-    if (!resolvedName) {
+    if (!contactName.trim()) {
       setLoanError('Please provide a contact person name.');
       return;
     }
@@ -167,9 +148,7 @@ export default function DebtsPage() {
     setLoanSaving(true);
     try {
       const payload = {
-        contactName: resolvedName,
-        contactEmail: contactEmail.trim() || undefined,
-        contactPhone: contactPhone.trim() || undefined,
+        contactName: contactName.trim(),
         type: loanType,
         amount: Number(amount),
         loanDate,
@@ -284,7 +263,7 @@ export default function DebtsPage() {
 
       {/* FEEDBACK BANNERS */}
       {successMsg && (
-        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-emerald-800 animate-fadeIn">
+        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-emerald-800 dark:text-emerald-400 animate-fadeIn">
           <span>{successMsg}</span>
           <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
             <X className="h-3.5 w-3.5" />
@@ -379,19 +358,19 @@ export default function DebtsPage() {
               onChange={(e) => setTypeFilter(e.target.value)}
               className="neu-input py-1.5 px-3 text-xs font-medium text-charcoal cursor-pointer"
             >
-              <option value="" className="bg-[#EAE6DF] text-charcoal">All Types</option>
-              <option value="LENT" className="bg-[#EAE6DF] text-charcoal">Lent Only</option>
-              <option value="BORROWED" className="bg-[#EAE6DF] text-charcoal">Borrowed Only</option>
+              <option value="" className="bg-[var(--bg-main)] text-charcoal">All Types</option>
+              <option value="LENT" className="bg-[var(--bg-main)] text-charcoal">Lent Only</option>
+              <option value="BORROWED" className="bg-[var(--bg-main)] text-charcoal">Borrowed Only</option>
             </select>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="neu-input py-1.5 px-3 text-xs font-medium text-charcoal cursor-pointer"
             >
-              <option value="" className="bg-[#EAE6DF] text-charcoal">All Statuses</option>
-              <option value="PENDING" className="bg-[#EAE6DF] text-charcoal">Pending</option>
-              <option value="PARTIAL" className="bg-[#EAE6DF] text-charcoal">Partial</option>
-              <option value="SETTLED" className="bg-[#EAE6DF] text-charcoal">Settled</option>
+              <option value="" className="bg-[var(--bg-main)] text-charcoal">All Statuses</option>
+              <option value="PENDING" className="bg-[var(--bg-main)] text-charcoal">Pending</option>
+              <option value="PARTIAL" className="bg-[var(--bg-main)] text-charcoal">Partial</option>
+              <option value="SETTLED" className="bg-[var(--bg-main)] text-charcoal">Settled</option>
             </select>
           </div>
         )}
@@ -419,427 +398,60 @@ export default function DebtsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {loans.map((loan) => {
-                const isLent = loan.type === 'LENT';
-                const isFullySettled = loan.status === 'SETTLED';
-
-                return (
-                  <div
-                    key={loan.id}
-                    className="neu-card rounded-2xl p-5 space-y-4 transition-all"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider neu-inset ${
-                              isLent ? 'text-gain' : 'text-loss'
-                            }`}
-                          >
-                            {isLent ? 'Lent to' : 'Borrowed from'}
-                          </span>
-                          <span className="text-[10px] font-semibold text-pencil">
-                            {formatDate(loan.loanDate)}
-                          </span>
-                        </div>
-                        <h4 className="text-base font-display font-semibold text-charcoal mt-1.5">
-                          {loan.contactName}
-                        </h4>
-                        {loan.description && (
-                          <p className="text-xs text-pencil mt-0.5">{loan.description}</p>
-                        )}
-                      </div>
-
-                      <div className="text-right">
-                        <span className="text-xs text-pencil block">Remaining</span>
-                        <span className="text-base font-bold text-charcoal tabular-nums">
-                          {formatCurrency(loan.remainingAmount)}
-                        </span>
-                        <span className="text-[10px] text-pencil block">
-                          of {formatCurrency(loan.amount)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Progress track */}
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-[11px] text-pencil">
-                        <span>Principal: {formatCurrency(loan.amount)}</span>
-                        <span>Settled: {loan.repaidPercentage}%</span>
-                      </div>
-                      <div className="neu-groove h-2 w-full p-0.5">
-                        <div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            isFullySettled ? 'bg-gain' : 'bg-[#0047FF]'
-                          }`}
-                          style={{ width: `${Math.min(100, loan.repaidPercentage)}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-lg neu-inset ${
-                          isFullySettled
-                            ? 'text-gain'
-                            : loan.status === 'PARTIAL'
-                            ? 'text-[#0047FF]'
-                            : 'text-pencil'
-                        }`}
-                      >
-                        {loan.status}
-                      </span>
-
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => openSettlementModal(loan)}
-                          className="neu-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-charcoal cursor-pointer rounded-xl"
-                        >
-                          <History className="h-3.5 w-3.5 text-pencil" />
-                          <span>{isFullySettled ? 'Audit Log' : 'Settle'}</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteLoan(loan.id)}
-                          className="neu-btn p-1.5 text-pencil hover:text-loss rounded-xl cursor-pointer"
-                          title="Delete Loan"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      ) : (
-        /* CONTACTS DIRECTORY TAB */
-        <div className="space-y-4">
-          {contacts.length === 0 ? (
-            <div className="neu-card p-12 text-center rounded-3xl space-y-3">
-              <Users2 className="h-8 w-8 text-pencil mx-auto" />
-              <h3 className="text-sm font-bold text-charcoal">NO CONTACTS DIRECTORY</h3>
-              <p className="text-xs text-pencil max-w-xs mx-auto">
-                Contacts are created automatically when logging new loans.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {contacts.map((contact) => (
-                <div key={contact.id} className="neu-card p-4 rounded-2xl space-y-1">
-                  <h4 className="text-xs font-bold text-charcoal">{contact.name}</h4>
-                  {contact.email && (
-                    <p className="text-[11px] text-pencil truncate">{contact.email}</p>
-                  )}
-                  {contact.phone && (
-                    <p className="text-[11px] text-pencil font-mono">{contact.phone}</p>
-                  )}
-                </div>
+              {loans.map((loan) => (
+                <DebtCard
+                  key={loan.id}
+                  loan={loan}
+                  onOpenSettlement={openSettlementModal}
+                  onDelete={handleDeleteLoan}
+                />
               ))}
             </div>
           )}
         </div>
+      ) : (
+        <ContactsDirectoryTab contacts={contacts} />
       )}
 
       {/* 5. RECORD LOAN MODAL */}
-      {isLoanModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-xs p-0 sm:p-4 animate-fadeIn">
-          <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-[#EAE6DF] neu-card p-6 shadow-2xl animate-scaleIn max-h-[92vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3">
-              <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-                  Peer Ledger
-                </span>
-                <h3 className="text-lg font-display font-semibold text-charcoal">
-                  Record Peer Loan
-                </h3>
-              </div>
-              <button
-                onClick={closeAddLoanModal}
-                className="neu-btn p-2 text-pencil hover:text-charcoal cursor-pointer rounded-xl"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {loanError && (
-              <div className="mt-4 neu-inset p-3 text-xs font-semibold text-loss rounded-xl">
-                {loanError}
-              </div>
-            )}
-
-            <form onSubmit={handleSaveLoan} className="mt-4 space-y-4">
-              {/* Type Switcher */}
-              <div>
-                <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1.5">
-                  Classification *
-                </label>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setLoanType('LENT')}
-                    className={`p-2.5 rounded-xl text-center text-xs font-semibold transition-all cursor-pointer ${
-                      loanType === 'LENT'
-                        ? 'neu-inset text-gain font-bold'
-                        : 'neu-btn text-pencil hover:text-charcoal'
-                    }`}
-                  >
-                    I Lent (To Receive)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setLoanType('BORROWED')}
-                    className={`p-2.5 rounded-xl text-center text-xs font-semibold transition-all cursor-pointer ${
-                      loanType === 'BORROWED'
-                        ? 'neu-inset text-loss font-bold'
-                        : 'neu-btn text-pencil hover:text-charcoal'
-                    }`}
-                  >
-                    I Borrowed (To Pay)
-                  </button>
-                </div>
-              </div>
-
-              {/* Contact Selector / Input */}
-              <div>
-                <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                  Contact Person *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Enter contact name"
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  className="neu-input block w-full py-2.5 px-3 text-xs"
-                />
-              </div>
-
-              {/* Principal Amount */}
-              <div>
-                <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                  Principal Amount (INR ₹) *
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  required
-                  placeholder="0.00"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="neu-input block w-full py-2.5 px-3 text-sm font-bold font-numeric text-charcoal"
-                />
-              </div>
-
-              {/* Date & Due Date */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                    Loan Date *
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={loanDate}
-                    onChange={(e) => setLoanDate(e.target.value)}
-                    className="neu-input block w-full py-2 px-3 text-xs cursor-pointer"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                    Due Date (Optional)
-                  </label>
-                  <input
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    className="neu-input block w-full py-2 px-3 text-xs cursor-pointer"
-                  />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                  Notes / Context
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. For concert tickets, Rent share"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="neu-input block w-full py-2.5 px-3 text-xs"
-                />
-              </div>
-
-              <div className="pt-3 flex items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={closeAddLoanModal}
-                  className="neu-btn px-4 py-2.5 text-xs font-semibold text-pencil hover:text-charcoal cursor-pointer rounded-xl"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loanSaving}
-                  className="neu-btn-blue px-5 py-2.5 text-xs font-semibold text-white cursor-pointer rounded-xl"
-                >
-                  {loanSaving ? 'Saving...' : 'Record Loan'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <AddLoanModal
+        isOpen={isLoanModalOpen}
+        onClose={closeAddLoanModal}
+        loanType={loanType}
+        setLoanType={setLoanType}
+        contactName={contactName}
+        setContactName={setContactName}
+        amount={amount}
+        setAmount={setAmount}
+        loanDate={loanDate}
+        setLoanDate={setLoanDate}
+        dueDate={dueDate}
+        setDueDate={setDueDate}
+        description={description}
+        setDescription={setDescription}
+        loanError={loanError}
+        loanSaving={loanSaving}
+        onSave={handleSaveLoan}
+      />
 
       {/* 6. SETTLEMENT & AUDIT MODAL */}
-      {isSettlementModalOpen && selectedLoan && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-xs p-0 sm:p-4 animate-fadeIn">
-          <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-[#EAE6DF] neu-card p-6 shadow-2xl animate-scaleIn max-h-[92vh] overflow-y-auto space-y-5">
-            <div className="flex items-center justify-between pb-3">
-              <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-                  Debt Settlement
-                </span>
-                <h3 className="text-lg font-display font-semibold text-charcoal">
-                  {selectedLoan.contactName}
-                </h3>
-              </div>
-              <button
-                onClick={closeSettlementModal}
-                className="neu-btn p-2 text-pencil hover:text-charcoal cursor-pointer rounded-xl"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Remaining Balance Stat */}
-            <div className="neu-card p-4 rounded-2xl flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-                  Outstanding Balance
-                </span>
-                <span className="text-xl font-bold text-charcoal tabular-nums">
-                  {formatCurrency(selectedLoan.remainingAmount)}
-                </span>
-              </div>
-              <span className="text-xs font-semibold text-pencil">
-                Principal: {formatCurrency(selectedLoan.amount)}
-              </span>
-            </div>
-
-            {settleError && (
-              <div className="neu-inset p-3 text-xs font-semibold text-loss rounded-xl">
-                {settleError}
-              </div>
-            )}
-
-            {/* Settle Form if not settled */}
-            {selectedLoan.remainingAmount > 0 ? (
-              <form onSubmit={handleRecordSettlement} className="space-y-4">
-                <div>
-                  <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                    Repayment Amount (INR ₹) *
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    max={selectedLoan.remainingAmount}
-                    value={settleAmount}
-                    onChange={(e) => setSettleAmount(e.target.value)}
-                    className="neu-input block w-full py-2.5 px-3 text-sm font-bold font-numeric text-charcoal"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                      Method
-                    </label>
-                    <select
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="neu-input block w-full py-2.5 px-3 text-xs cursor-pointer"
-                    >
-                      {PAYMENT_METHODS.map((m) => (
-                        <option key={m.value} value={m.value} className="bg-[#EAE6DF] text-charcoal">
-                          {m.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                      Date
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      value={settlementDate}
-                      onChange={(e) => setSettlementDate(e.target.value)}
-                      className="neu-input block w-full py-2 px-3 text-xs cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1">
-                    Notes
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Partial GPay transfer"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    className="neu-input block w-full py-2.5 px-3 text-xs"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={settleSaving}
-                  className="neu-btn-blue w-full py-3 text-xs font-semibold text-white cursor-pointer"
-                >
-                  {settleSaving ? 'Recording Settlement...' : 'Confirm Repayment'}
-                </button>
-              </form>
-            ) : (
-              <div className="p-4 rounded-2xl neu-inset text-center text-xs font-bold text-gain">
-                This debt obligation is fully settled.
-              </div>
-            )}
-
-            {/* Audit History Timeline */}
-            <div className="space-y-3 pt-2">
-              <h4 className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                Settlement Audit Trail
-              </h4>
-              {settlementHistory.length === 0 ? (
-                <p className="text-xs text-pencil">No repayments logged yet.</p>
-              ) : (
-                <div className="space-y-2 max-h-40 overflow-y-auto neu-inset p-3 rounded-2xl">
-                  {settlementHistory.map((s) => (
-                    <div key={s.id} className="py-1 flex items-center justify-between text-xs">
-                      <div>
-                        <span className="font-bold text-charcoal tabular-nums">
-                          {formatCurrency(s.amount)}
-                        </span>
-                        <span className="text-[10px] text-pencil block">
-                          {s.paymentMethod.replace('_', ' ')} • {formatDate(s.settlementDate)}
-                        </span>
-                      </div>
-                      {s.notes && <span className="text-[11px] text-pencil truncate">{s.notes}</span>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <SettlementModal
+        isOpen={isSettlementModalOpen}
+        onClose={closeSettlementModal}
+        selectedLoan={selectedLoan}
+        settleAmount={settleAmount}
+        setSettleAmount={setSettleAmount}
+        paymentMethod={paymentMethod}
+        setPaymentMethod={setPaymentMethod}
+        settlementDate={settlementDate}
+        setSettlementDate={setSettlementDate}
+        notes={notes}
+        setNotes={setNotes}
+        settlementHistory={settlementHistory}
+        settleSaving={settleSaving}
+        settleError={settleError}
+        onRecordSettlement={handleRecordSettlement}
+      />
     </div>
   );
 }

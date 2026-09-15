@@ -7,31 +7,15 @@ import {
   PieChart,
   Target,
   Users2,
-  Calendar,
-  RefreshCw,
 } from 'lucide-react';
-import CategoryIcon from '@/components/ui/CategoryIcon';
-import { formatCurrency, formatDate, downloadCSV } from '@/lib/utils';
+import { downloadCSV } from '@/lib/utils';
 import { getExpensesAction } from '@/actions/expense-actions';
 import { getDashboardAnalyticsAction } from '@/actions/dashboard-actions';
 import { getBudgetStatusAction } from '@/actions/budget-actions';
 import { getLoansAction } from '@/actions/loan-actions';
 import { ReportsStatementSkeleton } from '@/components/ui/skeletons';
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+import ReportPeriodSelector from '@/components/reports/ReportPeriodSelector';
+import ReportTable from '@/components/reports/ReportTable';
 
 export default function ReportsPage() {
   const [reportType, setReportType] = useState('expenses'); // 'expenses' | 'categories' | 'budgets' | 'loans'
@@ -173,13 +157,13 @@ export default function ReportsPage() {
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
-          <span className="text-[10px] font-bold text-[#7D8494] uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
             Statements & Audits
           </span>
-          <h1 className="text-2xl md:text-3xl font-display font-semibold text-[#1E2025] tracking-tight mt-0.5">
+          <h1 className="text-2xl md:text-3xl font-display font-semibold text-charcoal tracking-tight mt-0.5">
             Reports & Export
           </h1>
-          <p className="text-xs md:text-sm text-[#7D8494] mt-1">
+          <p className="text-xs md:text-sm text-pencil mt-1">
             Review structured audit logs and download offline CSV statements.
           </p>
         </div>
@@ -201,12 +185,12 @@ export default function ReportsPage() {
           className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
             reportType === 'expenses'
               ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-[#5E6472] hover:text-[#1E2025]'
+              : 'neu-btn text-pencil hover:text-charcoal'
           }`}
         >
           <FileText
             className={`h-4 w-4 mb-2 ${
-              reportType === 'expenses' ? 'text-[#0047FF]' : 'text-[#7D8494]'
+              reportType === 'expenses' ? 'text-[#0047FF]' : 'text-pencil'
             }`}
           />
           <h4 className="text-xs font-bold">Expense Ledger</h4>
@@ -218,12 +202,12 @@ export default function ReportsPage() {
           className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
             reportType === 'categories'
               ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-[#5E6472] hover:text-[#1E2025]'
+              : 'neu-btn text-pencil hover:text-charcoal'
           }`}
         >
           <PieChart
             className={`h-4 w-4 mb-2 ${
-              reportType === 'categories' ? 'text-[#0047FF]' : 'text-[#7D8494]'
+              reportType === 'categories' ? 'text-[#0047FF]' : 'text-pencil'
             }`}
           />
           <h4 className="text-xs font-bold">Category Summary</h4>
@@ -235,12 +219,12 @@ export default function ReportsPage() {
           className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
             reportType === 'budgets'
               ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-[#5E6472] hover:text-[#1E2025]'
+              : 'neu-btn text-pencil hover:text-charcoal'
           }`}
         >
           <Target
             className={`h-4 w-4 mb-2 ${
-              reportType === 'budgets' ? 'text-[#0047FF]' : 'text-[#7D8494]'
+              reportType === 'budgets' ? 'text-[#0047FF]' : 'text-pencil'
             }`}
           />
           <h4 className="text-xs font-bold">Budget Pacing</h4>
@@ -252,12 +236,12 @@ export default function ReportsPage() {
           className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
             reportType === 'loans'
               ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-[#5E6472] hover:text-[#1E2025]'
+              : 'neu-btn text-pencil hover:text-charcoal'
           }`}
         >
           <Users2
             className={`h-4 w-4 mb-2 ${
-              reportType === 'loans' ? 'text-[#0047FF]' : 'text-[#7D8494]'
+              reportType === 'loans' ? 'text-[#0047FF]' : 'text-pencil'
             }`}
           />
           <h4 className="text-xs font-bold">Peer Ledger</h4>
@@ -267,272 +251,21 @@ export default function ReportsPage() {
 
       {/* PERIOD CONTROLS (for expenses and budgets) */}
       {(reportType === 'expenses' || reportType === 'budgets') && (
-        <div className="neu-card p-3 sm:p-4 flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#1E2025]">
-            <Calendar className="h-4 w-4 text-[#7D8494]" />
-            <span>Reporting Period:</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={month}
-              onChange={(e) => setMonth(Number(e.target.value))}
-              className="neu-input py-1.5 px-3 text-xs font-medium text-[#1E2025] focus:outline-none cursor-pointer"
-            >
-              {MONTHS.map((m, idx) => (
-                <option key={m} value={idx + 1}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="neu-input py-1.5 px-3 text-xs font-medium text-[#1E2025] focus:outline-none cursor-pointer"
-            >
-              {[year - 1, year, year + 1].map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <ReportPeriodSelector
+          month={month}
+          year={year}
+          onMonthChange={setMonth}
+          onYearChange={setYear}
+        />
       )}
 
-      {/* REPORT DATA PREVIEW */}
-      <div className="neu-card overflow-hidden">
-        <div className="px-4 sm:px-5 py-3.5 sm:py-4 flex items-center justify-between border-b border-[#DFDBD3]/40">
-          <h3 className="text-xs font-bold text-[#1E2025] uppercase tracking-wider">
-            Statement Preview ({data.length} records)
-          </h3>
-          <span className="text-[11px] font-mono text-[#7D8494]">INR (₹)</span>
-        </div>
-
-        {error ? (
-          <div className="p-8 text-center space-y-3">
-            <p className="text-xs text-rose-600 font-medium">{error}</p>
-            <button
-              onClick={fetchReportData}
-              className="neu-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-[#1E2025] cursor-pointer"
-            >
-              <RefreshCw className="h-3 w-3" />
-              <span>Retry Query</span>
-            </button>
-          </div>
-        ) : data.length === 0 ? (
-          <div className="p-12 text-center text-xs text-[#7D8494]">
-            No report data available for the specified criteria.
-          </div>
-        ) : (
-          <>
-            {/* MOBILE VIEW (< 640px): Stacked Statement Cards */}
-            <div className="block sm:hidden divide-y divide-[#DFDBD3]/30">
-              {reportType === 'expenses' &&
-                data.map((exp, idx) => (
-                  <div key={exp.id || `exp-${idx}`} className="p-3.5 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <CategoryIcon iconName={exp.categoryIcon} className="h-3.5 w-3.5 text-[#7D8494]" />
-                        <span className="font-bold text-xs text-[#1E2025]">{exp.description || exp.categoryName}</span>
-                      </div>
-                      <span className="text-xs font-bold text-[#1E2025] tabular-nums">
-                        {formatCurrency(exp.amount)}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-[#7D8494]">
-                      <span>{exp.categoryName} • {exp.paymentMethod.replace('_', ' ')}</span>
-                      <span>{formatDate(exp.expenseDate)}</span>
-                    </div>
-                  </div>
-                ))}
-
-              {reportType === 'categories' &&
-                data.map((cat, idx) => (
-                  <div key={cat.categoryId || cat.id || `cat-${idx}`} className="p-3.5 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: cat.categoryColor }} />
-                      <span className="font-semibold text-xs text-[#1E2025]">{cat.categoryName}</span>
-                    </div>
-                    <span className="font-bold text-xs text-[#1E2025] tabular-nums">
-                      {formatCurrency(cat.total)}
-                    </span>
-                  </div>
-                ))}
-
-              {reportType === 'budgets' &&
-                data.map((b, idx) => (
-                  <div key={b.budgetId || b.id || b.categoryId || `budget-${idx}`} className="p-3.5 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-[#1E2025]">{b.categoryName}</span>
-                      <span className={`text-xs font-bold tabular-nums ${b.isOverBudget ? 'text-rose-600' : 'text-[#1E2025]'}`}>
-                        {b.utilizationPercentage}%
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-[#7D8494]">
-                      <span>Cap: {formatCurrency(b.budgetLimit)}</span>
-                      <span>Spent: {formatCurrency(b.spentAmount)}</span>
-                    </div>
-                  </div>
-                ))}
-
-              {reportType === 'loans' &&
-                data.map((l, idx) => (
-                  <div key={l.id || `loan-${idx}`} className="p-3.5 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-[#1E2025]">{l.contactName}</span>
-                      <span className={`text-[10px] font-bold ${l.type === 'LENT' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                        {l.type}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-[#7D8494]">
-                      <span>Principal: {formatCurrency(l.amount)}</span>
-                      <span className="font-bold text-[#1E2025] tabular-nums">Rem: {formatCurrency(l.remainingAmount)}</span>
-                    </div>
-                  </div>
-                ))}
-            </div>
-
-            {/* DESKTOP/TABLET VIEW (>= 640px): Standard Table */}
-            <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-[#DFDBD3]/40 text-[10px] font-bold uppercase tracking-wider text-[#7D8494] bg-[#E5E1D9]/40">
-                    {reportType === 'expenses' && (
-                      <>
-                        <th className="py-3 px-5">Expense Details</th>
-                        <th className="py-3 px-4">Method</th>
-                        <th className="py-3 px-4">Date</th>
-                        <th className="py-3 px-5 text-right">Amount</th>
-                      </>
-                    )}
-                    {reportType === 'categories' && (
-                      <>
-                        <th className="py-3 px-5">Category</th>
-                        <th className="py-3 px-5 text-right">Total Aggregate Spend</th>
-                      </>
-                    )}
-                    {reportType === 'budgets' && (
-                      <>
-                        <th className="py-3 px-5">Category</th>
-                        <th className="py-3 px-4">Budget Cap</th>
-                        <th className="py-3 px-4">Spent</th>
-                        <th className="py-3 px-4">Remaining</th>
-                        <th className="py-3 px-5 text-right">Utilization</th>
-                      </>
-                    )}
-                    {reportType === 'loans' && (
-                      <>
-                        <th className="py-3 px-5">Contact</th>
-                        <th className="py-3 px-4">Type</th>
-                        <th className="py-3 px-4">Principal</th>
-                        <th className="py-3 px-4">Remaining</th>
-                        <th className="py-3 px-4">Date</th>
-                        <th className="py-3 px-5 text-right">Status</th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#DFDBD3]/30">
-                  {reportType === 'expenses' &&
-                    data.map((exp, idx) => (
-                      <tr key={exp.id || `exp-row-${idx}`} className="hover:bg-[#FFFFFF]/25 transition-colors">
-                        <td className="py-3.5 px-5 font-semibold text-[#1E2025]">
-                          <div className="flex items-center gap-2.5">
-                            <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4 text-[#7D8494]" />
-                            <span>{exp.description || exp.categoryName}</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4 text-[#7D8494]">
-                          {exp.paymentMethod.replace('_', ' ')}
-                        </td>
-                        <td className="py-3.5 px-4 text-[#7D8494] font-medium">
-                          {formatDate(exp.expenseDate)}
-                        </td>
-                        <td className="py-3.5 px-5 text-right font-bold text-[#1E2025] tabular-nums">
-                          {formatCurrency(exp.amount)}
-                        </td>
-                      </tr>
-                    ))}
-
-                  {reportType === 'categories' &&
-                    data.map((cat, idx) => (
-                      <tr key={cat.categoryId || cat.id || `cat-row-${idx}`} className="hover:bg-[#FFFFFF]/25 transition-colors">
-                        <td className="py-3.5 px-5">
-                          <div className="flex items-center gap-2.5">
-                            <div
-                              className="h-2.5 w-2.5 rounded-full"
-                              style={{ backgroundColor: cat.categoryColor }}
-                            />
-                            <span className="font-semibold text-[#1E2025]">{cat.categoryName}</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-5 text-right font-bold text-[#1E2025] tabular-nums">
-                          {formatCurrency(cat.total)}
-                        </td>
-                      </tr>
-                    ))}
-
-                  {reportType === 'budgets' &&
-                    data.map((b, idx) => (
-                      <tr key={b.budgetId || b.id || b.categoryId || `budget-row-${idx}`} className="hover:bg-[#FFFFFF]/25 transition-colors">
-                        <td className="py-3.5 px-5">
-                          <div className="flex items-center gap-2.5">
-                            <CategoryIcon iconName={b.categoryIcon} className="h-4 w-4 text-[#7D8494]" />
-                            <span className="font-semibold text-[#1E2025]">{b.categoryName}</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4 text-[#7D8494] font-medium tabular-nums">
-                          {formatCurrency(b.budgetLimit)}
-                        </td>
-                        <td className="py-3.5 px-4 text-[#1E2025] font-semibold tabular-nums">
-                          {formatCurrency(b.spentAmount)}
-                        </td>
-                        <td className="py-3.5 px-4 text-emerald-600 font-semibold tabular-nums">
-                          {formatCurrency(b.remainingAmount)}
-                        </td>
-                        <td className="py-3.5 px-5 text-right">
-                          <span
-                            className={`font-bold tabular-nums ${
-                              b.isOverBudget ? 'text-rose-600' : 'text-[#1E2025]'
-                            }`}
-                          >
-                            {b.utilizationPercentage}%
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-
-                  {reportType === 'loans' &&
-                    data.map((l, idx) => (
-                      <tr key={l.id || `loan-row-${idx}`} className="hover:bg-[#FFFFFF]/25 transition-colors">
-                        <td className="py-3.5 px-5 font-semibold text-[#1E2025]">{l.contactName}</td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`font-bold text-[11px] ${
-                              l.type === 'LENT' ? 'text-emerald-600' : 'text-rose-600'
-                            }`}
-                          >
-                            {l.type}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 text-[#7D8494] tabular-nums">{formatCurrency(l.amount)}</td>
-                        <td className="py-3.5 px-4 font-bold text-[#1E2025] tabular-nums">
-                          {formatCurrency(l.remainingAmount)}
-                        </td>
-                        <td className="py-3.5 px-4 text-[#7D8494]">{formatDate(l.loanDate)}</td>
-                        <td className="py-3.5 px-5 text-right">
-                          <span className="inline-flex rounded-md neu-inset px-2.5 py-0.5 text-[10px] font-semibold text-[#1E2025]">
-                            {l.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-      </div>
+      {/* REPORT DATA PREVIEW TABLE */}
+      <ReportTable
+        reportType={reportType}
+        data={data}
+        error={error}
+        onRetry={fetchReportData}
+      />
     </div>
   );
 }
