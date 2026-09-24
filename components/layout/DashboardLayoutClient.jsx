@@ -25,11 +25,11 @@ export default function DashboardLayoutClient({ user, children }) {
   const [moreDrawerOpen, setMoreDrawerOpen] = useState(false);
 
   const navItems = [
-    { name: 'Overview', to: '/dashboard', icon: Compass },
-    { name: 'Activity', to: '/expenses', icon: Clock },
-    { name: 'Budgets', to: '/budgets', icon: PiggyBank },
-    { name: 'Lending & Debts', to: '/debts', icon: ArrowLeftRight },
-    { name: 'Reports', to: '/reports', icon: FileSpreadsheet },
+    { number: '01', name: 'OVERVIEW', to: '/dashboard', icon: Compass },
+    { number: '02', name: 'ACTIVITY', to: '/expenses', icon: Clock },
+    { number: '03', name: 'BUDGETS', to: '/budgets', icon: PiggyBank },
+    { number: '04', name: 'LENDING & DEBTS', to: '/debts', icon: ArrowLeftRight },
+    { number: '05', name: 'REPORTS', to: '/reports', icon: FileSpreadsheet },
   ];
 
   const handleLogout = async () => {
@@ -48,33 +48,36 @@ export default function DashboardLayoutClient({ user, children }) {
 
   return (
     <div className="flex min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] w-full max-w-full overflow-x-hidden">
-      {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-[var(--bg-main)] shadow-[6px_0_18px_rgba(168,160,146,0.22)] dark:shadow-[6px_0_18px_rgba(0,0,0,0.5)] p-6 justify-between z-20 transition-colors">
-        <div className="flex flex-col gap-7">
-          {/* Brand Wordmark */}
-          <div>
-            <div className="flex items-center gap-2.5">
-              <span className="h-3 w-3 rounded-full bg-[#0047FF] shadow-[0_0_8px_rgba(0,71,255,0.6)]"></span>
-              <span className="font-display font-bold tracking-tight text-lg text-charcoal">
-                ExpenseWise
+      {/* DESKTOP SIDEBAR - SWISS INTERNATIONAL ARCHITECTURAL GRID */}
+      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-[var(--bg-main)] border-r-4 border-black dark:border-white/20 p-6 justify-between z-20 transition-colors">
+        <div className="flex flex-col gap-6">
+          {/* Brand Wordmark with Swiss Accent Flag */}
+          <div className="border-b-2 border-black dark:border-white/20 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="h-4 w-4 bg-[#FF3000] inline-block shrink-0"></span>
+              <span className="font-black text-xl tracking-tighter uppercase text-charcoal">
+                EXPENSEWISE
               </span>
             </div>
-            <p className="text-[10px] font-bold text-pencil uppercase tracking-wider mt-1">
-              Personal Finance Journal
+            <p className="text-[10px] font-bold text-pencil uppercase tracking-widest mt-1">
+              FINANCIAL LEDGER // SYSTEM
             </p>
           </div>
 
-          {/* Quick Add Action */}
+          {/* Quick Record Action Trigger */}
           <button
             onClick={handleQuickAdd}
-            className="neu-btn-blue inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-semibold text-white cursor-pointer active:scale-[0.98]"
+            className="swiss-btn-accent w-full py-3 px-4 text-xs font-black text-white flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5"
           >
-            <Plus className="h-4 w-4 stroke-[2.5]" />
-            <span>Record Entry</span>
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>RECORD ENTRY</span>
           </button>
 
-          {/* Navigation Links */}
-          <nav className="flex flex-col gap-1.5">
+          {/* Navigation Links - Numbered Swiss Precision */}
+          <nav className="flex flex-col gap-1">
+            <span className="text-[9px] font-black uppercase tracking-widest text-pencil mb-1">
+              INDEX DIRECTORY
+            </span>
             {navItems.map((item) => {
               const isActive = pathname === item.to || pathname.startsWith(`${item.to}/`);
               const Icon = item.icon;
@@ -82,18 +85,23 @@ export default function DashboardLayoutClient({ user, children }) {
                 <Link
                   key={item.name}
                   href={item.to}
-                  className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-all border ${
                     isActive
-                      ? 'neu-inset text-charcoal'
-                      : 'text-pencil hover:text-charcoal hover:neu-card-sm'
+                      ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                      : 'border-transparent text-pencil hover:text-charcoal hover:border-black dark:hover:border-white/40'
                   }`}
                 >
-                  <Icon
-                    className={`h-4 w-4 ${
-                      isActive ? 'text-[#0047FF]' : 'text-pencil'
+                  <div className="flex items-center gap-2.5">
+                    <Icon className={`h-4 w-4 ${isActive ? 'text-[#FF3000]' : ''}`} />
+                    <span className="tracking-tight">{item.name}</span>
+                  </div>
+                  <span
+                    className={`text-[9px] font-mono ${
+                      isActive ? 'text-[#FF3000]' : 'text-pencil opacity-60'
                     }`}
-                  />
-                  <span>{item.name}</span>
+                  >
+                    {item.number}
+                  </span>
                 </Link>
               );
             })}
@@ -101,55 +109,52 @@ export default function DashboardLayoutClient({ user, children }) {
             {user?.role === 'ADMIN' && (
               <Link
                 href="/admin"
-                className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all mt-2 ${
+                className={`flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-all border mt-2 ${
                   pathname.startsWith('/admin')
-                    ? 'neu-inset text-purple-700 bg-purple-500/10'
-                    : 'text-pencil hover:text-purple-600 hover:neu-card-sm'
+                    ? 'bg-[#FF3000] text-white border-[#FF3000]'
+                    : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
                 }`}
               >
-                <ShieldAlert
-                  className={`h-4 w-4 ${
-                    pathname.startsWith('/admin') ? 'text-purple-600' : 'text-pencil'
-                  }`}
-                />
-                <span className="flex items-center justify-between flex-1">
-                  Admin Portal
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold border border-purple-200 dark:border-purple-800">
-                    STAFF
-                  </span>
+                <div className="flex items-center gap-2.5">
+                  <ShieldAlert className="h-4 w-4" />
+                  <span className="tracking-tight">ADMIN PORTAL</span>
+                </div>
+                <span className="text-[9px] font-mono px-1 bg-black text-white dark:bg-white dark:text-black">
+                  STAFF
                 </span>
               </Link>
             )}
           </nav>
         </div>
 
-        {/* User Account & Theme Toggle */}
-        <div className="pt-4 flex flex-col gap-2.5">
+        {/* User Account & Controls */}
+        <div className="pt-4 border-t-2 border-black dark:border-white/20 flex flex-col gap-3">
           {/* Theme Switcher in Sidebar */}
           <ThemeToggle variant="sidebar" />
 
-          {/* Desktop Install App Trigger (Hidden in standalone app) */}
+          {/* Desktop Install App Trigger */}
           <InstallPwaButton className="w-full justify-center" />
 
-          <div className="neu-inset p-3 rounded-xl flex flex-col gap-3">
+          {/* User Account Block */}
+          <div className="p-3 border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] flex flex-col gap-2.5">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-charcoal text-white text-xs font-bold neu-card-sm">
+              <div className="flex h-7 w-7 items-center justify-center bg-black text-white dark:bg-white dark:text-black text-xs font-black shrink-0">
                 {user?.name ? user.name[0].toUpperCase() : 'U'}
               </div>
               <div className="overflow-hidden">
-                <p className="text-xs font-semibold text-charcoal truncate leading-tight">
+                <p className="text-xs font-bold text-charcoal truncate leading-tight uppercase">
                   {user?.name}
                 </p>
-                <p className="text-[11px] text-pencil truncate">{user?.email}</p>
+                <p className="text-[10px] font-mono text-pencil truncate">{user?.email}</p>
               </div>
             </div>
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 text-xs font-medium text-pencil hover:text-loss transition-colors pt-1 cursor-pointer"
+              className="w-full py-1.5 px-2 text-[11px] font-bold text-pencil hover:text-[#FF3000] hover:border-[#FF3000] border border-black/20 dark:border-white/20 transition-colors flex items-center justify-center gap-1.5 cursor-pointer uppercase"
             >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Sign Out</span>
+              <LogOut className="h-3 w-3" />
+              <span>SIGN OUT</span>
             </button>
           </div>
         </div>
@@ -157,122 +162,118 @@ export default function DashboardLayoutClient({ user, children }) {
 
       {/* MAIN CONTENT AREA */}
       <div className="flex flex-1 flex-col md:pl-64 min-h-screen w-full min-w-0 max-w-full overflow-x-hidden bg-[var(--bg-main)] transition-colors">
-        {/* MOBILE TOP BAR (Neumorphic Header) */}
-        <header className="flex md:hidden h-14 items-center justify-between px-4 bg-[var(--bg-main)] shadow-[0_4px_12px_rgba(168,160,146,0.22)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.5)] sticky top-0 z-30 w-full min-w-0 transition-colors">
+        {/* MOBILE TOP BAR - SWISS RECTANGULAR HEADER */}
+        <header className="flex md:hidden h-14 items-center justify-between px-4 bg-[var(--bg-main)] border-b-2 border-black dark:border-white/20 sticky top-0 z-30 w-full min-w-0 transition-colors">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#0047FF] shadow-[0_0_6px_rgba(0,71,255,0.5)]"></span>
-            <span className="font-display font-bold text-sm tracking-tight text-charcoal">
-              ExpenseWise
+            <span className="h-3.5 w-3.5 bg-[#FF3000]"></span>
+            <span className="font-black text-sm uppercase tracking-tight text-charcoal">
+              EXPENSEWISE
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Header Theme Switcher */}
             <ThemeToggle variant="header" />
-
-            {/* Mobile Header Install App Trigger (Hidden in standalone app) */}
             <InstallPwaButton variant="header" />
-
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--bg-surface)] text-charcoal neu-card-sm text-[11px] font-bold">
+            <div className="flex h-7 w-7 items-center justify-center bg-black text-white dark:bg-white dark:text-black text-[10px] font-black">
               {user?.name ? user.name[0].toUpperCase() : 'U'}
             </div>
           </div>
         </header>
 
         {/* SCROLLING PAGE BODY */}
-        <main className="flex-1 px-4 py-5 md:px-10 md:py-8 max-w-5xl w-full min-w-0 mx-auto pb-24 md:pb-12 bg-[var(--bg-main)] transition-colors">
+        <main className="flex-1 px-4 py-6 md:px-10 md:py-8 max-w-6xl w-full min-w-0 mx-auto pb-24 md:pb-12 bg-[var(--bg-main)] transition-colors">
           {children}
         </main>
       </div>
 
-      {/* MOBILE BOTTOM NAVIGATION (Molded Neumorphic Bar) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 neu-tabbar flex items-center justify-around px-2 z-40">
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--bg-surface)] border-t-3 border-black dark:border-white/20 flex items-center justify-around px-1 z-40">
         <Link
           href="/dashboard"
-          className={`flex flex-col items-center gap-1 text-[10px] font-semibold py-1 px-3 transition-colors ${
-            pathname === '/dashboard' ? 'text-[#0047FF] font-bold' : 'text-pencil'
+          className={`flex flex-col items-center gap-0.5 text-[9px] font-black py-1 px-2 uppercase transition-colors ${
+            pathname === '/dashboard' ? 'text-[#FF3000] border-b-2 border-[#FF3000]' : 'text-pencil'
           }`}
         >
-          <Compass className="h-5 w-5" />
-          <span>Home</span>
+          <Compass className="h-4 w-4" />
+          <span>HOME</span>
         </Link>
 
         <Link
           href="/expenses"
-          className={`flex flex-col items-center gap-1 text-[10px] font-semibold py-1 px-3 transition-colors ${
-            pathname === '/expenses' ? 'text-[#0047FF] font-bold' : 'text-pencil'
+          className={`flex flex-col items-center gap-0.5 text-[9px] font-black py-1 px-2 uppercase transition-colors ${
+            pathname === '/expenses' ? 'text-[#FF3000] border-b-2 border-[#FF3000]' : 'text-pencil'
           }`}
         >
-          <Clock className="h-5 w-5" />
-          <span>Activity</span>
+          <Clock className="h-4 w-4" />
+          <span>ACTIVITY</span>
         </Link>
 
-        {/* CENTER PROMINENT 3D NEUMORPHIC ADD BUTTON */}
+        {/* CENTER SWISS ACTION TRIGGER */}
         <button
           onClick={handleQuickAdd}
           aria-label="Record Expense"
-          className="neu-btn-blue flex h-13 w-13 items-center justify-center rounded-full text-white active:scale-95 transition-all -mt-6 border-4 border-[var(--bg-main)] cursor-pointer"
+          className="swiss-btn-accent flex h-11 w-11 items-center justify-center text-white active:scale-95 transition-all -mt-5 border-2 border-black cursor-pointer shadow-none"
         >
-          <Plus className="h-6 w-6 stroke-[2.5]" />
+          <Plus className="h-5 w-5 stroke-[3]" />
         </button>
 
         <Link
           href="/budgets"
-          className={`flex flex-col items-center gap-1 text-[10px] font-semibold py-1 px-3 transition-colors ${
-            pathname === '/budgets' ? 'text-[#0047FF] font-bold' : 'text-pencil'
+          className={`flex flex-col items-center gap-0.5 text-[9px] font-black py-1 px-2 uppercase transition-colors ${
+            pathname === '/budgets' ? 'text-[#FF3000] border-b-2 border-[#FF3000]' : 'text-pencil'
           }`}
         >
-          <PiggyBank className="h-5 w-5" />
-          <span>Budgets</span>
+          <PiggyBank className="h-4 w-4" />
+          <span>BUDGETS</span>
         </Link>
 
         <button
           onClick={() => setMoreDrawerOpen(true)}
-          className={`flex flex-col items-center gap-1 text-[10px] font-semibold py-1 px-3 cursor-pointer transition-colors ${
+          className={`flex flex-col items-center gap-0.5 text-[9px] font-black py-1 px-2 uppercase cursor-pointer transition-colors ${
             pathname === '/debts' || pathname === '/reports' || pathname.startsWith('/admin')
-              ? 'text-[#0047FF] font-bold'
+              ? 'text-[#FF3000] border-b-2 border-[#FF3000]'
               : 'text-pencil'
           }`}
         >
-          <Menu className="h-5 w-5" />
-          <span>More</span>
+          <Menu className="h-4 w-4" />
+          <span>MORE</span>
         </button>
       </nav>
 
       {/* MOBILE MORE ACTIONS DRAWER */}
       {moreDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs md:hidden animate-fadeIn">
-          <div className="w-full bg-[var(--bg-surface)] rounded-t-3xl p-6 shadow-2xl space-y-4 animate-scaleIn border-t border-[#D8D2C6]/40 dark:border-[#252A36]">
-            <div className="flex items-center justify-between pb-3">
-              <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                Additional Ledgers & Settings
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-none md:hidden animate-fadeIn">
+          <div className="w-full bg-[var(--bg-surface)] border-t-4 border-black dark:border-white p-6 space-y-4 animate-scaleIn">
+            <div className="flex items-center justify-between pb-3 border-b-2 border-black dark:border-white/20">
+              <span className="text-xs font-black uppercase tracking-widest text-charcoal">
+                ADDITIONAL DIRECTORY
               </span>
               <button
                 onClick={() => setMoreDrawerOpen(false)}
-                className="p-1 text-pencil hover:text-charcoal cursor-pointer neu-btn-sm"
+                className="p-1 text-pencil hover:text-charcoal border border-black dark:border-white cursor-pointer"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className={`grid ${user?.role === 'ADMIN' ? 'grid-cols-3' : 'grid-cols-2'} gap-2.5`}>
+            <div className={`grid ${user?.role === 'ADMIN' ? 'grid-cols-3' : 'grid-cols-2'} gap-2`}>
               <Link
                 href="/debts"
                 onClick={() => setMoreDrawerOpen(false)}
-                className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98]"
+                className="p-3 border-2 border-black dark:border-white/30 bg-[var(--bg-subtle)] flex flex-col gap-1 transition-colors hover:bg-black hover:text-white"
               >
-                <ArrowLeftRight className="h-5 w-5 text-[#0047FF]" />
-                <span className="text-xs font-bold text-charcoal">Peer Ledgers</span>
+                <ArrowLeftRight className="h-5 w-5 text-[#FF3000]" />
+                <span className="text-xs font-black uppercase">PEER LEDGERS</span>
                 <span className="text-[9px] text-pencil">Lending & Debt</span>
               </Link>
 
               <Link
                 href="/reports"
                 onClick={() => setMoreDrawerOpen(false)}
-                className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98]"
+                className="p-3 border-2 border-black dark:border-white/30 bg-[var(--bg-subtle)] flex flex-col gap-1 transition-colors hover:bg-black hover:text-white"
               >
-                <FileSpreadsheet className="h-5 w-5 text-[#0047FF]" />
-                <span className="text-xs font-bold text-charcoal">Reports & CSV</span>
+                <FileSpreadsheet className="h-5 w-5 text-[#FF3000]" />
+                <span className="text-xs font-black uppercase">REPORTS</span>
                 <span className="text-[9px] text-pencil">Export data</span>
               </Link>
 
@@ -280,33 +281,30 @@ export default function DashboardLayoutClient({ user, children }) {
                 <Link
                   href="/admin"
                   onClick={() => setMoreDrawerOpen(false)}
-                  className="neu-card p-3 rounded-xl flex flex-col gap-1.5 transition-transform active:scale-[0.98] border border-purple-300/40 dark:border-purple-700/40"
+                  className="p-3 border-2 border-[#FF3000] bg-[var(--bg-subtle)] flex flex-col gap-1 transition-colors hover:bg-[#FF3000] hover:text-white"
                 >
-                  <ShieldAlert className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                  <span className="text-xs font-bold text-purple-700 dark:text-purple-300">Admin Portal</span>
-                  <span className="text-[9px] text-purple-500 dark:text-purple-400">System metrics</span>
+                  <ShieldAlert className="h-5 w-5 text-[#FF3000]" />
+                  <span className="text-xs font-black uppercase">ADMIN</span>
+                  <span className="text-[9px] text-pencil">Staff portal</span>
                 </Link>
               )}
             </div>
 
-            {/* In-Drawer Theme Switcher */}
+            {/* In-Drawer Theme Switcher & Install */}
             <ThemeToggle variant="sidebar" />
-
-            {/* In-Drawer Install App Action */}
             <InstallPwaButton className="w-full justify-center py-2.5" />
 
-            <div className="pt-3 neu-inset p-3 rounded-xl flex items-center justify-between">
+            <div className="pt-3 border-t-2 border-black dark:border-white/20 flex items-center justify-between">
               <div className="overflow-hidden">
-                <p className="text-xs font-bold text-charcoal truncate">{user?.name}</p>
-                <p className="text-[10px] text-pencil truncate">{user?.email}</p>
+                <p className="text-xs font-black text-charcoal truncate uppercase">{user?.name}</p>
+                <p className="text-[10px] font-mono text-pencil truncate">{user?.email}</p>
               </div>
 
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 text-xs font-bold text-loss px-3 py-1.5 rounded-lg neu-btn cursor-pointer"
+                className="py-1.5 px-3 text-xs font-black text-white bg-[#FF3000] border border-[#FF3000] uppercase cursor-pointer"
               >
-                <LogOut className="h-3.5 w-3.5" />
-                <span>Sign Out</span>
+                SIGN OUT
               </button>
             </div>
           </div>

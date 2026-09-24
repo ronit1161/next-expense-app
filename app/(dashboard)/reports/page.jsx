@@ -145,111 +145,69 @@ export default function ReportsPage() {
     }
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    downloadCSV(`ExpenseWise_${reportType}_Report_${timestamp}.csv`, csvContent);
+    downloadCSV(csvContent, `expensewise-${reportType}-report-${timestamp}.csv`);
   };
 
-  if (loading && data.length === 0) {
-    return <ReportsStatementSkeleton />;
-  }
+  const navTabs = [
+    { id: 'expenses', label: '04.1 ITEM STATEMENT', icon: FileText },
+    { id: 'categories', label: '04.2 SECTOR AGGREGATES', icon: PieChart },
+    { id: 'budgets', label: '04.3 BUDGET AUDIT', icon: Target },
+    { id: 'loans', label: '04.4 PEER EXPOSURE', icon: Users2 },
+  ];
 
   return (
-    <div className="space-y-6 pb-20 md:pb-8 animate-fadeIn">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-        <div>
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-            Statements & Audits
-          </span>
-          <h1 className="text-2xl md:text-3xl font-display font-semibold text-charcoal tracking-tight mt-0.5">
-            Reports & Export
-          </h1>
-          <p className="text-xs md:text-sm text-pencil mt-1">
-            Review structured audit logs and download offline CSV statements.
-          </p>
+    <div className="space-y-8 pb-16 animate-fadeIn">
+      {/* 1. TOP HEADER BANNER */}
+      <div className="border-b-4 border-black dark:border-white/20 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 bg-[#FF3000]"></span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+                04. REPORTS // FINANCIAL STATEMENTS
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
+              STATEMENTS &amp; LEDGER EXPORT
+            </h1>
+          </div>
+
+          <button
+            onClick={handleExportCSV}
+            disabled={!data || data.length === 0}
+            className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-2 self-start sm:self-auto disabled:opacity-30 cursor-pointer"
+          >
+            <Download className="h-4 w-4" />
+            <span>EXPORT CSV LEDGER</span>
+          </button>
         </div>
-
-        <button
-          onClick={handleExportCSV}
-          disabled={loading || data.length === 0}
-          className="neu-btn-blue inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-semibold disabled:opacity-40 cursor-pointer w-full sm:w-auto"
-        >
-          <Download className="h-4 w-4" />
-          <span>Export CSV Statement</span>
-        </button>
       </div>
 
-      {/* REPORT TYPE SELECTOR CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <button
-          onClick={() => setReportType('expenses')}
-          className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
-            reportType === 'expenses'
-              ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-pencil hover:text-charcoal'
-          }`}
-        >
-          <FileText
-            className={`h-4 w-4 mb-2 ${
-              reportType === 'expenses' ? 'text-[#0047FF]' : 'text-pencil'
-            }`}
-          />
-          <h4 className="text-xs font-bold">Expense Ledger</h4>
-          <p className="text-[10px] opacity-75 mt-0.5 leading-snug">Itemized journal</p>
-        </button>
-
-        <button
-          onClick={() => setReportType('categories')}
-          className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
-            reportType === 'categories'
-              ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-pencil hover:text-charcoal'
-          }`}
-        >
-          <PieChart
-            className={`h-4 w-4 mb-2 ${
-              reportType === 'categories' ? 'text-[#0047FF]' : 'text-pencil'
-            }`}
-          />
-          <h4 className="text-xs font-bold">Category Summary</h4>
-          <p className="text-[10px] opacity-75 mt-0.5 leading-snug">Spending distribution</p>
-        </button>
-
-        <button
-          onClick={() => setReportType('budgets')}
-          className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
-            reportType === 'budgets'
-              ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-pencil hover:text-charcoal'
-          }`}
-        >
-          <Target
-            className={`h-4 w-4 mb-2 ${
-              reportType === 'budgets' ? 'text-[#0047FF]' : 'text-pencil'
-            }`}
-          />
-          <h4 className="text-xs font-bold">Budget Pacing</h4>
-          <p className="text-[10px] opacity-75 mt-0.5 leading-snug">Limits vs Actuals</p>
-        </button>
-
-        <button
-          onClick={() => setReportType('loans')}
-          className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer ${
-            reportType === 'loans'
-              ? 'neu-inset text-[#0047FF]'
-              : 'neu-btn text-pencil hover:text-charcoal'
-          }`}
-        >
-          <Users2
-            className={`h-4 w-4 mb-2 ${
-              reportType === 'loans' ? 'text-[#0047FF]' : 'text-pencil'
-            }`}
-          />
-          <h4 className="text-xs font-bold">Peer Ledger</h4>
-          <p className="text-[10px] opacity-75 mt-0.5 leading-snug">Lent & Borrowed</p>
-        </button>
+      {/* 2. REPORT TYPE TAB SELECTOR */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+        {navTabs.map((tab) => {
+          const isActive = reportType === tab.id;
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setReportType(tab.id)}
+              className={`p-3 border-2 text-xs font-black uppercase flex items-center justify-between transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                  : 'border-black dark:border-white/30 bg-[var(--bg-surface)] text-charcoal hover:bg-black hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Icon className={`h-4 w-4 ${isActive ? 'text-[#FF3000]' : ''}`} />
+                <span>{tab.label}</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
-      {/* PERIOD CONTROLS (for expenses and budgets) */}
+      {/* 3. PERIOD SELECTOR (FOR PERIODIC REPORTS) */}
       {(reportType === 'expenses' || reportType === 'budgets') && (
         <ReportPeriodSelector
           month={month}
@@ -259,13 +217,17 @@ export default function ReportsPage() {
         />
       )}
 
-      {/* REPORT DATA PREVIEW TABLE */}
-      <ReportTable
-        reportType={reportType}
-        data={data}
-        error={error}
-        onRetry={fetchReportData}
-      />
+      {/* 4. STATEMENT DATA TABLE */}
+      {loading ? (
+        <ReportsStatementSkeleton />
+      ) : (
+        <ReportTable
+          reportType={reportType}
+          data={data}
+          error={error}
+          onRetry={fetchReportData}
+        />
+      )}
     </div>
   );
 }

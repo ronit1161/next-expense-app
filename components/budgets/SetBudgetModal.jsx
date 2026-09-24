@@ -17,43 +17,44 @@ export default function SetBudgetModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-xs p-0 sm:p-4 animate-fadeIn">
-      <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-[var(--bg-main)] neu-card p-6 shadow-2xl animate-scaleIn max-h-[92vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 animate-fadeIn">
+      <div className="w-full max-w-md border-4 border-black dark:border-white bg-[var(--bg-surface)] p-6 space-y-5 animate-scaleIn max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-3">
           <div>
-            <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-              Budget Control
+            <span className="text-[10px] font-black text-[#FF3000] uppercase tracking-widest block">
+              03.A ALLOCATION TARGET
             </span>
-            <h3 className="text-lg font-display font-semibold text-charcoal">
-              Set Spending Limit
+            <h3 className="text-xl font-black uppercase tracking-tight text-charcoal">
+              SET SPENDING LIMIT
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="neu-btn p-2 text-pencil hover:text-charcoal cursor-pointer rounded-xl"
+            className="p-1.5 border border-black dark:border-white text-pencil hover:text-charcoal cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {modalError && (
-          <div className="mt-4 neu-inset p-3 text-xs font-semibold text-loss rounded-xl">
+          <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 p-3 text-xs font-black text-[#FF3000] uppercase">
             {modalError}
           </div>
         )}
 
-        <form onSubmit={onSave} className="mt-4 space-y-4">
+        <form onSubmit={onSave} className="space-y-4">
           <div>
-            <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1.5">
-              Category *
+            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
+              CATEGORY *
             </label>
             <select
               value={selectedCategoryId}
               onChange={(e) => setSelectedCategoryId(e.target.value)}
-              className="neu-input block w-full py-2.5 px-3 text-xs cursor-pointer"
+              className="swiss-input block w-full py-2.5 px-3 text-xs font-mono font-bold uppercase cursor-pointer"
             >
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id} className="bg-[var(--bg-main)] text-charcoal">
+                <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
@@ -61,8 +62,8 @@ export default function SetBudgetModal({
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-pencil uppercase tracking-wider block mb-1.5">
-              Monthly Limit Amount (INR ₹) *
+            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
+              MONTHLY CAP AMOUNT (INR ₹) *
             </label>
             <input
               type="number"
@@ -71,24 +72,24 @@ export default function SetBudgetModal({
               placeholder="e.g. 15000"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="neu-input block w-full py-2.5 px-3 text-sm font-bold font-numeric text-charcoal"
+              className="swiss-input block w-full py-2.5 px-3 text-lg font-black font-mono text-charcoal"
             />
           </div>
 
-          <div className="pt-3 flex items-center justify-end gap-3">
+          <div className="pt-2 flex items-center justify-end gap-2 border-t-2 border-black dark:border-white/20">
             <button
               type="button"
               onClick={onClose}
-              className="neu-btn px-4 py-2.5 text-xs font-semibold text-pencil hover:text-charcoal cursor-pointer rounded-xl"
+              className="swiss-btn px-4 py-2 text-xs font-black"
             >
-              Cancel
+              CANCEL
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="neu-btn-blue px-5 py-2.5 text-xs font-semibold text-white cursor-pointer rounded-xl"
+              className="swiss-btn-accent px-5 py-2 text-xs font-black disabled:opacity-40"
             >
-              {saving ? 'Saving...' : 'Set Limit'}
+              {saving ? 'COMMITTING...' : 'SAVE BUDGET LIMIT'}
             </button>
           </div>
         </form>

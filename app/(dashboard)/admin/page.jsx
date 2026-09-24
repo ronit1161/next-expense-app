@@ -20,9 +20,9 @@ const AdminAnalyticsCharts = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="neu-card p-12 rounded-2xl flex flex-col items-center justify-center text-pencil">
-        <Loader2 className="h-8 w-8 animate-spin text-[#0047FF] mb-3" />
-        <p className="text-xs font-semibold">Loading platform analytics & charts...</p>
+      <div className="border-4 border-black dark:border-white/20 p-12 text-center text-pencil bg-[var(--bg-surface)]">
+        <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#FF3000] mb-2" />
+        <p className="text-xs font-mono uppercase font-black">COMPILING PLATFORM ANALYTICS...</p>
       </div>
     ),
   }
@@ -99,7 +99,7 @@ export default function AdminPage() {
   const [categories, setCategories] = useState([]);
   const [newCatName, setNewCatName] = useState('');
   const [newCatIcon, setNewCatIcon] = useState('Layers');
-  const [newCatColor, setNewCatColor] = useState('#0047FF');
+  const [newCatColor, setNewCatColor] = useState('#000000');
   const [savingCategory, setSavingCategory] = useState(false);
   const [categoryMsg, setCategoryMsg] = useState('');
   const [categoryError, setCategoryError] = useState('');
@@ -246,7 +246,7 @@ export default function AdminPage() {
         color: newCatColor,
       });
       if (res.success) {
-        setCategoryMsg('Category created successfully!');
+        setCategoryMsg('CATEGORY INITIALIZED');
         setNewCatName('');
         fetchCategories();
       } else {
@@ -261,7 +261,7 @@ export default function AdminPage() {
 
   // Delete Category Handler
   const handleDeleteCategory = async (catId) => {
-    if (!confirm('Are you sure you want to delete this category?')) return;
+    if (!confirm('CONFIRM DELETE: Remove this global category?')) return;
     try {
       const res = await deleteCategoryAction(catId);
       if (res.success) {
@@ -303,12 +303,12 @@ export default function AdminPage() {
         downloadAnchor.setAttribute('href', jsonString);
         downloadAnchor.setAttribute(
           'download',
-          `expensewise-backup-${new Date().toISOString().split('T')[0]}.json`
+          `expensewise-snapshot-${new Date().toISOString().split('T')[0]}.json`
         );
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        setExportSuccessMsg('Platform JSON Snapshot downloaded successfully!');
+        setExportSuccessMsg('PLATFORM JSON SNAPSHOT DOWNLOADED');
       } else {
         alert(res.error || 'Failed to generate backup.');
       }
@@ -340,7 +340,7 @@ export default function AdminPage() {
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        setExportSuccessMsg(`Master CSV with ${res.count} records downloaded successfully!`);
+        setExportSuccessMsg(`MASTER CSV (${res.count} RECORDS) DOWNLOADED`);
       } else {
         alert(res.error || 'Failed to generate CSV.');
       }
@@ -351,123 +351,74 @@ export default function AdminPage() {
     }
   };
 
+  const navTabs = [
+    { id: 'users', label: '06.1 DIRECTORY', icon: Users },
+    { id: 'analytics', label: '06.2 ANALYTICS', icon: BarChart3 },
+    { id: 'health', label: '06.3 HEALTH', icon: Activity },
+    { id: 'backup', label: '06.4 BACKUPS', icon: Database },
+    { id: 'activities', label: '06.5 STREAM', icon: Clock },
+    { id: 'categories', label: '06.6 CATEGORIES', icon: Layers },
+  ];
+
   return (
-    <div className="space-y-7 pb-16 animate-fadeIn">
-      {/* 1. Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 neu-card p-6 rounded-2xl bg-gradient-to-r from-[#EAE6DF] via-[#F3EFE8] to-[#EAE6DF] border border-purple-200/50 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-600 text-white shadow-[0_4px_12px_rgba(147,51,234,0.35)]">
-            <ShieldAlert className="h-6 w-6" />
-          </div>
+    <div className="space-y-8 pb-16 animate-fadeIn">
+      {/* 1. TOP HEADER BANNER */}
+      <div className="border-b-4 border-black dark:border-white/20 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold font-display text-charcoal">
-                Platform Admin Portal
-              </h1>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 font-bold border border-purple-200">
-                STAFF SECURE
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 bg-[#FF3000]"></span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+                06. ADMIN // PLATFORM CONSOLE
               </span>
             </div>
-            <p className="text-xs text-pencil mt-0.5">
-              Live platform metrics, user activity inspection, system diagnostics & data exports.
-            </p>
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
+              STAFF COMMAND CENTER
+            </h1>
           </div>
-        </div>
 
-        <button
-          onClick={() => {
-            fetchOverview();
-            if (activeTab === 'users') fetchUsers();
-            if (activeTab === 'analytics') fetchAnalytics();
-            if (activeTab === 'health') fetchHealth();
-            if (activeTab === 'activities') fetchActivities();
-          }}
-          className="neu-btn px-4 py-2 rounded-xl text-xs font-semibold text-charcoal flex items-center gap-2 self-start md:self-auto cursor-pointer"
-        >
-          <RefreshCw className="h-3.5 w-3.5 text-[#0047FF]" />
-          <span>Refresh All</span>
-        </button>
+          <button
+            onClick={() => {
+              fetchOverview();
+              if (activeTab === 'users') fetchUsers();
+              if (activeTab === 'analytics') fetchAnalytics();
+              if (activeTab === 'health') fetchHealth();
+              if (activeTab === 'activities') fetchActivities();
+            }}
+            className="swiss-btn px-4 py-2 text-xs font-black flex items-center gap-2 self-start sm:self-auto cursor-pointer"
+          >
+            <RefreshCw className="h-3.5 w-3.5 text-[#FF3000]" />
+            <span>SYNC ALL DATA</span>
+          </button>
+        </div>
       </div>
 
-      {/* 2. Executive KPI Cards */}
+      {/* 2. EXECUTIVE KPI TILES */}
       <AdminOverviewCards overview={overview} loadingOverview={loadingOverview} />
 
-      {/* 3. Tab Bar Navigation */}
-      <div className="flex items-center gap-2 border-b border-[#D8D2C6] pb-3 overflow-x-auto scrollbar-none">
-        <button
-          onClick={() => setActiveTab('users')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'users'
-              ? 'neu-inset text-[#0047FF] bg-blue-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <Users className="h-4 w-4" />
-          <span>Users & Inspector</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('analytics')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'analytics'
-              ? 'neu-inset text-[#0047FF] bg-blue-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <BarChart3 className="h-4 w-4" />
-          <span>Platform Analytics</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('health')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'health'
-              ? 'neu-inset text-emerald-600 bg-emerald-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <Activity className="h-4 w-4" />
-          <span>System & DB Health</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('backup')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'backup'
-              ? 'neu-inset text-purple-600 bg-purple-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <Database className="h-4 w-4" />
-          <span>Backups & Master CSV</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('activities')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'activities'
-              ? 'neu-inset text-[#0047FF] bg-blue-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <Clock className="h-4 w-4" />
-          <span>Global Stream</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('categories')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'categories'
-              ? 'neu-inset text-[#0047FF] bg-blue-50/50'
-              : 'text-pencil hover:text-charcoal hover:neu-card-sm'
-          }`}
-        >
-          <Layers className="h-4 w-4" />
-          <span>Category Manager</span>
-        </button>
+      {/* 3. SUB-SYSTEM NAVIGATION TABS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        {navTabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`p-2.5 border-2 text-xs font-black uppercase flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                  : 'border-black dark:border-white/30 bg-[var(--bg-surface)] text-charcoal hover:bg-black hover:text-white'
+              }`}
+            >
+              <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#FF3000]' : ''}`} />
+              <span className="truncate">{tab.label}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* 4. TAB 1: ALL USERS & DEEP ACTIVITY INSPECTION */}
+      {/* 4. ACTIVE TAB CONTENT */}
       {activeTab === 'users' && (
         <AdminUsersTab
           users={users}
@@ -481,13 +432,12 @@ export default function AdminPage() {
         />
       )}
 
-      {/* 5. TAB 2: PLATFORM ANALYTICS & MACRO CHARTS */}
       {activeTab === 'analytics' && (
         <div className="space-y-6 animate-fadeIn">
           {loadingAnalytics ? (
-            <div className="neu-card p-12 rounded-2xl flex flex-col items-center justify-center text-pencil">
-              <Loader2 className="h-8 w-8 animate-spin text-[#0047FF] mb-3" />
-              <p className="text-xs font-semibold">Aggregating platform-wide analytics...</p>
+            <div className="border-4 border-black dark:border-white/20 p-12 text-center text-pencil bg-[var(--bg-surface)]">
+              <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#FF3000] mb-2" />
+              <p className="text-xs font-mono uppercase font-black">AGGREGATING PLATFORM ANALYTICS...</p>
             </div>
           ) : (
             <AdminAnalyticsCharts analytics={analytics} />
@@ -495,7 +445,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* 6. TAB 3: SYSTEM HEALTH & DB DIAGNOSTICS */}
       {activeTab === 'health' && (
         <AdminHealthTab
           health={health}
@@ -505,7 +454,6 @@ export default function AdminPage() {
         />
       )}
 
-      {/* 7. TAB 4: DATA BACKUP & MASTER EXPORT */}
       {activeTab === 'backup' && (
         <AdminBackupTab
           exportSuccessMsg={exportSuccessMsg}
@@ -520,7 +468,6 @@ export default function AdminPage() {
         />
       )}
 
-      {/* 8. TAB 5: GLOBAL ACTIVITY STREAM */}
       {activeTab === 'activities' && (
         <AdminActivitiesTab
           activities={activities}
@@ -533,7 +480,6 @@ export default function AdminPage() {
         />
       )}
 
-      {/* 9. TAB 6: CATEGORY MANAGER */}
       {activeTab === 'categories' && (
         <AdminCategoriesTab
           categories={categories}
@@ -551,7 +497,7 @@ export default function AdminPage() {
         />
       )}
 
-      {/* 10. USER ACTIVITY INSPECTOR MODAL */}
+      {/* 5. USER INSPECTION MODAL */}
       <AdminUserInspectModal
         inspectingUser={inspectingUser}
         inspectDetail={inspectDetail}

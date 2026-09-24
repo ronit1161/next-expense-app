@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Plus, Sparkles, X } from 'lucide-react';
+import { Plus, Sparkles, X, RefreshCw } from 'lucide-react';
 import SmsParserModal from '@/components/expenses/SmsParserModal';
 import ExpenseModal from '@/components/expenses/ExpenseModal';
 import ExpenseFilters from '@/components/expenses/ExpenseFilters';
@@ -142,133 +142,113 @@ export default function ExpensesPage() {
   const handleSaveExpense = async (e) => {
     e.preventDefault();
     setModalError('');
-
-    if (!amount || Number(amount) <= 0) {
-      setModalError('Please enter a valid amount.');
-      return;
-    }
-    if (!selectedCategoryId) {
-      setModalError('Please choose a category.');
-      return;
-    }
-
     setSaving(true);
+
     try {
       const payload = {
-        amount: Number(amount),
-        categoryId: Number(selectedCategoryId),
-        description: description.trim() || null,
+        amount: parseFloat(amount),
+        categoryId: parseInt(selectedCategoryId, 10),
+        description: description.trim() || undefined,
         paymentMethod,
         expenseDate,
       };
 
-      let res;
+      let result;
       if (modalMode === 'add') {
-        res = await createExpenseAction(payload);
+        result = await createExpenseAction(payload);
       } else {
-        res = await updateExpenseAction(editingExpenseId, payload);
+        result = await updateExpenseAction(editingExpenseId, payload);
       }
 
-      if (res.success) {
-        setSuccessMsg(
-          modalMode === 'add' ? 'Entry recorded in journal.' : 'Entry updated.'
-        );
-        setTimeout(() => setSuccessMsg(''), 3000);
+      if (result.success) {
         closeModal();
+        setSuccessMsg(modalMode === 'add' ? 'ENTRY LOGGED SUCCESSFULLY' : 'ENTRY UPDATED');
+        setTimeout(() => setSuccessMsg(''), 3000);
         fetchExpenses();
       } else {
-        setModalError(res.error || 'Failed to save entry.');
+        setModalError(result.error || 'Failed to process transaction.');
       }
     } catch (err) {
-      setModalError(err.message || 'Operation failed.');
+      setModalError('Failed to process transaction.');
+      console.error(err);
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteExpense = async (id) => {
-    if (!window.confirm('Delete this transaction from your journal?')) return;
-
-    // Optimistically remove from state immediately for 0ms perceived latency
-    const prevExpenses = [...expenses];
-    setExpenses((current) => current.filter((e) => e.id !== id));
-
+    if (!confirm('CONFIRM DELETE: Are you sure you want to remove this ledger entry?')) return;
     try {
-      const res = await deleteExpenseAction(id);
-      if (res.success) {
-        setSuccessMsg('Entry deleted.');
+      const result = await deleteExpenseAction(id);
+      if (result.success) {
+        setSuccessMsg('ENTRY REMOVED');
         setTimeout(() => setSuccessMsg(''), 3000);
+        fetchExpenses();
       } else {
-        // Rollback on server failure
-        setExpenses(prevExpenses);
-        setError(res.error || 'Failed to delete entry.');
+        alert(result.error || 'Failed to remove entry.');
       }
     } catch (err) {
-      setExpenses(prevExpenses);
-      setError(err.message || 'Failed to delete entry.');
+      console.error(err);
+      alert('Failed to remove entry.');
     }
   };
 
-  if (loading && expenses.length === 0) {
-    return <ActivityTimelineSkeleton />;
-  }
-
   return (
-    <div className="w-full max-w-full min-w-0 space-y-5 pb-12 animate-fadeIn">
-      {/* 1. HEADER */}
-      <div className="flex items-center justify-between pb-2 gap-2 w-full min-w-0">
-        <div className="min-w-0 flex-1">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            Journal Outflows
-          </span>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-charcoal tracking-tight truncate">
-            Activity Timeline
-          </h1>
-        </div>
+    <div className="space-y-6 pb-16 animate-fadeIn">
+      {/* 1. TOP HEADER BANNER */}
+      <div className="border-b-4 border-black dark:border-white/20 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 bg-[#FF3000]"></span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+                02. ACTIVITY // TRANSACTION LEDGER
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
+              ITEMIZED EXPENDITURES
+            </h1>
+          </div>
 
-        {/* Action Buttons: Smart SMS Parser + New Entry */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setIsSmsModalOpen(true)}
-            className="neu-btn inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs font-bold text-[#0047FF] hover:text-[#0038D1] cursor-pointer min-h-[36px]"
-            title="Auto-detect and log expenses from bank SMS or UPI alerts"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="hidden sm:inline">Paste SMS / UPI</span>
-            <span className="sm:hidden">SMS</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            {/* SMS Parser Button */}
+            <button
+              onClick={() => setIsSmsModalOpen(true)}
+              className="swiss-btn px-3 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-[#FF3000]" />
+              <span>PASTE SMS</span>
+            </button>
 
-          <button
-            onClick={openAddModal}
-            className="neu-btn-blue inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs font-semibold text-white cursor-pointer shrink-0 min-h-[36px]"
-          >
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">New Entry</span>
-            <span className="sm:hidden">Add</span>
-          </button>
+            {/* Manual Add Button */}
+            <button
+              onClick={openAddModal}
+              className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer"
+            >
+              <Plus className="h-4 w-4 stroke-[3]" />
+              <span>RECORD ENTRY</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* FEEDBACK BANNERS */}
+      {/* SUCCESS / ERROR ALERTS */}
       {successMsg && (
-        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-emerald-800 dark:text-emerald-400 animate-fadeIn w-full min-w-0">
+        <div className="border-2 border-black bg-black text-white dark:border-white dark:bg-white dark:text-black p-3 text-xs font-black uppercase tracking-wider animate-fadeIn flex items-center justify-between">
           <span>{successMsg}</span>
-          <button onClick={() => setSuccessMsg('')} className="p-1 cursor-pointer">
+          <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-loss animate-fadeIn w-full min-w-0">
-          <span>{error}</span>
-          <button onClick={() => setError('')} className="p-1 cursor-pointer">
-            <X className="h-3.5 w-3.5" />
-          </button>
+        <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 text-[#FF3000] p-3 text-xs font-black uppercase tracking-wider animate-fadeIn">
+          {error}
         </div>
       )}
 
-      {/* 2. CATEGORY HORIZONTAL FILTER STRIP & FILTER TOGGLE */}
+      {/* 2. FILTER BAR */}
       <ExpenseFilters
         categories={categories}
         categoryId={categoryId}
@@ -291,18 +271,22 @@ export default function ExpensesPage() {
         onResetFilters={handleResetFilters}
       />
 
-      {/* 3. DATE-GROUPED TIMELINE TABLE & LIST */}
-      <ExpenseTable
-        expenses={expenses}
-        page={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        onOpenAdd={openAddModal}
-        onOpenEdit={openEditModal}
-        onDelete={handleDeleteExpense}
-      />
+      {/* 3. TRANSACTION TIMELINE / TABLE */}
+      {loading ? (
+        <ActivityTimelineSkeleton />
+      ) : (
+        <ExpenseTable
+          expenses={expenses}
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+          onOpenAdd={openAddModal}
+          onOpenEdit={openEditModal}
+          onDelete={handleDeleteExpense}
+        />
+      )}
 
-      {/* 4. ADD / EDIT EXPENSE MODAL */}
+      {/* EXPENSE ENTRY FORM MODAL */}
       <ExpenseModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -323,12 +307,16 @@ export default function ExpensesPage() {
         onSave={handleSaveExpense}
       />
 
-      {/* 5. SMART SMS & UPI PARSER MODAL */}
+      {/* SMS BULK PARSER MODAL */}
       <SmsParserModal
         isOpen={isSmsModalOpen}
         onClose={() => setIsSmsModalOpen(false)}
         categories={categories}
-        onBatchCreated={fetchExpenses}
+        onBatchCreated={() => {
+          fetchExpenses();
+          setSuccessMsg('SMS TRANSACTIONS IMPORTED SUCCESSFULLY');
+          setTimeout(() => setSuccessMsg(''), 3000);
+        }}
       />
     </div>
   );

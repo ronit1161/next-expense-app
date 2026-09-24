@@ -12,75 +12,97 @@ export default function DashboardSummaryCards({ summary }) {
 
   return (
     <div className="space-y-4">
-      {/* Large Dominant Financial Figure */}
-      <div className="neu-card p-5 sm:p-6 rounded-3xl">
-        <span className="text-[11px] font-bold text-pencil uppercase tracking-wider block">
-          Total Monthly Outflow
-        </span>
-        <div className="text-4xl sm:text-5xl md:text-6xl font-display font-extrabold tracking-tight text-charcoal tabular-nums mt-1">
+      {/* Dominant Swiss KPI Tile */}
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 sm:p-8 swiss-dots relative">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-black dark:border-white/20 pb-3">
+          <span className="text-xs font-black uppercase tracking-widest text-[#FF3000]">
+            01.0 // TOTAL MONTHLY OUTFLOW
+          </span>
+          <span className="text-[10px] font-mono uppercase text-pencil">
+            RECORDED EXPENDITURE
+          </span>
+        </div>
+
+        <div className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter text-charcoal tabular-nums mt-4">
           {formatCurrency(summary?.monthSpent)}
         </div>
+
         {summary?.budgetLimit > 0 && (
-          <div className="mt-3 flex items-center gap-2">
-            <div className="flex-1 neu-groove h-2 p-0.5">
+          <div className="mt-5 space-y-2">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="font-bold text-charcoal uppercase">
+                CAPACITY: {budgetUtilization}% UTILIZED
+              </span>
+              <span className="text-pencil font-bold">
+                BUDGET CAP: {formatCurrency(summary?.budgetLimit)}
+              </span>
+            </div>
+            {/* Rectangular Solid Progress Bar */}
+            <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] h-4 p-0.5">
               <div
-                className={`h-full rounded-full ${
-                  budgetUtilization > 100 ? 'bg-loss' : 'bg-[#0047FF]'
+                className={`h-full transition-all duration-300 ${
+                  budgetUtilization > 100 ? 'bg-[#FF3000]' : 'bg-black dark:bg-white'
                 }`}
                 style={{ width: `${Math.min(100, budgetUtilization)}%` }}
               />
             </div>
-            <span className="text-xs text-pencil font-medium shrink-0">
-              {budgetUtilization}% of {formatCurrency(summary?.budgetLimit)}
-            </span>
           </div>
         )}
       </div>
 
-      {/* Three Restrained Stat Tiles */}
+      {/* Three Structural Metric Blocks */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Tile A: Today */}
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            Today&apos;s Spend
-          </span>
-          <div className="text-2xl font-bold text-charcoal tabular-nums mt-2">
+        {/* Tile 1: Today's Total */}
+        <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+              TODAY&apos;S TOTAL
+            </span>
+            <span className="text-[9px] font-mono text-[#FF3000] font-black">01.A</span>
+          </div>
+          <div className="text-2xl font-black text-charcoal tabular-nums mt-3">
             {formatCurrency(summary?.todaySpent)}
           </div>
-          <p className="text-[11px] text-pencil mt-2 truncate">
-            Top: <span className="font-semibold text-charcoal">{summary?.highestCategory || 'N/A'}</span>
+          <p className="text-[10px] font-mono text-pencil mt-3 pt-2 border-t border-black/10 dark:border-white/10 uppercase truncate">
+            TOP CAT: <span className="font-bold text-charcoal">{summary?.highestCategory || 'NONE'}</span>
           </p>
         </div>
 
-        {/* Tile B: Budget Headroom */}
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            Remaining Budget
-          </span>
-          <div className="text-2xl font-bold text-charcoal tabular-nums mt-2">
+        {/* Tile 2: Remaining Headroom */}
+        <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+              BUDGET HEADROOM
+            </span>
+            <span className="text-[9px] font-mono text-[#FF3000] font-black">01.B</span>
+          </div>
+          <div className="text-2xl font-black text-charcoal tabular-nums mt-3">
             {formatCurrency(summary?.remainingBudget)}
           </div>
-          <p className="text-[11px] text-pencil mt-2">
-            Cap: {formatCurrency(summary?.budgetLimit)}
+          <p className="text-[10px] font-mono text-pencil mt-3 pt-2 border-t border-black/10 dark:border-white/10 uppercase">
+            LIMIT: {formatCurrency(summary?.budgetLimit)}
           </p>
         </div>
 
-        {/* Tile C: Peer Exposure */}
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            Peer Net Balance
-          </span>
+        {/* Tile 3: Peer Exposure */}
+        <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+              PEER NET BALANCE
+            </span>
+            <span className="text-[9px] font-mono text-[#FF3000] font-black">01.C</span>
+          </div>
           <div
-            className={`text-2xl font-bold tabular-nums mt-2 ${
-              netDebt >= 0 ? 'text-gain' : 'text-loss'
+            className={`text-2xl font-black tabular-nums mt-3 ${
+              netDebt < 0 ? 'text-[#FF3000]' : 'text-charcoal'
             }`}
           >
             {formatCurrency(netDebt)}
           </div>
-          <p className="text-[11px] text-pencil mt-2 flex items-center justify-between">
-            <span>To Rec: {formatCurrency(summary?.receivable)}</span>
-            <span>To Pay: {formatCurrency(summary?.payable)}</span>
-          </p>
+          <div className="text-[10px] font-mono text-pencil mt-3 pt-2 border-t border-black/10 dark:border-white/10 flex items-center justify-between uppercase">
+            <span>REC: {formatCurrency(summary?.receivable)}</span>
+            <span>PAY: {formatCurrency(summary?.payable)}</span>
+          </div>
         </div>
       </div>
     </div>

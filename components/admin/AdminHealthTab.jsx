@@ -7,44 +7,46 @@ export default function AdminHealthTab({
   handlePingDb,
 }) {
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6">
       {loadingHealth ? (
-        <div className="neu-card p-12 rounded-2xl flex flex-col items-center justify-center text-pencil">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-600 mb-3" />
-          <p className="text-xs font-semibold">Running database & server diagnostics...</p>
+        <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-12 text-center rounded-none">
+          <Loader2 className="h-8 w-8 animate-spin text-swiss-red mx-auto mb-3" />
+          <p className="font-mono text-xs uppercase tracking-widest text-neutral-500">
+            [01] RUNNING DATABASE & SERVER DIAGNOSTICS...
+          </p>
         </div>
       ) : health ? (
         <>
           {/* Vitals Summary Card */}
-          <div className="neu-card p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-emerald-200/60 bg-gradient-to-r from-[#EAE6DF] via-emerald-50/20 to-[#EAE6DF]">
-            <div className="flex items-center gap-4">
+          <div className="border-4 border-black dark:border-white bg-white dark:bg-black p-6 rounded-none flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start md:items-center gap-4">
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-2xl text-white ${
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-none font-mono text-lg font-black text-white ${
                   health.status === 'HEALTHY'
-                    ? 'bg-emerald-600 shadow-[0_4px_12px_rgba(16,185,129,0.35)]'
-                    : 'bg-amber-600 shadow-[0_4px_12px_rgba(245,158,11,0.35)]'
+                    ? 'bg-black text-white dark:bg-white dark:text-black'
+                    : 'bg-swiss-red text-white'
                 }`}
               >
                 <Activity className="h-6 w-6" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-charcoal">
-                    PostgreSQL Database Connection
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="font-black text-base uppercase tracking-tight text-black dark:text-white">
+                    PostgreSQL Connection Matrix
                   </h3>
                   <span
-                    className={`text-[10px] px-2 py-0.5 rounded-md font-bold uppercase ${
+                    className={`font-mono text-[10px] px-2 py-0.5 font-bold uppercase rounded-none border ${
                       health.status === 'HEALTHY'
-                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                        : 'bg-amber-100 text-amber-700 border border-amber-200'
+                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                        : 'bg-swiss-red text-white border-swiss-red'
                     }`}
                   >
-                    {health.status}
+                    STATUS: {health.status}
                   </span>
                 </div>
-                <p className="text-xs text-pencil mt-0.5">
-                  Neon Serverless Postgres • Measured latency:{' '}
-                  <strong className="text-emerald-700 font-bold">
+                <p className="font-mono text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                  Engine: Neon Serverless Postgres // Latency:{' '}
+                  <strong className="text-black dark:text-white font-black">
                     {health.databaseLatencyMs} ms
                   </strong>
                 </p>
@@ -54,60 +56,65 @@ export default function AdminHealthTab({
             <button
               onClick={handlePingDb}
               disabled={pingingDb}
-              className="neu-btn px-4 py-2 rounded-xl text-xs font-semibold text-charcoal flex items-center gap-2 self-start md:self-auto cursor-pointer"
+              className="swiss-btn-outline px-5 py-3 rounded-none font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start md:self-auto cursor-pointer"
             >
               <RefreshCw
-                className={`h-3.5 w-3.5 text-emerald-600 ${pingingDb ? 'animate-spin' : ''}`}
+                className={`h-3.5 w-3.5 ${pingingDb ? 'animate-spin text-swiss-red' : ''}`}
               />
-              <span>{pingingDb ? 'Pinging DB...' : 'Test DB Latency'}</span>
+              <span>{pingingDb ? 'PINGING_DB...' : 'TEST DB LATENCY'}</span>
             </button>
           </div>
 
           {/* Table Row Statistics */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-pencil uppercase tracking-wider">
-              Database Table Row Counts
-            </h3>
+            <div className="flex items-center justify-between border-b-2 border-black dark:border-white pb-2">
+              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-neutral-500">
+                [02] DATABASE ROW TELEMETRY
+              </h3>
+              <span className="font-mono text-[10px] uppercase text-neutral-400">
+                LIVE_SCHEMA_COUNT
+              </span>
+            </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-              <div className="neu-card p-4 rounded-xl text-center">
-                <p className="text-[10px] text-pencil uppercase font-bold">Users</p>
-                <p className="text-lg font-extrabold text-charcoal mt-1">
+              <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">USERS</p>
+                <p className="font-mono text-xl font-black text-black dark:text-white mt-1 tabular-nums">
                   {health.tableCounts?.users ?? 0}
                 </p>
               </div>
 
-              <div className="neu-card p-4 rounded-xl text-center">
-                <p className="text-[10px] text-pencil uppercase font-bold">Expenses</p>
-                <p className="text-lg font-extrabold text-charcoal mt-1">
+              <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">EXPENSES</p>
+                <p className="font-mono text-xl font-black text-black dark:text-white mt-1 tabular-nums">
                   {health.tableCounts?.expenses ?? 0}
                 </p>
               </div>
 
-              <div className="neu-card p-4 rounded-xl text-center">
-                <p className="text-[10px] text-pencil uppercase font-bold">Budgets</p>
-                <p className="text-lg font-extrabold text-charcoal mt-1">
+              <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">BUDGETS</p>
+                <p className="font-mono text-xl font-black text-black dark:text-white mt-1 tabular-nums">
                   {health.tableCounts?.budgets ?? 0}
                 </p>
               </div>
 
-              <div className="neu-card p-4 rounded-xl text-center">
-                <p className="text-[10px] text-pencil uppercase font-bold">Loans</p>
-                <p className="text-lg font-extrabold text-charcoal mt-1">
+              <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">LOANS</p>
+                <p className="font-mono text-xl font-black text-black dark:text-white mt-1 tabular-nums">
                   {health.tableCounts?.loans ?? 0}
                 </p>
               </div>
 
-              <div className="neu-card p-4 rounded-xl text-center">
-                <p className="text-[10px] text-pencil uppercase font-bold">Settlements</p>
-                <p className="text-lg font-extrabold text-charcoal mt-1">
+              <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">SETTLEMENTS</p>
+                <p className="font-mono text-xl font-black text-black dark:text-white mt-1 tabular-nums">
                   {health.tableCounts?.settlements ?? 0}
                 </p>
               </div>
 
-              <div className="neu-card p-4 rounded-xl text-center bg-blue-50/30 border border-blue-200/50">
-                <p className="text-[10px] text-[#0047FF] uppercase font-bold">Total Rows</p>
-                <p className="text-lg font-extrabold text-[#0047FF] mt-1">
+              <div className="border-2 border-black dark:border-white bg-black text-white dark:bg-white dark:text-black p-4 rounded-none">
+                <p className="font-mono text-[10px] text-neutral-400 dark:text-neutral-600 uppercase tracking-wider font-bold">TOTAL ROWS</p>
+                <p className="font-mono text-xl font-black mt-1 tabular-nums">
                   {health.tableCounts?.totalRecords ?? 0}
                 </p>
               </div>
@@ -116,40 +123,46 @@ export default function AdminHealthTab({
 
           {/* Server Runtime Environment */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="neu-card p-5 rounded-2xl flex items-center gap-3">
-              <Server className="h-5 w-5 text-pencil" />
+            <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-5 rounded-none flex items-center gap-3">
+              <div className="p-2 border border-black dark:border-white bg-neutral-100 dark:bg-neutral-900 rounded-none">
+                <Server className="h-5 w-5 text-black dark:text-white" />
+              </div>
               <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                  Node Version & Env
+                <span className="font-mono text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
+                  NODE & ENVIRONMENT
                 </span>
-                <p className="text-xs font-bold text-charcoal mt-0.5">
-                  {health.runtime?.nodeVersion} • {health.runtime?.environment}
+                <p className="font-mono text-xs font-black text-black dark:text-white mt-0.5">
+                  {health.runtime?.nodeVersion || 'Node.js'} • {health.runtime?.environment || 'production'}
                 </p>
               </div>
             </div>
 
-            <div className="neu-card p-5 rounded-2xl flex items-center gap-3">
-              <HardDrive className="h-5 w-5 text-pencil" />
+            <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-5 rounded-none flex items-center gap-3">
+              <div className="p-2 border border-black dark:border-white bg-neutral-100 dark:bg-neutral-900 rounded-none">
+                <HardDrive className="h-5 w-5 text-black dark:text-white" />
+              </div>
               <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                  Memory Heap Used
+                <span className="font-mono text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
+                  HEAP MEMORY USAGE
                 </span>
-                <p className="text-xs font-bold text-charcoal mt-0.5">
+                <p className="font-mono text-xs font-black text-black dark:text-white mt-0.5 tabular-nums">
                   {health.runtime?.memoryUsage?.heapUsedMb || '—'} MB /{' '}
                   {health.runtime?.memoryUsage?.heapTotalMb || '—'} MB
                 </p>
               </div>
             </div>
 
-            <div className="neu-card p-5 rounded-2xl flex items-center gap-3">
-              <Cpu className="h-5 w-5 text-pencil" />
+            <div className="border-2 border-black dark:border-white bg-white dark:bg-black p-5 rounded-none flex items-center gap-3">
+              <div className="p-2 border border-black dark:border-white bg-neutral-100 dark:bg-neutral-900 rounded-none">
+                <Cpu className="h-5 w-5 text-black dark:text-white" />
+              </div>
               <div>
-                <span className="text-[10px] font-bold text-pencil uppercase tracking-wider">
-                  Server Uptime
+                <span className="font-mono text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
+                  SERVER UPTIME
                 </span>
-                <p className="text-xs font-bold text-charcoal mt-0.5">
-                  {Math.floor((health.runtime?.uptimeSeconds || 0) / 60)} minutes (
-                  {health.runtime?.uptimeSeconds || 0}s)
+                <p className="font-mono text-xs font-black text-black dark:text-white mt-0.5 tabular-nums">
+                  {Math.floor((health.runtime?.uptimeSeconds || 0) / 60)} MIN (
+                  {health.runtime?.uptimeSeconds || 0}S)
                 </p>
               </div>
             </div>

@@ -24,57 +24,54 @@ export default function AdminActivitiesTab({
               setActivitySearch(e.target.value);
               setActivityPage(1);
             }}
-            placeholder="Search transaction or user..."
-            className="neu-input w-full pl-10 pr-4 py-2 text-xs text-charcoal placeholder:text-pencil rounded-xl"
+            placeholder="SEARCH TRANSACTION OR USER..."
+            className="swiss-input w-full pl-10 pr-4 py-2 text-xs font-mono uppercase"
           />
         </div>
-        <p className="text-xs text-pencil self-end sm:self-auto">
-          Page {activityPage} of {totalActivityPages}
+        <p className="text-xs font-mono text-pencil self-end sm:self-auto uppercase">
+          PAGE {activityPage} OF {totalActivityPages}
         </p>
       </div>
 
       {/* Activity Timeline List */}
-      <div className="neu-card rounded-2xl overflow-hidden border border-[#D8D2C6]/50">
-        <div className="divide-y divide-[#E0DBD0]">
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] overflow-hidden">
+        <div className="divide-y divide-black/10 dark:divide-white/10">
           {loadingActivities ? (
             <div className="p-8 text-center text-pencil">
-              <Loader2 className="h-5 w-5 animate-spin mx-auto text-[#0047FF] mb-2" />
-              Loading platform activity stream...
+              <Loader2 className="h-5 w-5 animate-spin mx-auto text-[#FF3000] mb-2" />
+              <p className="text-xs font-mono uppercase font-black">STREAMING REAL-TIME AUDIT LOGS...</p>
             </div>
           ) : activities.length === 0 ? (
-            <div className="p-8 text-center text-pencil">
-              No platform activity found matching your search.
+            <div className="p-8 text-center text-xs font-mono text-pencil uppercase">
+              NO PLATFORM ACTIVITY FOUND MATCHING QUERY.
             </div>
           ) : (
             activities.map((a) => (
               <div
                 key={a.id}
-                className="p-4 flex items-center justify-between gap-4 hover:bg-[#E2DDD4]/40 transition-colors"
+                className="p-4 flex items-center justify-between gap-4 hover:bg-[var(--bg-subtle)] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className="h-10 w-10 rounded-xl flex items-center justify-center neu-card-sm text-white shrink-0"
-                    style={{ backgroundColor: a.categoryColor || '#0047FF' }}
-                  >
-                    <CategoryIcon name={a.categoryIcon} className="h-4 w-4" />
+                  <div className="h-8 w-8 bg-black text-white dark:bg-white dark:text-black flex items-center justify-center shrink-0">
+                    <CategoryIcon iconName={a.categoryIcon} className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-xs text-charcoal">{a.description}</p>
-                    <div className="flex items-center gap-2 text-[11px] text-pencil mt-0.5">
-                      <span className="font-semibold text-charcoal">{a.userName}</span>
+                    <p className="font-black text-xs text-charcoal uppercase">{a.description || a.categoryName}</p>
+                    <div className="flex items-center gap-2 text-[10px] font-mono text-pencil uppercase mt-0.5">
+                      <span className="font-bold text-charcoal">{a.userName}</span>
                       <span>•</span>
                       <span>{a.userEmail}</span>
                       <span>•</span>
                       <span>{formatDate(a.expenseDate)}</span>
                       <span>•</span>
-                      <span className="uppercase text-[9px] px-1 rounded bg-[#D8D2C6]/50">
+                      <span className="border border-current px-1">
                         {a.paymentMethod}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <span className="font-bold text-xs text-loss shrink-0">
+                <span className="font-black text-xs font-mono text-[#FF3000] shrink-0">
                   -{formatCurrency(a.amount)}
                 </span>
               </div>
@@ -84,23 +81,23 @@ export default function AdminActivitiesTab({
 
         {/* Pagination Controls */}
         {totalActivityPages > 1 && (
-          <div className="p-4 flex items-center justify-between border-t border-[#D8D2C6] bg-[#EAE6DF]">
+          <div className="p-3 flex items-center justify-between border-t-2 border-black dark:border-white/20 bg-[var(--bg-subtle)]">
             <button
               disabled={activityPage <= 1}
               onClick={() => setActivityPage((p) => Math.max(1, p - 1))}
-              className="neu-btn-sm px-3 py-1 rounded-lg text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer"
+              className="swiss-btn px-3 py-1 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
             >
-              <ChevronLeft className="h-3.5 w-3.5" /> Previous
+              <ChevronLeft className="h-3.5 w-3.5" /> PREVIOUS
             </button>
-            <span className="text-xs text-pencil">
-              Page {activityPage} of {totalActivityPages}
+            <span className="text-xs font-mono text-pencil uppercase font-bold">
+              PAGE {activityPage} OF {totalActivityPages}
             </span>
             <button
               disabled={activityPage >= totalActivityPages}
               onClick={() => setActivityPage((p) => Math.min(totalActivityPages, p + 1))}
-              className="neu-btn-sm px-3 py-1 rounded-lg text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer"
+              className="swiss-btn px-3 py-1 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
             >
-              Next <ChevronRight className="h-3.5 w-3.5" />
+              NEXT <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
         )}

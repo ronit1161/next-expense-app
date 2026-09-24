@@ -3,79 +3,71 @@ import { formatCurrency } from '@/lib/utils';
 
 export default function AdminOverviewCards({ overview, loadingOverview }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Total Users */}
-      <div className="neu-card p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-            Total Users
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+            TOTAL USERS
           </span>
-          <div className="p-2 rounded-xl bg-blue-50 text-[#0047FF] neu-card-sm">
-            <Users className="h-4 w-4" />
-          </div>
+          <span className="text-[9px] font-mono text-[#FF3000] font-black">06.A</span>
         </div>
         <div className="mt-3">
-          <p className="text-2xl font-display font-extrabold text-charcoal">
+          <p className="text-3xl font-black text-charcoal tabular-nums font-mono">
             {loadingOverview ? '...' : overview?.totalUsers || 0}
           </p>
-          <p className="text-[10px] text-pencil mt-0.5">Registered accounts</p>
+          <p className="text-[10px] font-mono text-pencil mt-1 uppercase">REGISTERED ACCOUNTS</p>
         </div>
       </div>
 
       {/* Gross Platform Spend */}
-      <div className="neu-card p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-            Gross Volume
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+            GROSS VOLUME
           </span>
-          <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 neu-card-sm">
-            <TrendingUp className="h-4 w-4" />
-          </div>
+          <span className="text-[9px] font-mono text-[#FF3000] font-black">06.B</span>
         </div>
         <div className="mt-3">
-          <p className="text-2xl font-display font-extrabold text-charcoal">
+          <p className="text-3xl font-black text-charcoal tabular-nums font-mono">
             {loadingOverview ? '...' : formatCurrency(overview?.totalVolume || 0)}
           </p>
-          <p className="text-[10px] text-pencil mt-0.5">
-            Avg {formatCurrency(overview?.averageSpendPerUser || 0)} / user
+          <p className="text-[10px] font-mono text-pencil mt-1 uppercase">
+            AVG {formatCurrency(overview?.averageSpendPerUser || 0)} / USER
           </p>
         </div>
       </div>
 
       {/* Total Expenses Logged */}
-      <div className="neu-card p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-            Total Entries
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+            TOTAL ENTRIES
           </span>
-          <div className="p-2 rounded-xl bg-purple-50 text-purple-600 neu-card-sm">
-            <CreditCard className="h-4 w-4" />
-          </div>
+          <span className="text-[9px] font-mono text-[#FF3000] font-black">06.C</span>
         </div>
         <div className="mt-3">
-          <p className="text-2xl font-display font-extrabold text-charcoal">
+          <p className="text-3xl font-black text-charcoal tabular-nums font-mono">
             {loadingOverview ? '...' : overview?.totalExpensesCount?.toLocaleString() || 0}
           </p>
-          <p className="text-[10px] text-pencil mt-0.5">Across all categories</p>
+          <p className="text-[10px] font-mono text-pencil mt-1 uppercase">ALL CATEGORIES</p>
         </div>
       </div>
 
       {/* Active Budgets & Lending */}
-      <div className="neu-card p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-            Active Budgets
+      <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-pencil">
+            ACTIVE BUDGETS
           </span>
-          <div className="p-2 rounded-xl bg-amber-50 text-amber-600 neu-card-sm">
-            <PiggyBank className="h-4 w-4" />
-          </div>
+          <span className="text-[9px] font-mono text-[#FF3000] font-black">06.D</span>
         </div>
         <div className="mt-3">
-          <p className="text-2xl font-display font-extrabold text-charcoal">
+          <p className="text-3xl font-black text-charcoal tabular-nums font-mono">
             {loadingOverview ? '...' : overview?.totalBudgetsCount || 0}
           </p>
-          <p className="text-[10px] text-pencil mt-0.5">
-            {overview?.totalLoansCount || 0} peer debt records
+          <p className="text-[10px] font-mono text-pencil mt-1 uppercase">
+            {overview?.totalLoansCount || 0} PEER DEBT RECORDS
           </p>
         </div>
       </div>

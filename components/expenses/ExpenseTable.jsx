@@ -33,22 +33,22 @@ export default function ExpenseTable({
   const sortedDates = Object.keys(groupedExpenses).sort((a, b) => new Date(b) - new Date(a));
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {expenses.length === 0 ? (
-        <div className="neu-card p-8 sm:p-12 text-center rounded-3xl space-y-4">
+        <div className="border-4 border-black dark:border-white/20 p-8 sm:p-12 text-center space-y-4 bg-[var(--bg-surface)]">
           <CreditCard className="h-8 w-8 text-pencil mx-auto" />
           <div>
-            <h3 className="text-sm font-bold text-charcoal">NO TRANSACTIONS LOGGED</h3>
-            <p className="text-xs text-pencil mt-1 max-w-xs mx-auto">
-              No activity found for the selected category or period.
+            <h3 className="text-sm font-black uppercase text-charcoal">NO TRANSACTIONS LOGGED</h3>
+            <p className="text-xs font-mono text-pencil mt-1 max-w-xs mx-auto uppercase">
+              NO ACTIVITY FOUND FOR THE SELECTED FILTERS.
             </p>
           </div>
           <button
             onClick={onOpenAdd}
-            className="neu-btn-blue inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold cursor-pointer min-h-[38px]"
+            className="swiss-btn-accent px-4 py-2.5 text-xs font-black uppercase cursor-pointer"
           >
-            <Plus className="h-3.5 w-3.5" />
-            <span>Record First Expense</span>
+            <Plus className="h-4 w-4 mr-1 stroke-[3]" />
+            <span>RECORD FIRST EXPENSE</span>
           </button>
         </div>
       ) : (
@@ -58,36 +58,36 @@ export default function ExpenseTable({
 
           return (
             <div key={dateStr} className="space-y-2">
-              {/* Date Group Header */}
-              <div className="flex items-center justify-between px-2 pb-0.5">
-                <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-                  {formatDate(dateStr)}
+              {/* Date Group Header - Swiss Crisp Border */}
+              <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-1 px-1">
+                <span className="text-xs font-black text-charcoal uppercase tracking-wider">
+                  {formatDate(dateStr).toUpperCase()}
                 </span>
-                <span className="text-xs font-bold text-charcoal tabular-nums font-numeric">
-                  {formatCurrency(dayTotal)}
+                <span className="text-xs font-black text-charcoal tabular-nums font-mono">
+                  TOTAL: {formatCurrency(dayTotal)}
                 </span>
               </div>
 
               {/* Day Items List */}
-              <div className="neu-card rounded-2xl p-2 space-y-1.5">
+              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-surface)] divide-y-2 divide-black/10 dark:divide-white/10">
                 {dayExpenses.map((exp) => (
                   <div
                     key={exp.id}
-                    className="p-3 rounded-xl flex items-center justify-between hover:neu-inset transition-all gap-2.5"
+                    className="p-3.5 flex items-center justify-between hover:bg-[var(--bg-subtle)] transition-colors gap-3"
                   >
                     {/* Left: Icon & Description */}
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl neu-card-sm text-charcoal shrink-0">
-                        <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4 text-pencil" />
+                      <div className="flex h-8 w-8 items-center justify-center border border-black dark:border-white/40 bg-black text-white dark:bg-white dark:text-black shrink-0">
+                        <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4" />
                       </div>
-                      <div className="min-w-0 flex-1 pr-1">
-                        <p className="text-xs sm:text-sm font-bold text-charcoal truncate leading-tight">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm font-black text-charcoal truncate uppercase">
                           {exp.description || exp.categoryName}
                         </p>
-                        <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-pencil">
-                          <span className="truncate max-w-[90px] sm:max-w-none">{exp.categoryName}</span>
+                        <div className="flex items-center gap-2 mt-0.5 text-[10px] font-mono text-pencil uppercase">
+                          <span className="font-bold text-charcoal">{exp.categoryName}</span>
                           <span>•</span>
-                          <span className="px-1.5 py-0.5 rounded-md neu-inset text-charcoal font-medium shrink-0">
+                          <span className="border border-current px-1">
                             {exp.paymentMethod.replace('_', ' ')}
                           </span>
                         </div>
@@ -95,27 +95,27 @@ export default function ExpenseTable({
                     </div>
 
                     {/* Right: Amount & Actions */}
-                    <div className="flex items-center gap-2.5 shrink-0">
-                      <span className="text-xs sm:text-sm font-bold text-charcoal tabular-nums font-numeric">
-                        {formatCurrency(exp.amount)}
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-xs sm:text-sm font-black text-charcoal tabular-nums font-mono">
+                        -{formatCurrency(exp.amount)}
                       </span>
 
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => onOpenEdit(exp)}
-                          className="neu-btn p-1.5 text-pencil hover:text-charcoal rounded-lg cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
-                          title="Edit"
-                          aria-label="Edit expense"
+                          className="p-1.5 border border-black/20 dark:border-white/20 hover:border-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer"
+                          aria-label="Edit record"
+                          title="Edit record"
                         >
-                          <Pencil className="h-3.5 w-3.5" />
+                          <Pencil className="h-3 w-3" />
                         </button>
                         <button
                           onClick={() => onDelete(exp.id)}
-                          className="neu-btn p-1.5 text-pencil hover:text-loss rounded-lg cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
-                          title="Delete"
-                          aria-label="Delete expense"
+                          className="p-1.5 border border-black/20 dark:border-white/20 hover:border-[#FF3000] hover:bg-[#FF3000] hover:text-white transition-colors cursor-pointer"
+                          aria-label="Delete record"
+                          title="Delete record"
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
+                          <Trash2 className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
@@ -127,28 +127,28 @@ export default function ExpenseTable({
         })
       )}
 
-      {/* PAGINATION */}
+      {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-3">
+        <div className="flex items-center justify-between border-2 border-black dark:border-white/20 p-3 bg-[var(--bg-surface)]">
           <button
+            disabled={page <= 1}
             onClick={() => onPageChange(Math.max(1, page - 1))}
-            disabled={page === 1}
-            className="neu-btn inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold text-charcoal disabled:opacity-40 cursor-pointer min-h-[36px]"
+            className="swiss-btn px-3 py-1.5 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
-            <span>Prev</span>
+            <span>PREVIOUS</span>
           </button>
 
-          <span className="text-xs font-medium text-pencil tabular-nums">
-            Page {page} of {totalPages}
+          <span className="text-xs font-mono font-bold text-pencil uppercase">
+            PAGE {page} OF {totalPages}
           </span>
 
           <button
+            disabled={page >= totalPages}
             onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-            disabled={page === totalPages}
-            className="neu-btn inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold text-charcoal disabled:opacity-40 cursor-pointer min-h-[36px]"
+            className="swiss-btn px-3 py-1.5 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
           >
-            <span>Next</span>
+            <span>NEXT</span>
             <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>

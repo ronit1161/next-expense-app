@@ -136,34 +136,32 @@ export default function DebtsPage() {
     setLoanError('');
 
     if (!contactName.trim()) {
-      setLoanError('Please provide a contact person name.');
+      setLoanError('PLEASE SPECIFY A CONTACT NAME.');
       return;
     }
-
     if (!amount || Number(amount) <= 0) {
-      setLoanError('Please enter a valid loan principal amount.');
+      setLoanError('PLEASE SPECIFY A VALID LOAN AMOUNT.');
       return;
     }
 
     setLoanSaving(true);
     try {
-      const payload = {
+      const res = await createLoanAction({
         contactName: contactName.trim(),
         type: loanType,
         amount: Number(amount),
         loanDate,
         dueDate: dueDate || undefined,
         description: description.trim() || undefined,
-      };
+      });
 
-      const res = await createLoanAction(payload);
       if (res.success) {
-        setSuccessMsg('Peer loan recorded.');
+        setSuccessMsg('PEER LEDGER RECORD LOGGED');
         setTimeout(() => setSuccessMsg(''), 3000);
         closeAddLoanModal();
         fetchLedgerData();
       } else {
-        setLoanError(res.error || 'Failed to record loan.');
+        setLoanError(res.error || 'Failed to create loan record.');
       }
     } catch (err) {
       setLoanError(err.message || 'Operation failed.');
@@ -177,29 +175,26 @@ export default function DebtsPage() {
     setSettleError('');
 
     if (!settleAmount || Number(settleAmount) <= 0) {
-      setSettleError('Please specify a positive settlement amount.');
+      setSettleError('PLEASE ENTER A VALID REPAYMENT AMOUNT.');
       return;
     }
-
-    if (Number(settleAmount) > Number(selectedLoan?.remainingAmount)) {
-      setSettleError(
-        `Settlement amount cannot exceed remaining balance (₹${selectedLoan?.remainingAmount}).`
-      );
+    if (Number(settleAmount) > selectedLoan.remainingAmount) {
+      setSettleError(`AMOUNT CANNOT EXCEED OUTSTANDING ${formatCurrency(selectedLoan.remainingAmount)}`);
       return;
     }
 
     setSettleSaving(true);
     try {
-      const payload = {
+      const res = await recordSettlementAction({
+        loanId: selectedLoan.id,
         amount: Number(settleAmount),
         paymentMethod,
         settlementDate,
-        notes: notes || null,
-      };
+        notes: notes.trim() || undefined,
+      });
 
-      const res = await recordSettlementAction(selectedLoan.id, payload);
       if (res.success) {
-        setSuccessMsg('Settlement logged successfully.');
+        setSuccessMsg('SETTLEMENT AUDITED & LOGGED');
         setTimeout(() => setSuccessMsg(''), 3000);
         closeSettlementModal();
         fetchLedgerData();
@@ -214,56 +209,52 @@ export default function DebtsPage() {
   };
 
   const handleDeleteLoan = async (id) => {
-    if (!window.confirm('Permanently remove this peer loan record?')) return;
-
+    if (!confirm('CONFIRM DELETE: Remove this peer loan ledger record?')) return;
     try {
       const res = await deleteLoanAction(id);
       if (res.success) {
-        setSuccessMsg('Loan record deleted.');
+        setSuccessMsg('LEDGER RECORD DELETED');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchLedgerData();
       } else {
-        setError(res.error || 'Failed to delete record.');
+        alert(res.error || 'Failed to delete loan.');
       }
     } catch (err) {
-      setError(err.message || 'Failed to delete record.');
+      console.error(err);
+      alert('Failed to delete loan.');
     }
   };
 
-  const netBalance = summary.totalReceivable - summary.totalPayable;
-
-  if (loading && loans.length === 0) {
-    return <DebtsLedgerSkeleton />;
-  }
-
   return (
-    <div className="space-y-6 pb-20 md:pb-8 animate-fadeIn">
-      {/* 1. HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-        <div>
-          <span className="text-[11px] font-bold text-pencil uppercase tracking-wider">
-            Peer Registers
-          </span>
-          <h1 className="text-2xl md:text-3xl font-display font-semibold text-charcoal tracking-tight mt-0.5">
-            Lending & Borrowing
-          </h1>
-          <p className="text-xs md:text-sm text-pencil mt-1">
-            Track receivables, payables, and step-by-step debt repayments.
-          </p>
-        </div>
+    <div className="space-y-8 pb-16 animate-fadeIn">
+      {/* 1. TOP HEADER BANNER */}
+      <div className="border-b-4 border-black dark:border-white/20 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 bg-[#FF3000]"></span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+                05. PEER LEDGERS // LENDING &amp; EXPOSURE
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
+              PEER DEBT &amp; LENDING
+            </h1>
+          </div>
 
-        <button
-          onClick={openAddLoanModal}
-          className="neu-btn-blue inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-semibold text-white cursor-pointer w-full sm:w-auto"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Record Loan</span>
-        </button>
+          <button
+            onClick={openAddLoanModal}
+            className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+          >
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>RECORD PEER LOAN</span>
+          </button>
+        </div>
       </div>
 
-      {/* FEEDBACK BANNERS */}
+      {/* ALERTS */}
       {successMsg && (
-        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-emerald-800 dark:text-emerald-400 animate-fadeIn">
+        <div className="border-2 border-black bg-black text-white p-3 text-xs font-black uppercase tracking-wider animate-fadeIn flex items-center justify-between">
           <span>{successMsg}</span>
           <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
             <X className="h-3.5 w-3.5" />
@@ -272,148 +263,141 @@ export default function DebtsPage() {
       )}
 
       {error && (
-        <div className="flex items-center justify-between rounded-xl neu-inset px-4 py-3 text-xs font-semibold text-loss animate-fadeIn">
-          <span>{error}</span>
-          <button
-            onClick={() => {
-              setLoading(true);
-              fetchLedgerData();
-            }}
-            className="flex items-center gap-1 text-xs underline cursor-pointer"
-          >
-            <RefreshCw className="h-3 w-3" />
-            <span>Retry</span>
-          </button>
+        <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 text-[#FF3000] p-3 text-xs font-black uppercase tracking-wider animate-fadeIn">
+          {error}
         </div>
       )}
 
-      {/* 2. SUMMARY TILES */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            To Receive (Lent)
-          </span>
-          <div className="text-2xl font-bold text-gain tabular-nums mt-2">
+      {/* 2. RECEIVABLE VS PAYABLE DUAL TILES */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Receivable (Lent) */}
+        <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-2">
+          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-2">
+            <span className="text-xs font-black uppercase tracking-widest text-charcoal">
+              05.A OUTSTANDING RECEIVABLE (LENT OUT)
+            </span>
+            <span className="text-[10px] font-mono px-1 border border-black dark:border-white uppercase font-bold">
+              TO RECEIVE
+            </span>
+          </div>
+          <div className="text-3xl sm:text-5xl font-black text-charcoal tabular-nums font-mono pt-2">
             {formatCurrency(summary.totalReceivable)}
           </div>
-          <p className="text-[11px] text-pencil mt-2">Total pending from contacts</p>
+          <p className="text-[10px] font-mono text-pencil uppercase pt-1">
+            AGGREGATE CAPITAL OWED TO YOU BY RECIPIENTS
+          </p>
         </div>
 
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            To Pay (Borrowed)
-          </span>
-          <div className="text-2xl font-bold text-loss tabular-nums mt-2">
+        {/* Payable (Borrowed) */}
+        <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-2">
+          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-2">
+            <span className="text-xs font-black uppercase tracking-widest text-[#FF3000]">
+              05.B OUTSTANDING PAYABLE (BORROWED)
+            </span>
+            <span className="text-[10px] font-mono px-1 bg-[#FF3000] text-white uppercase font-bold">
+              TO REPAY
+            </span>
+          </div>
+          <div className="text-3xl sm:text-5xl font-black text-[#FF3000] tabular-nums font-mono pt-2">
             {formatCurrency(summary.totalPayable)}
           </div>
-          <p className="text-[11px] text-pencil mt-2">Total owed to others</p>
-        </div>
-
-        <div className="neu-card p-5 rounded-2xl flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-pencil uppercase tracking-wider block">
-            Net Balance Exposure
-          </span>
-          <div
-            className={`text-2xl font-bold tabular-nums mt-2 ${
-              netBalance >= 0 ? 'text-gain' : 'text-loss'
-            }`}
-          >
-            {formatCurrency(netBalance)}
-          </div>
-          <p className="text-[11px] text-pencil mt-2">
-            {netBalance >= 0 ? 'Net creditor position' : 'Net debtor position'}
+          <p className="text-[10px] font-mono text-pencil uppercase pt-1">
+            AGGREGATE OBLIGATION YOU OWE TO LENDERS
           </p>
         </div>
       </div>
 
-      {/* 3. SUB-TAB & FILTER CONTROLS */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pt-1">
-        <div className="inline-flex rounded-2xl neu-inset p-1.5 gap-1">
-          <button
-            onClick={() => setActiveTab('loans')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === 'loans'
-                ? 'neu-card-sm text-[#0047FF] font-bold'
-                : 'text-pencil hover:text-charcoal'
-            }`}
-          >
-            All Loans ({loans.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('contacts')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === 'contacts'
-                ? 'neu-card-sm text-[#0047FF] font-bold'
-                : 'text-pencil hover:text-charcoal'
-            }`}
-          >
-            Contacts Directory ({contacts.length})
-          </button>
+      {/* 3. TABS & FILTER TOOLBAR */}
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black dark:border-white/20 pb-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab('loans')}
+              className={`px-4 py-2 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+                activeTab === 'loans'
+                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                  : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+              }`}
+            >
+              ACTIVE LEDGERS ({loans.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('contacts')}
+              className={`px-4 py-2 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+                activeTab === 'contacts'
+                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                  : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+              }`}
+            >
+              DIRECTORY ({contacts.length})
+            </button>
+          </div>
+
+          {activeTab === 'loans' && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <select
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+                className="swiss-input py-1.5 px-2.5 text-xs font-mono font-bold uppercase cursor-pointer"
+              >
+                <option value="">ALL TYPES</option>
+                <option value="LENT">LENT (RECEIVABLE)</option>
+                <option value="BORROWED">BORROWED (PAYABLE)</option>
+              </select>
+
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="swiss-input py-1.5 px-2.5 text-xs font-mono font-bold uppercase cursor-pointer"
+              >
+                <option value="">ALL STATUSES</option>
+                <option value="PENDING">PENDING</option>
+                <option value="PARTIAL">PARTIAL</option>
+                <option value="SETTLED">SETTLED</option>
+              </select>
+            </div>
+          )}
         </div>
 
-        {activeTab === 'loans' && (
-          <div className="flex items-center gap-2.5">
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="neu-input py-1.5 px-3 text-xs font-medium text-charcoal cursor-pointer"
+        {/* 4. CONTENT VIEW */}
+        {loading ? (
+          <DebtsLedgerSkeleton />
+        ) : activeTab === 'contacts' ? (
+          <ContactsDirectoryTab contacts={contacts} />
+        ) : loans.length === 0 ? (
+          <div className="border-4 border-black dark:border-white/20 p-8 sm:p-12 text-center space-y-4 bg-[var(--bg-surface)]">
+            <CreditCard className="h-8 w-8 text-pencil mx-auto" />
+            <div>
+              <h3 className="text-sm font-black uppercase text-charcoal">
+                NO PEER LEDGERS FOUND
+              </h3>
+              <p className="text-xs font-mono text-pencil mt-1 max-w-xs mx-auto uppercase">
+                NO RECORDED LENDING OR DEBT ENTRIES MATCHING CRITERIA.
+              </p>
+            </div>
+            <button
+              onClick={openAddLoanModal}
+              className="swiss-btn-accent px-4 py-2.5 text-xs font-black uppercase cursor-pointer"
             >
-              <option value="" className="bg-[var(--bg-main)] text-charcoal">All Types</option>
-              <option value="LENT" className="bg-[var(--bg-main)] text-charcoal">Lent Only</option>
-              <option value="BORROWED" className="bg-[var(--bg-main)] text-charcoal">Borrowed Only</option>
-            </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="neu-input py-1.5 px-3 text-xs font-medium text-charcoal cursor-pointer"
-            >
-              <option value="" className="bg-[var(--bg-main)] text-charcoal">All Statuses</option>
-              <option value="PENDING" className="bg-[var(--bg-main)] text-charcoal">Pending</option>
-              <option value="PARTIAL" className="bg-[var(--bg-main)] text-charcoal">Partial</option>
-              <option value="SETTLED" className="bg-[var(--bg-main)] text-charcoal">Settled</option>
-            </select>
+              <Plus className="h-4 w-4 mr-1 stroke-[3]" />
+              <span>LOG FIRST PEER LOAN</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {loans.map((loan) => (
+              <DebtCard
+                key={loan.id}
+                loan={loan}
+                onOpenSettlement={openSettlementModal}
+                onDelete={handleDeleteLoan}
+              />
+            ))}
           </div>
         )}
       </div>
 
-      {/* 4. ACTIVE TAB CONTENT */}
-      {activeTab === 'loans' ? (
-        <div className="space-y-4">
-          {loans.length === 0 ? (
-            <div className="neu-card p-12 text-center rounded-3xl space-y-4">
-              <CreditCard className="h-8 w-8 text-pencil mx-auto" />
-              <div>
-                <h3 className="text-sm font-bold text-charcoal">NO PEER LOANS RECORDED</h3>
-                <p className="text-xs text-pencil mt-1 max-w-xs mx-auto">
-                  Keep track of money lent to friends or borrowed from contacts.
-                </p>
-              </div>
-              <button
-                onClick={openAddLoanModal}
-                className="neu-btn-blue inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold cursor-pointer"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Record Loan</span>
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {loans.map((loan) => (
-                <DebtCard
-                  key={loan.id}
-                  loan={loan}
-                  onOpenSettlement={openSettlementModal}
-                  onDelete={handleDeleteLoan}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      ) : (
-        <ContactsDirectoryTab contacts={contacts} />
-      )}
-
-      {/* 5. RECORD LOAN MODAL */}
+      {/* MODALS */}
       <AddLoanModal
         isOpen={isLoanModalOpen}
         onClose={closeAddLoanModal}
@@ -434,7 +418,6 @@ export default function DebtsPage() {
         onSave={handleSaveLoan}
       />
 
-      {/* 6. SETTLEMENT & AUDIT MODAL */}
       <SettlementModal
         isOpen={isSettlementModalOpen}
         onClose={closeSettlementModal}

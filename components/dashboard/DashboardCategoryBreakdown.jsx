@@ -8,59 +8,67 @@ export default function DashboardCategoryBreakdown({ categoryBreakdown = [], tot
   const totalMonth = totalMonthSpent || 1;
 
   return (
-    <div className="neu-card p-5 sm:p-6 rounded-3xl space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xs font-bold text-charcoal uppercase tracking-wider">
-          Where Your Money Went
-        </h2>
-        <span className="text-[11px] text-pencil font-medium">
-          {categoryBreakdown.length} Categories
-        </span>
-      </div>
+    <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-4 h-full flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-3">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+              01.3 ALLOCATION
+            </span>
+            <h2 className="text-sm font-black uppercase tracking-tight text-charcoal">
+              CATEGORY BREAKDOWN
+            </h2>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-pencil uppercase">
+            {categoryBreakdown.length} SECTORS
+          </span>
+        </div>
 
-      {categoryBreakdown.length > 0 ? (
-        <div className="space-y-4 pt-1">
-          {categoryBreakdown.map((cat) => {
-            const percent = Math.round((cat.total / totalMonth) * 100);
+        {categoryBreakdown.length > 0 ? (
+          <div className="space-y-4 pt-4">
+            {categoryBreakdown.map((cat, idx) => {
+              const percent = Math.round((cat.total / totalMonth) * 100);
 
-            return (
-              <div key={cat.categoryId} className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-charcoal">
-                    {cat.categoryName}
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-pencil tabular-nums">
-                      {percent}%
+              return (
+                <div key={cat.categoryId} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="font-black text-charcoal uppercase">
+                      {idx + 1}. {cat.categoryName}
                     </span>
-                    <span className="font-bold text-charcoal tabular-nums">
-                      {formatCurrency(cat.total)}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] text-pencil">{percent}%</span>
+                      <span className="font-bold text-charcoal">{formatCurrency(cat.total)}</span>
+                    </div>
+                  </div>
+                  {/* Solid Sharp Progress Bar */}
+                  <div className="border border-black dark:border-white/20 bg-[var(--bg-subtle)] h-2.5 p-0.5">
+                    <div
+                      className="h-full bg-black dark:bg-white transition-all duration-300"
+                      style={{ width: `${Math.min(100, percent)}%` }}
+                    />
                   </div>
                 </div>
-                {/* Indented Groove Track with Molded Fill */}
-                <div className="neu-groove h-2 w-full p-0.5">
-                  <div
-                    className="h-full bg-charcoal rounded-full neu-progress-fill transition-all duration-300"
-                    style={{ width: `${Math.min(100, percent)}%` }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="neu-inset p-6 text-center rounded-2xl space-y-2">
-          <p className="text-xs text-pencil">No expenses recorded this month yet.</p>
-          <Link
-            href="/expenses?action=add"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-electric hover:underline"
-          >
-            <Plus className="h-3 w-3" />
-            <span>Record your first transaction</span>
-          </Link>
-        </div>
-      )}
+              );
+            })}
+          </div>
+        ) : (
+          <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] p-6 text-center space-y-3 mt-4">
+            <p className="text-xs font-mono text-pencil uppercase">NO EXPENDITURES RECORDED</p>
+            <Link
+              href="/expenses?action=add"
+              className="swiss-btn-accent px-3 py-1.5 text-xs font-black"
+            >
+              <Plus className="h-3 w-3 mr-1" />
+              <span>LOG FIRST RECORD</span>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div className="pt-4 border-t border-black/10 dark:border-white/10 flex items-center justify-between text-[10px] font-mono text-pencil uppercase">
+        <span>AGGREGATE:</span>
+        <span className="font-bold text-charcoal">{formatCurrency(totalMonthSpent)}</span>
+      </div>
     </div>
   );
 }

@@ -36,51 +36,53 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#EAE6DF] px-4 py-12">
-      <div className="w-full max-w-sm space-y-6">
-        {/* Editorial Header */}
-        <div className="text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#0047FF]"></span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#7D8494]">ExpenseWise</span>
+    <div className="flex min-h-screen items-center justify-center bg-[var(--bg-main)] px-4 py-12 swiss-grid-pattern">
+      <div className="w-full max-w-md space-y-4">
+        {/* Architectural Header */}
+        <div className="border-b-4 border-black dark:border-white/30 pb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-3.5 w-3.5 bg-[#FF3000]"></span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
+              00. AUTHENTICATION // PORTAL
+            </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#1E2025]">
-            Sign in to your journal
+          <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter text-charcoal">
+            SIGN IN TO LEDGER
           </h1>
-          <p className="text-xs text-[#7D8494] mt-1">
-            Access your personal ledger and financial pacing.
+          <p className="text-xs font-mono text-pencil mt-1 uppercase">
+            OBJECTIVE FINANCIAL RECORD &amp; PACING SYSTEM
           </p>
         </div>
 
-        {/* Form Container */}
-        <div className="neu-card p-6 sm:p-7">
+        {/* Form Container - Swiss Heavy Card */}
+        <div className="border-4 border-black dark:border-white/30 bg-[var(--bg-surface)] p-6 sm:p-8">
           {error && (
-            <div className="mb-5 flex items-start gap-2.5 rounded-xl bg-rose-100/70 p-3 text-xs text-rose-800">
+            <div className="mb-6 flex items-start gap-2.5 border-2 border-[#FF3000] bg-[#FF3000]/10 p-3 text-xs text-[#FF3000] font-black uppercase">
               <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-              <span className="font-medium leading-relaxed">{error}</span>
+              <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
+          <form onSubmit={handleSubmit} className="space-y-5" suppressHydrationWarning>
             <div>
-              <label className="block text-xs font-bold text-[#1E2025] mb-1.5">
-                Email Address
+              <label className="block text-xs font-black uppercase tracking-wider text-charcoal mb-1.5">
+                EMAIL ADDRESS
               </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                className="neu-input block w-full py-2 px-3 text-xs focus:outline-none"
+                placeholder="USER@EXPENSEWISE.COM"
+                className="swiss-input block w-full py-2.5 px-3 text-xs font-mono"
                 suppressHydrationWarning
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold text-[#1E2025]">
-                  Password
+                <label className="block text-xs font-black uppercase tracking-wider text-charcoal">
+                  SECURITY KEY (PASSWORD)
                 </label>
               </div>
               <div className="relative">
@@ -89,17 +91,17 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="neu-input block w-full py-2 pl-3 pr-9 text-xs focus:outline-none"
+                  placeholder="••••••••••••"
+                  className="swiss-input block w-full py-2.5 pl-3 pr-10 text-xs font-mono"
                   suppressHydrationWarning
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#7D8494] hover:text-[#1E2025] transition-colors cursor-pointer"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-pencil hover:text-charcoal transition-colors cursor-pointer"
                   suppressHydrationWarning
                 >
-                  {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
@@ -107,27 +109,27 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="neu-btn-blue flex w-full justify-center items-center gap-2 py-2.5 px-4 text-xs font-bold cursor-pointer disabled:opacity-50 mt-3"
+              className="swiss-btn-accent flex w-full justify-center items-center gap-2 py-3 px-4 text-xs font-black uppercase tracking-wider cursor-pointer disabled:opacity-50 mt-4"
               suppressHydrationWarning
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Signing In...</span>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>AUTHENTICATING...</span>
                 </>
               ) : (
-                <span>Access Ledger</span>
+                <span>ACCESS SYSTEM // &rarr;</span>
               )}
             </button>
           </form>
 
-          <div className="mt-5 text-center text-xs text-[#7D8494] border-t border-[#DFDBD3]/40 pt-4">
-            New user?{' '}
+          <div className="mt-6 text-center text-xs text-pencil border-t-2 border-black dark:border-white/20 pt-4 uppercase font-bold">
+            NO ACCOUNT REGISTERED?{' '}
             <Link
               href="/signup"
-              className="font-bold text-[#0047FF] hover:underline"
+              className="font-black text-[#FF3000] hover:underline"
             >
-              Create Account
+              CREATE NEW ACCOUNT
             </Link>
           </div>
         </div>
