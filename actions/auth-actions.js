@@ -29,6 +29,7 @@ export async function registerAction(data) {
         id: true,
         name: true,
         email: true,
+        role: true,
       },
     });
 
@@ -65,6 +66,7 @@ export async function loginAction(data) {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
     };
 
     await createSession(userSafe);
