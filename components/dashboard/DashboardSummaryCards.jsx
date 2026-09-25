@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatCurrency } from '@/lib/utils';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
+import { triggerHaptic } from '@/lib/haptics';
 import {
   ArrowUpRight,
   ArrowDownLeft,
@@ -55,11 +57,22 @@ export default function DashboardSummaryCards({ summary }) {
             Total monthly spending
           </span>
           <div className="flex items-center gap-3 mt-1.5">
-            <span className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white tabular-nums">
-              {showBalance ? formatCurrency(summary?.monthSpent || 0) : '₹ ••••••••'}
-            </span>
+            {showBalance ? (
+              <AnimatedNumber
+                value={summary?.monthSpent || 0}
+                duration={850}
+                className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white"
+              />
+            ) : (
+              <span className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white tabular-nums">
+                ₹ ••••••••
+              </span>
+            )}
             <button
-              onClick={() => setShowBalance(!showBalance)}
+              onClick={() => {
+                triggerHaptic('selection');
+                setShowBalance(!showBalance);
+              }}
               aria-label={showBalance ? 'Hide balance' : 'Show balance'}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all cursor-pointer"
             >
@@ -131,8 +144,8 @@ export default function DashboardSummaryCards({ summary }) {
               <Calendar className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="font-heading font-black text-2xl text-[var(--text-primary)] tabular-nums mt-3">
-            {formatCurrency(summary?.todaySpent || 0)}
+          <div className="font-heading font-black text-2xl text-[var(--text-primary)] mt-3">
+            <AnimatedNumber value={summary?.todaySpent || 0} />
           </div>
           <p className="text-[11px] text-[var(--text-muted)] mt-2 font-medium truncate">
             Top Sector: <span className="font-bold text-[var(--text-primary)]">{summary?.highestCategory || 'None'}</span>
@@ -149,8 +162,8 @@ export default function DashboardSummaryCards({ summary }) {
               <PiggyBank className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="font-heading font-black text-2xl text-teal-600 dark:text-teal-400 tabular-nums mt-3">
-            {formatCurrency(summary?.remainingBudget || 0)}
+          <div className="font-heading font-black text-2xl text-teal-600 dark:text-teal-400 mt-3">
+            <AnimatedNumber value={summary?.remainingBudget || 0} />
           </div>
           <p className="text-[11px] text-[var(--text-muted)] mt-2 font-medium truncate">
             Limit: <span className="font-bold text-[var(--text-primary)]">{formatCurrency(summary?.budgetLimit || 0)}</span>
@@ -168,11 +181,11 @@ export default function DashboardSummaryCards({ summary }) {
             </div>
           </div>
           <div
-            className={`font-heading font-black text-2xl tabular-nums mt-3 ${
+            className={`font-heading font-black text-2xl mt-3 ${
               netDebt < 0 ? 'text-rose-500' : 'text-[var(--text-primary)]'
             }`}
           >
-            {formatCurrency(netDebt)}
+            <AnimatedNumber value={netDebt} />
           </div>
           <div className="text-[11px] text-[var(--text-muted)] mt-2 flex items-center justify-between font-medium">
             <span>To Collect: <strong className="text-emerald-500 font-bold">{formatCurrency(summary?.receivable || 0)}</strong></span>

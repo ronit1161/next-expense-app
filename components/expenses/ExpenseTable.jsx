@@ -1,15 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import {
   CreditCard,
   Plus,
-  Pencil,
-  Trash2,
   ChevronLeft,
   ChevronRight,
-  Calendar,
+  Sparkles,
 } from 'lucide-react';
-import CategoryIcon from '@/components/ui/CategoryIcon';
+import SwipeableExpenseRow from './SwipeableExpenseRow';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
 export default function ExpenseTable({
@@ -21,6 +21,8 @@ export default function ExpenseTable({
   onOpenEdit,
   onDelete,
 }) {
+  const [activeSwipedId, setActiveSwipedId] = useState(null);
+
   const groupedExpenses = expenses.reduce((groups, expense) => {
     const dateKey = expense.expenseDate;
     if (!groups[dateKey]) {
@@ -34,6 +36,19 @@ export default function ExpenseTable({
 
   return (
     <div className="space-y-6">
+      {/* Mobile Gestures Helper Badge */}
+      {expenses.length > 0 && (
+        <div className="sm:hidden flex items-center justify-between px-3.5 py-2 rounded-2xl bg-slate-100/70 dark:bg-white/5 border border-slate-200/60 dark:border-white/5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+          <span className="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-bold">
+            <span>&larr;</span> Swipe right to Edit
+          </span>
+          <span className="text-slate-300 dark:text-white/10 font-black">&bull;</span>
+          <span className="flex items-center gap-1 text-rose-600 dark:text-rose-400 font-bold">
+            Swipe left to Delete <span>&rarr;</span>
+          </span>
+        </div>
+      )}
+
       {expenses.length === 0 ? (
         <div className="fintech-card p-10 sm:p-14 text-center space-y-4 rounded-3xl">
           <div className="h-12 w-12 mx-auto rounded-2xl bg-[var(--bg-recessed)] flex items-center justify-center text-[var(--text-muted)]">
@@ -67,66 +82,24 @@ export default function ExpenseTable({
                 <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
                   {formatDate(dateStr)}
                 </span>
-                <span className="text-xs font-heading font-black text-[var(--text-primary)] tabular-nums">
-                  Day Total: {formatCurrency(dayTotal)}
+                <span className="text-xs font-heading font-black text-[var(--text-primary)]">
+                  Day Total: <AnimatedNumber value={dayTotal} />
                 </span>
               </div>
 
-              {/* Day Items List - Clean Fintech Row Layout (matching reference) */}
-              <div className="fintech-card p-2 sm:p-3 rounded-2xl divide-y divide-[var(--border-clay)]">
+              {/* Day Items List - Swipeable Rows */}
+              <div className="space-y-1.5">
                 {dayExpenses.map((exp) => (
-                  <div
+                  <SwipeableExpenseRow
                     key={exp.id}
-                    className="p-3 flex items-center justify-between hover:bg-[var(--bg-recessed)]/50 rounded-xl transition-all gap-3 group"
-                  >
-                    {/* Left: Icon & Title */}
-                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                      <div
-                        className="flex h-10 w-10 items-center justify-center rounded-2xl text-white shrink-0 shadow-xs"
-                        style={{ backgroundColor: exp.categoryColor || '#181B26' }}
-                      >
-                        <CategoryIcon iconName={exp.categoryIcon} className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs sm:text-sm font-heading font-bold text-[var(--text-primary)] truncate">
-                          {exp.description || exp.categoryName}
-                        </p>
-                        <div className="flex items-center gap-2 mt-0.5 text-[11px] text-[var(--text-muted)] font-medium">
-                          <span>{exp.categoryName}</span>
-                          <span>&bull;</span>
-                          <span className="uppercase text-[9px] tracking-wider px-1.5 py-0.5 rounded bg-[var(--bg-recessed)]">
-                            {exp.paymentMethod.replace('_', ' ')}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: High-Contrast Amount & Action buttons */}
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-sm sm:text-base font-heading font-black text-[var(--text-primary)] tabular-nums">
-                        -{formatCurrency(exp.amount)}
-                      </span>
-
-                      <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => onOpenEdit(exp)}
-                          className="h-7 w-7 rounded-lg bg-[var(--bg-recessed)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
-                          aria-label="Edit record"
-                          title="Edit record"
-                        >
-                          <Pencil className="h-3 w-3" />
-                        </button>
-                        <button
-                          onClick={() => onDelete(exp.id)}
-                          className="h-7 w-7 rounded-lg bg-[var(--bg-recessed)] flex items-center justify-center text-[var(--text-muted)] hover:text-rose-500 transition-all cursor-pointer"
-                          aria-label="Delete record"
-                          title="Delete record"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    expense={exp}
+                    onOpenEdit={onOpenEdit}
+                    onDelete={onDelete}
+                    isSwipedOpen={activeSwipedId === exp.id}
+                    onSwipeChange={(id, action) => {
+                      setActiveSwipedId(action ? id : null);
+                    }}
+                  />
                 ))}
               </div>
             </div>

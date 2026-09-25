@@ -1,12 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Plus, Sparkles, X, Clock } from 'lucide-react';
 import SmsParserModal from '@/components/expenses/SmsParserModal';
 import ExpenseModal from '@/components/expenses/ExpenseModal';
 import ExpenseFilters from '@/components/expenses/ExpenseFilters';
 import ExpenseTable from '@/components/expenses/ExpenseTable';
+import UndoToast from '@/components/ui/UndoToast';
+import PullToRefresh from '@/components/ui/PullToRefresh';
+import { formatCurrency } from '@/lib/utils';
+import { triggerHaptic } from '@/lib/haptics';
 import {
   getExpensesAction,
   getCategoriesAction,
@@ -44,6 +48,13 @@ export default function ExpensesPage() {
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
   const [modalError, setModalError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  // Undo Toast state for deletion
+  const [undoState, setUndoState] = useState({
+    isOpen: false,
+    expense: null,
+  });
+  const pendingDeleteRef = useRef(null);
 
   const fetchExpenses = useCallback(async () => {
     setLoading(true);
@@ -161,6 +172,7 @@ export default function ExpensesPage() {
       }
 
       if (result.success) {
+        triggerHaptic('success');
         closeModal();
         setSuccessMsg(modalMode === 'add' ? 'Expense logged successfully!' : 'Expense updated!');
         setTimeout(() => setSuccessMsg(''), 3000);
@@ -176,25 +188,64 @@ export default function ExpensesPage() {
     }
   };
 
-  const handleDeleteExpense = async (id) => {
-    if (!confirm('Are you sure you want to delete this expense entry?')) return;
-    try {
-      const result = await deleteExpenseAction(id);
-      if (result.success) {
-        setSuccessMsg('Expense removed');
-        setTimeout(() => setSuccessMsg(''), 3000);
-        fetchExpenses();
-      } else {
-        alert(result.error || 'Failed to remove entry.');
+  const commitPendingDelete = useCallback(async () => {
+    if (pendingDeleteRef.current) {
+      const { id } = pendingDeleteRef.current;
+      pendingDeleteRef.current = null;
+      try {
+        await deleteExpenseAction(id);
+      } catch (err) {
+        console.error('Failed to commit delete:', err);
       }
-    } catch (err) {
-      console.error(err);
-      alert('Failed to remove entry.');
     }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      // Commit pending delete if user navigates away
+      commitPendingDelete();
+    };
+  }, [commitPendingDelete]);
+
+  const handleDeleteExpense = (id) => {
+    // If there is already a pending delete for another item, commit it immediately
+    commitPendingDelete();
+
+    const itemToDelete = expenses.find((e) => e.id === id);
+    if (!itemToDelete) return;
+
+    // Optimistically remove from visible list
+    setExpenses((prev) => prev.filter((e) => e.id !== id));
+    pendingDeleteRef.current = { id, expense: itemToDelete };
+
+    setUndoState({
+      isOpen: true,
+      expense: itemToDelete,
+    });
+  };
+
+  const handleUndoDelete = () => {
+    if (pendingDeleteRef.current) {
+      const { expense } = pendingDeleteRef.current;
+      pendingDeleteRef.current = null;
+      // Re-insert into state preserving sorted order
+      setExpenses((prev) =>
+        [expense, ...prev].sort(
+          (a, b) => new Date(b.expenseDate) - new Date(a.expenseDate)
+        )
+      );
+    }
+    setUndoState({ isOpen: false, expense: null });
+  };
+
+  const handleDismissDelete = () => {
+    commitPendingDelete();
+    setUndoState({ isOpen: false, expense: null });
   };
 
   return (
-    <div className="space-y-6 pb-16 animate-fadeIn">
+    <PullToRefresh onRefresh={fetchExpenses}>
+      <div className="space-y-6 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -317,6 +368,23 @@ export default function ExpensesPage() {
           setTimeout(() => setSuccessMsg(''), 3000);
         }}
       />
-    </div>
+
+      {/* NON-BLOCKING UNDO TOAST NOTIFICATION */}
+      <UndoToast
+        isOpen={undoState.isOpen}
+        message="Transaction removed"
+        subMessage={
+          undoState.expense
+            ? `${undoState.expense.description || undoState.expense.categoryName} • ${formatCurrency(
+                undoState.expense.amount
+              )}`
+            : ''
+        }
+        onUndo={handleUndoDelete}
+        onDismiss={handleDismissDelete}
+        duration={5000}
+      />
+      </div>
+    </PullToRefresh>
   );
 }

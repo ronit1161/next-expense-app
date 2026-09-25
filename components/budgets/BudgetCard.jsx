@@ -2,6 +2,7 @@
 
 import { Trash2 } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 import { formatCurrency } from '@/lib/utils';
 
 export default function BudgetCard({ budget, onDelete }) {
@@ -58,16 +59,18 @@ export default function BudgetCard({ budget, onDelete }) {
 
       <div className="flex items-center justify-between text-xs pt-3.5 mt-2 border-t border-slate-100 dark:border-white/5">
         <span className="text-slate-500 dark:text-slate-400">
-          Spent: <strong className="text-slate-900 dark:text-white font-black tabular-nums">{formatCurrency(budget.spentAmount)}</strong>
+          Spent: <strong className="text-slate-900 dark:text-white font-black"><AnimatedNumber value={budget.spentAmount} /></strong>
         </span>
         <span
-          className={`font-bold tabular-nums ${
+          className={`font-bold ${
             budget.isOverBudget ? 'text-rose-600 dark:text-rose-400' : 'text-teal-600 dark:text-teal-400'
           }`}
         >
-          {budget.isOverBudget
-            ? `+${formatCurrency(budget.spentAmount - budget.budgetLimit)} over`
-            : `${formatCurrency(budget.remainingAmount)} left`}
+          {budget.isOverBudget ? (
+            <span>+<AnimatedNumber value={budget.spentAmount - budget.budgetLimit} prefix="" /> over</span>
+          ) : (
+            <span><AnimatedNumber value={budget.remainingAmount} prefix="₹" /> left</span>
+          )}
         </span>
       </div>
     </div>

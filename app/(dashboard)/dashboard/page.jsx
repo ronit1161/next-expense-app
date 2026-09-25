@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowRight, RefreshCw, Sparkles, TrendingUp } from 'lucide-react';
 import { getDashboardDataAction } from '@/actions/dashboard-actions';
 import { DashboardSkeleton, Skeleton } from '@/components/ui/skeletons';
+import PullToRefresh from '@/components/ui/PullToRefresh';
 import DashboardSummaryCards from '@/components/dashboard/DashboardSummaryCards';
 import DashboardRecentTransactions from '@/components/dashboard/DashboardRecentTransactions';
 import DashboardInsightsCard from '@/components/dashboard/DashboardInsightsCard';
@@ -115,7 +116,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-7 pb-16 animate-fadeIn">
+    <PullToRefresh onRefresh={fetchDashboardData}>
+      <div className="space-y-7 pb-16 animate-fadeIn">
       {/* 1. TOP HERO GREETING (DESKTOP VIEW) */}
       <div className="hidden sm:flex sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -187,6 +189,7 @@ export default function DashboardPage() {
         dismissedInsights={dismissedInsights}
         onDismiss={dismissInsight}
       />
-    </div>
+      </div>
+    </PullToRefresh>
   );
 }
