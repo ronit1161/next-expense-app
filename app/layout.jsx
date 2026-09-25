@@ -6,13 +6,13 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   viewportFit: 'cover',
-  themeColor: '#F4F1FA',
+  themeColor: '#F4F6F9',
 };
 
 export const metadata = {
-  title: 'ExpenseWise — Digital Clay Finance Journal',
+  title: 'ExpenseWise — Personal Finance Journal',
   description:
-    'A delightfully tactile, high-fidelity personal finance journal for daily expense tracking, budget monitoring, and playful financial clarity.',
+    'A clean, professional personal finance journal for daily expense tracking, budget monitoring, and financial clarity.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -56,27 +56,30 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] antialiased selection:bg-[#7C3AED] selection:text-white relative"
+        className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] antialiased selection:bg-[#0F766E] selection:text-white relative"
         suppressHydrationWarning
       >
-        {/* Ambient Floating Clay Blobs */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10" aria-hidden="true">
-          <div className="absolute -top-[10%] -left-[10%] h-[60vh] w-[60vh] rounded-full bg-[#8B5CF6]/15 dark:bg-[#8B5CF6]/20 blur-3xl animate-clay-float" />
-          <div className="absolute top-[30%] -right-[15%] h-[55vh] w-[55vh] rounded-full bg-[#EC4899]/15 dark:bg-[#EC4899]/20 blur-3xl animate-clay-float-delayed animation-delay-2000" />
-          <div className="absolute -bottom-[10%] left-[25%] h-[50vh] w-[50vh] rounded-full bg-[#0EA5E9]/15 dark:bg-[#0EA5E9]/20 blur-3xl animate-clay-float-slow animation-delay-4000" />
-          <div className="absolute top-[60%] left-[5%] h-[40vh] w-[40vh] rounded-full bg-[#10B981]/10 dark:bg-[#10B981]/15 blur-3xl animate-clay-breathe" />
-        </div>
-
         <ThemeProvider>{children}</ThemeProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              if ('serviceWorker' in navigator && window.location.protocol === 'https:' || window.location.hostname === 'localhost') {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
-                    console.log('ServiceWorker registration skipped:', err);
+              if ('serviceWorker' in navigator) {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (var registration of registrations) {
+                      registration.unregister();
+                    }
                   });
-                });
+                  if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                      for (var name of names) caches.delete(name);
+                    });
+                  }
+                } else if (window.location.protocol === 'https:') {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').catch(function() {});
+                  });
+                }
               }
             `,
           }}

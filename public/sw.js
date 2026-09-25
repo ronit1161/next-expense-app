@@ -1,6 +1,5 @@
-const CACHE_NAME = 'expensewise-static-v1';
+const CACHE_NAME = 'expensewise-static-v2';
 const ASSETS_TO_CACHE = [
-  '/',
   '/manifest.json',
   '/favicon.svg',
   '/icons/icon-192x192.png',
@@ -8,7 +7,7 @@ const ASSETS_TO_CACHE = [
   '/icons/apple-touch-icon.png',
 ];
 
-// Install Event - Pre-cache core shell
+// Install Event - Pre-cache icons & manifest
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -36,18 +35,21 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event - Cache-First for static assets, Network-First for API/Dynamic routes
+// Fetch Event - Only cache static icons / images, NEVER cache Next.js internals, HTML, or API
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Skip non-GET requests and Next.js Server Action / API posts
-  if (event.request.method !== 'GET' || url.pathname.startsWith('/api/')) {
+  // Strictly skip all non-GET requests, API routes, and Next.js internal bundles
+  if (
+    event.request.method !== 'GET' ||
+    url.pathname.startsWith('/api/') ||
+    url.pathname.startsWith('/_next/')
+  ) {
     return;
   }
 
-  // Cache-First for static fonts, images, and immutable chunks
+  // Cache-First only for static icons and public assets
   if (
-    url.pathname.startsWith('/_next/static/') ||
     url.pathname.startsWith('/icons/') ||
     url.pathname.endsWith('.svg') ||
     url.pathname.endsWith('.png') ||
@@ -63,16 +65,6 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         });
-      })
-    );
-    return;
-  }
-
-  // Network-First for HTML navigation with Cache Fallback
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match('/') || caches.match(event.request);
       })
     );
   }

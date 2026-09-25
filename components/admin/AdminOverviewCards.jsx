@@ -1,4 +1,4 @@
-import { Users, TrendingUp, CreditCard, PiggyBank, Receipt, HandCoins, ArrowUpRight } from 'lucide-react';
+import { Users, TrendingUp, Receipt, PiggyBank } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
 export default function AdminOverviewCards({ overview, loadingOverview }) {
@@ -8,59 +8,56 @@ export default function AdminOverviewCards({ overview, loadingOverview }) {
       value: loadingOverview ? '...' : (overview?.totalUsers || 0).toLocaleString(),
       subtitle: 'Registered Accounts',
       icon: Users,
-      gradient: 'from-blue-400 to-indigo-600',
+      iconColor: 'text-indigo-500',
     },
     {
       title: 'Gross Volume',
       value: loadingOverview ? '...' : formatCurrency(overview?.totalVolume || 0),
       subtitle: `Avg ${formatCurrency(overview?.averageSpendPerUser || 0)} / user`,
       icon: TrendingUp,
-      gradient: 'from-violet-400 to-purple-600',
+      iconColor: 'text-teal-500',
     },
     {
       title: 'Total Entries',
       value: loadingOverview ? '...' : (overview?.totalExpensesCount || 0).toLocaleString(),
       subtitle: 'All Recorded Categories',
       icon: Receipt,
-      gradient: 'from-pink-400 to-rose-600',
+      iconColor: 'text-amber-500',
     },
     {
       title: 'Active Budgets',
       value: loadingOverview ? '...' : (overview?.totalBudgetsCount || 0).toLocaleString(),
       subtitle: `${overview?.totalLoansCount || 0} peer debt records`,
       icon: PiggyBank,
-      gradient: 'from-emerald-400 to-teal-600',
+      iconColor: 'text-emerald-500',
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {cards.map((card, idx) => {
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {cards.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.title}
-            className="clay-card p-6 rounded-[28px] flex flex-col justify-between hover:-translate-y-1.5 transition-all duration-300 group"
+            className="fintech-card p-5 rounded-2xl flex flex-col justify-between hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200 group"
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[var(--clay-border)]">
-              <span className="text-xs font-bold text-[var(--text-secondary)]">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 {card.title}
               </span>
               <div
-                className={`h-10 w-10 rounded-2xl bg-gradient-to-br ${card.gradient} clay-orb flex items-center justify-center text-white shrink-0`}
+                className="h-9 w-9 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0"
               >
-                <Icon className="h-5 w-5 stroke-[2.2]" />
+                <Icon className={`h-4 w-4 stroke-[2.2] ${card.iconColor}`} />
               </div>
             </div>
 
-            <div className="mt-4">
-              <p
-                className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] tracking-tight"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
-              >
+            <div className="mt-3.5">
+              <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">
                 {card.value}
               </p>
-              <p className="text-xs text-[var(--text-muted)] mt-1 font-medium">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
                 {card.subtitle}
               </p>
             </div>

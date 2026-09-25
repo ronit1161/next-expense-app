@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Plus, Sparkles, X, RefreshCw, Layers } from 'lucide-react';
+import { Plus, Sparkles, X, Clock } from 'lucide-react';
 import SmsParserModal from '@/components/expenses/SmsParserModal';
 import ExpenseModal from '@/components/expenses/ExpenseModal';
 import ExpenseFilters from '@/components/expenses/ExpenseFilters';
@@ -198,15 +198,15 @@ export default function ExpensesPage() {
       {/* 1. TOP HEADER BANNER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 text-xs font-heading font-black mb-1">
-            <Layers className="h-3.5 w-3.5 text-purple-600" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-muted)] text-[11px] font-bold">
+            <Clock className="h-3.5 w-3.5 text-[var(--brand-accent)]" />
             <span>Activity Ledger</span>
           </div>
-          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-charcoal">
-            Expenses &amp; Activity
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[var(--text-primary)]">
+            Transactions
           </h1>
-          <p className="text-sm font-medium text-pencil">
-            Review and itemize all your personal financial transactions.
+          <p className="text-xs text-[var(--text-muted)] font-medium">
+            Review and itemize all your cash outflow and merchant records.
           </p>
         </div>
 
@@ -214,16 +214,16 @@ export default function ExpensesPage() {
           {/* SMS Parser Button */}
           <button
             onClick={() => setIsSmsModalOpen(true)}
-            className="clay-btn-secondary px-4 py-2.5 text-xs font-heading font-black flex items-center gap-2 rounded-[20px] cursor-pointer"
+            className="fintech-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <Sparkles className="h-4 w-4 text-purple-600" />
-            <span>Paste SMS</span>
+            <Sparkles className="h-3.5 w-3.5 text-[var(--brand-accent)]" />
+            <span>SMS Import</span>
           </button>
 
           {/* Manual Add Button */}
           <button
             onClick={openAddModal}
-            className="clay-btn-primary px-5 py-2.5 text-xs font-heading font-black flex items-center gap-2 rounded-[20px] cursor-pointer shadow-md"
+            className="fintech-btn-primary px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-sm"
           >
             <Plus className="h-4 w-4 stroke-[3]" />
             <span>Record Expense</span>
@@ -233,16 +233,16 @@ export default function ExpensesPage() {
 
       {/* SUCCESS / ERROR ALERTS */}
       {successMsg && (
-        <div className="clay-card bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide flex items-center justify-between">
+        <div className="rounded-2xl bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 p-3.5 text-xs font-bold flex items-center justify-between">
           <span>{successMsg}</span>
           <button onClick={() => setSuccessMsg('')} className="p-1 rounded-full hover:bg-emerald-500/20 cursor-pointer">
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="clay-card bg-rose-500/15 border border-rose-500/30 text-rose-800 dark:text-rose-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide">
+        <div className="rounded-2xl bg-rose-500/15 border border-rose-500/25 text-rose-400 p-3.5 text-xs font-bold">
           {error}
         </div>
       )}
@@ -285,7 +285,7 @@ export default function ExpensesPage() {
         />
       )}
 
-      {/* EXPENSE ENTRY FORM MODAL */}
+      {/* EXPENSE ENTRY FORM MODAL (MATCHING REFERENCE PHONE 2) */}
       <ExpenseModal
         isOpen={isModalOpen}
         onClose={closeModal}

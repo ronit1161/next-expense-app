@@ -150,10 +150,10 @@ export default function ReportsPage() {
   };
 
   const navTabs = [
-    { id: 'expenses', label: 'Item Statement', icon: FileText, gradient: 'from-blue-400 to-indigo-600' },
-    { id: 'categories', label: 'Sector Split', icon: PieChart, gradient: 'from-purple-400 to-purple-600' },
-    { id: 'budgets', label: 'Budget Audit', icon: Target, gradient: 'from-pink-400 to-pink-600' },
-    { id: 'loans', label: 'Peer Debts', icon: Users2, gradient: 'from-amber-400 to-orange-500' },
+    { id: 'expenses', label: 'Item Statement', icon: FileText, iconColor: 'text-[#0F766E] bg-teal-50 dark:bg-teal-950/40' },
+    { id: 'categories', label: 'Sector Split', icon: PieChart, iconColor: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40' },
+    { id: 'budgets', label: 'Budget Audit', icon: Target, iconColor: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40' },
+    { id: 'loans', label: 'Peer Debts', icon: Users2, iconColor: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40' },
   ];
 
   return (
@@ -161,14 +161,14 @@ export default function ReportsPage() {
       {/* 1. TOP HEADER BANNER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-300 text-xs font-heading font-black mb-1">
-            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs font-bold mb-1">
+            <FileSpreadsheet className="h-3.5 w-3.5" />
             <span>Financial Statements</span>
           </div>
-          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-charcoal">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Reports &amp; Data Export
           </h1>
-          <p className="text-sm font-medium text-pencil">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Analyze historical records and export clean CSV ledgers.
           </p>
         </div>
@@ -176,7 +176,7 @@ export default function ReportsPage() {
         <button
           onClick={handleExportCSV}
           disabled={!data || data.length === 0}
-          className="clay-btn-primary px-5 py-2.5 text-xs font-heading font-black flex items-center gap-2 self-start sm:self-auto disabled:opacity-40 rounded-[20px] cursor-pointer shadow-md"
+          className="fintech-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2 self-start sm:self-auto disabled:opacity-40 rounded-xl cursor-pointer transition-all"
         >
           <Download className="h-4 w-4" />
           <span>Export CSV Ledger</span>
@@ -192,16 +192,16 @@ export default function ReportsPage() {
             <button
               key={tab.id}
               onClick={() => setReportType(tab.id)}
-              className={`p-4 rounded-[24px] text-xs font-heading font-extrabold flex items-center justify-between transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl text-xs font-bold flex items-center justify-between transition-all cursor-pointer border ${
                 isActive
-                  ? 'clay-btn-primary scale-102 shadow-md'
-                  : 'clay-card hover:-translate-y-1 text-charcoal'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-lg shadow-black/10'
+                  : 'bg-white dark:bg-[#13141D] border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-9 w-9 rounded-xl flex items-center justify-center text-white shrink-0 bg-gradient-to-br ${tab.gradient} ${
-                    isActive ? 'clay-orb shadow-sm' : 'opacity-85'
+                  className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                    isActive ? 'bg-white/15 dark:bg-black/10 text-white dark:text-slate-950' : tab.iconColor
                   }`}
                 >
                   <Icon className="h-4 w-4 stroke-[2.5]" />

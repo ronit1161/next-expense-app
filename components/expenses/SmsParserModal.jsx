@@ -88,41 +88,41 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
-      <div className="w-full max-w-2xl clay-surface bg-white dark:bg-[#231D35] p-6 sm:p-8 space-y-4 max-h-[90vh] flex flex-col rounded-[36px] shadow-2xl animate-scaleIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
+      <div className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--border-clay)] p-6 space-y-4 max-h-[90vh] flex flex-col rounded-3xl shadow-2xl animate-scaleIn">
         {/* MODAL HEADER */}
-        <div className="flex items-center justify-between pb-3 border-b border-purple-500/10">
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--border-clay)]">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-600 text-white flex items-center justify-center clay-orb shadow-md">
-              <Sparkles className="h-5 w-5" />
+            <div className="h-9 w-9 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center">
+              <Sparkles className="h-4 w-4" />
             </div>
             <div>
-              <span className="font-heading text-[10px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">
                 Batch Smart Ingestion
               </span>
-              <h3 className="text-xl font-heading font-black text-charcoal">
+              <h3 className="text-base font-heading font-black text-[var(--text-primary)]">
                 SMS Transaction Extractor
               </h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-pencil hover:text-charcoal cursor-pointer"
+            className="p-2 rounded-xl hover:bg-[var(--bg-recessed)] text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* ALERTS */}
         {successMessage && (
-          <div className="rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 p-3.5 text-xs font-heading font-black flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <div className="rounded-xl bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 p-3 text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4" />
             <span>{successMessage}</span>
           </div>
         )}
 
         {errorMessage && (
-          <div className="rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-800 dark:text-rose-300 p-3.5 text-xs font-heading font-black flex items-center gap-2">
+          <div className="rounded-xl bg-rose-500/15 border border-rose-500/25 text-rose-400 p-3 text-xs font-bold flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
             <span>{errorMessage}</span>
           </div>
@@ -131,14 +131,14 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
         {/* INPUT TEXTAREA */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-heading font-black uppercase tracking-wider text-charcoal">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
               Paste Bank SMS or UPI alerts:
             </label>
             <button
               onClick={handlePasteFromClipboard}
-              className="clay-btn-secondary px-3 py-1.5 text-xs font-heading font-black rounded-xl flex items-center gap-1.5"
+              className="fintech-btn-secondary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5"
             >
-              <ClipboardPaste className="h-3.5 w-3.5 text-purple-600" />
+              <ClipboardPaste className="h-3.5 w-3.5" />
               <span>Paste Clipboard</span>
             </button>
           </div>
@@ -148,36 +148,36 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
             value={inputText}
             onChange={(e) => handleParseText(e.target.value)}
             placeholder="Paste raw bank alert text here (e.g. Rs 450.00 spent on SWIGGY on 24-Sep-26 via UPI...)"
-            className="clay-input w-full p-3.5 text-xs font-medium rounded-2xl"
+            className="fintech-input w-full p-3 text-xs font-medium rounded-2xl resize-none"
           />
         </div>
 
         {/* PARSED TABLE */}
-        <div className="flex-1 overflow-y-auto space-y-2 max-h-56 p-3 rounded-2xl bg-[#EFEBF5] dark:bg-[#1C172C] no-scrollbar">
-          <div className="flex items-center justify-between pb-1 text-xs font-heading font-bold text-pencil">
+        <div className="flex-1 overflow-y-auto space-y-2 max-h-52 p-3 rounded-2xl bg-[var(--bg-recessed)] no-scrollbar">
+          <div className="flex items-center justify-between pb-1 text-[11px] font-bold text-[var(--text-muted)]">
             <span>Parsed Entries ({parsedItems.length})</span>
           </div>
 
           {parsedItems.length === 0 ? (
-            <p className="text-xs text-pencil p-4 text-center font-medium">
+            <p className="text-xs text-[var(--text-muted)] p-4 text-center font-medium">
               No detectable transaction patterns found yet. Paste SMS text above!
             </p>
           ) : (
             parsedItems.map((item, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-xl bg-white dark:bg-[#2B243D] flex items-center justify-between gap-3 text-xs shadow-sm"
+                className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-clay)] flex items-center justify-between gap-3 text-xs"
               >
                 <div className="flex-1 space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-heading font-black text-sm text-charcoal">
+                    <span className="font-heading font-black text-sm text-[var(--text-primary)]">
                       ₹{item.amount}
                     </span>
-                    <span className="text-xs font-medium text-pencil truncate max-w-[150px]">
+                    <span className="text-xs font-medium text-[var(--text-muted)] truncate max-w-[140px]">
                       {item.merchant || 'Expense'}
                     </span>
                   </div>
-                  <span className="text-[10px] font-heading font-bold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[var(--bg-recessed)] text-[var(--text-muted)] uppercase">
                     {item.paymentMethod}
                   </span>
                 </div>
@@ -186,7 +186,7 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
                   <select
                     value={item.categoryId || (categories[0]?.id ? String(categories[0].id) : '')}
                     onChange={(e) => handleUpdateItem(idx, 'categoryId', e.target.value)}
-                    className="clay-input py-1.5 px-3 text-xs font-heading font-bold rounded-xl"
+                    className="fintech-input py-1 px-2.5 text-xs font-bold rounded-xl"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -197,9 +197,9 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
 
                   <button
                     onClick={() => handleRemoveItem(idx)}
-                    className="p-1.5 text-pencil hover:text-rose-600 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer transition-colors"
+                    className="p-1.5 text-[var(--text-muted)] hover:text-rose-500 rounded-lg hover:bg-[var(--bg-recessed)] cursor-pointer transition-colors"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
@@ -208,14 +208,14 @@ export default function SmsParserModal({ isOpen, onClose, categories = [], onBat
         </div>
 
         {/* SUBMIT ACTION */}
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-purple-500/10">
-          <button onClick={onClose} className="clay-btn-secondary px-5 py-2.5 text-xs font-heading font-black rounded-2xl">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border-clay)]">
+          <button onClick={onClose} className="fintech-btn-secondary px-4 py-2 text-xs font-bold">
             Cancel
           </button>
           <button
             onClick={handleSaveAll}
             disabled={parsedItems.length === 0 || isSubmitting}
-            className="clay-btn-primary px-6 py-2.5 text-xs font-heading font-black rounded-2xl disabled:opacity-40 shadow-md"
+            className="fintech-btn-primary px-5 py-2 text-xs font-bold disabled:opacity-40 shadow-sm"
           >
             {isSubmitting ? (
               <Loader2 className="h-4 w-4 animate-spin" />

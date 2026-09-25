@@ -15,9 +15,8 @@ import {
   CartesianGrid,
 } from 'recharts';
 import { formatCurrency } from '@/lib/utils';
-import { Users, TrendingUp, CreditCard, Layers } from 'lucide-react';
 
-const CANDY_PIE_COLORS = ['#7C3AED', '#DB2777', '#0EA5E9', '#10B981', '#F59E0B', '#6366F1'];
+const PROFESSIONAL_COLORS = ['#0F766E', '#14B8A6', '#6366F1', '#10B981', '#F59E0B', '#0EA5E9'];
 
 export default function AdminAnalyticsCharts({ analytics }) {
   if (!analytics) return null;
@@ -25,86 +24,74 @@ export default function AdminAnalyticsCharts({ analytics }) {
   return (
     <div className="space-y-6">
       {/* User Activity Tiers */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="clay-card p-6 rounded-[28px] flex items-center justify-between gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="fintech-card p-5 rounded-2xl flex items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold text-[var(--text-muted)] block">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">
               Active Users (&lt; 7 days)
             </span>
-            <p
-              className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] mt-1 tabular-nums"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
-            >
+            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 tabular-nums">
               {analytics.userTiers.active}{' '}
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs font-bold text-emerald-500">
                 ({Math.round((analytics.userTiers.active / (analytics.userTiers.total || 1)) * 100)}%)
               </span>
             </p>
           </div>
-          <span className="clay-badge-pill bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/20 text-xs font-bold">
             Tier 01
           </span>
         </div>
 
-        <div className="clay-card p-6 rounded-[28px] flex items-center justify-between gap-4">
+        <div className="fintech-card p-5 rounded-2xl flex items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold text-[var(--text-muted)] block">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">
               Occasional (&lt; 30 days)
             </span>
-            <p
-              className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] mt-1 tabular-nums"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
-            >
+            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 tabular-nums">
               {analytics.userTiers.occasional}{' '}
-              <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
+              <span className="text-xs font-bold text-amber-500">
                 ({Math.round((analytics.userTiers.occasional / (analytics.userTiers.total || 1)) * 100)}%)
               </span>
             </p>
           </div>
-          <span className="clay-badge-pill bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold">
+          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 border border-amber-500/20 text-xs font-bold">
             Tier 02
           </span>
         </div>
 
-        <div className="clay-card p-6 rounded-[28px] flex items-center justify-between gap-4">
+        <div className="fintech-card p-5 rounded-2xl flex items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold text-[var(--text-muted)] block">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">
               Dormant (&gt; 30 days)
             </span>
-            <p
-              className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] mt-1 tabular-nums"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
-            >
+            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 tabular-nums">
               {analytics.userTiers.dormant}{' '}
-              <span className="text-xs font-bold text-rose-600 dark:text-rose-400">
+              <span className="text-xs font-bold text-rose-500">
                 ({Math.round((analytics.userTiers.dormant / (analytics.userTiers.total || 1)) * 100)}%)
               </span>
             </p>
           </div>
-          <span className="clay-badge-pill bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold">
+          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 border border-rose-500/20 text-xs font-bold">
             Tier 03
           </span>
         </div>
       </div>
 
       {/* 6-Month Gross Spend Area Chart */}
-      <div className="clay-card p-6 sm:p-8 rounded-[32px] space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[var(--clay-border)]">
+      <div className="fintech-card p-6 sm:p-7 rounded-3xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3.5 border-b border-slate-100 dark:border-white/5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-violet-600 dark:text-violet-400">[01]</span>
-              <h3
-                className="text-lg font-extrabold text-[var(--text-primary)]"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
-              >
+              <span className="text-xs font-bold text-teal-600 dark:text-teal-400 font-mono">[01]</span>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 6-Month Gross Volume Trajectory
               </h3>
             </div>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5 font-medium">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
               Platform-wide transaction flow metric
             </p>
           </div>
-          <span className="clay-badge-pill bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-bold self-start sm:self-auto">
+          <span className="px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 text-xs font-bold self-start sm:self-auto">
             Gross Stream
           </span>
         </div>
@@ -114,20 +101,20 @@ export default function AdminAnalyticsCharts({ analytics }) {
             <AreaChart data={analytics.monthlyTrend}>
               <defs>
                 <linearGradient id="grossSpendGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#0F766E" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#0F766E" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(124, 58, 237, 0.1)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.15} vertical={false} />
               <XAxis
                 dataKey="month"
-                stroke="var(--text-muted)"
+                stroke="#94A3B8"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                stroke="var(--text-muted)"
+                stroke="#94A3B8"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
@@ -135,11 +122,11 @@ export default function AdminAnalyticsCharts({ analytics }) {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--bg-surface)',
-                  color: 'var(--text-primary)',
+                  backgroundColor: '#13141D',
+                  color: '#FFFFFF',
                   borderRadius: '16px',
-                  border: '1px solid var(--clay-border)',
-                  boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
                   fontSize: '12px',
                   fontWeight: 'bold',
                 }}
@@ -148,8 +135,8 @@ export default function AdminAnalyticsCharts({ analytics }) {
               <Area
                 type="monotone"
                 dataKey="grossSpend"
-                stroke="#7C3AED"
-                strokeWidth={3.5}
+                stroke="#0F766E"
+                strokeWidth={2.5}
                 fillOpacity={1}
                 fill="url(#grossSpendGrad)"
               />
@@ -161,18 +148,15 @@ export default function AdminAnalyticsCharts({ analytics }) {
       {/* Two Column Visuals: Payment Methods & Category Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Payment Method Distribution */}
-        <div className="clay-card p-6 sm:p-7 rounded-[32px] space-y-4">
-          <div className="pb-3 border-b border-[var(--clay-border)]">
+        <div className="fintech-card p-6 rounded-3xl space-y-4">
+          <div className="pb-3.5 border-b border-slate-100 dark:border-white/5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-violet-600 dark:text-violet-400">[02]</span>
-              <h3
-                className="text-base font-extrabold text-[var(--text-primary)]"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
-              >
+              <span className="text-xs font-bold text-teal-600 dark:text-teal-400 font-mono">[02]</span>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 Payment Channel Distribution
               </h3>
             </div>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Settlement rails breakdown (UPI / Cash / Card)
             </p>
           </div>
@@ -193,7 +177,7 @@ export default function AdminAnalyticsCharts({ analytics }) {
                   {analytics.paymentDistribution.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={CANDY_PIE_COLORS[index % CANDY_PIE_COLORS.length]}
+                      fill={PROFESSIONAL_COLORS[index % PROFESSIONAL_COLORS.length]}
                       stroke="transparent"
                     />
                   ))}
@@ -201,11 +185,11 @@ export default function AdminAnalyticsCharts({ analytics }) {
                 <Tooltip
                   formatter={(val) => [formatCurrency(val), 'Volume']}
                   contentStyle={{
-                    backgroundColor: 'var(--bg-surface)',
-                    color: 'var(--text-primary)',
+                    backgroundColor: '#13141D',
+                    color: '#FFFFFF',
                     borderRadius: '16px',
-                    border: '1px solid var(--clay-border)',
-                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
                     fontSize: '12px',
                     fontWeight: 'bold',
                   }}
@@ -214,16 +198,13 @@ export default function AdminAnalyticsCharts({ analytics }) {
             </ResponsiveContainer>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 pt-3 border-t border-[var(--clay-border)]">
-            {analytics.paymentDistribution.map((p, idx) => (
-              <div key={p.name} className="p-3 rounded-2xl bg-[var(--bg-muted)] clay-sunken text-center">
-                <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block truncate">
+          <div className="grid grid-cols-3 gap-2.5 pt-3 border-t border-slate-100 dark:border-white/5">
+            {analytics.paymentDistribution.map((p) => (
+              <div key={p.name} className="p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-center">
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase block truncate">
                   {p.name}
                 </span>
-                <span
-                  className="text-base font-black text-[var(--text-primary)] mt-0.5 block tabular-nums"
-                  style={{ fontFamily: 'Nunito, sans-serif' }}
-                >
+                <span className="text-base font-black text-slate-900 dark:text-white mt-0.5 block tabular-nums">
                   {p.count}
                 </span>
               </div>
@@ -232,18 +213,15 @@ export default function AdminAnalyticsCharts({ analytics }) {
         </div>
 
         {/* Top Category Volume Distribution */}
-        <div className="clay-card p-6 sm:p-7 rounded-[32px] space-y-4">
-          <div className="pb-3 border-b border-[var(--clay-border)]">
+        <div className="fintech-card p-6 rounded-3xl space-y-4">
+          <div className="pb-3.5 border-b border-slate-100 dark:border-white/5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-violet-600 dark:text-violet-400">[03]</span>
-              <h3
-                className="text-base font-extrabold text-[var(--text-primary)]"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
-              >
+              <span className="text-xs font-bold text-teal-600 dark:text-teal-400 font-mono">[03]</span>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 Category Volume Matrix
               </h3>
             </div>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Aggregate spend by category classification
             </p>
           </div>
@@ -255,10 +233,10 @@ export default function AdminAnalyticsCharts({ analytics }) {
                 layout="vertical"
                 margin={{ left: 10, right: 10 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(124, 58, 237, 0.1)" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.15} horizontal={false} />
                 <XAxis
                   type="number"
-                  stroke="var(--text-muted)"
+                  stroke="#94A3B8"
                   fontSize={10}
                   tickLine={false}
                   axisLine={false}
@@ -267,7 +245,7 @@ export default function AdminAnalyticsCharts({ analytics }) {
                 <YAxis
                   dataKey="name"
                   type="category"
-                  stroke="var(--text-primary)"
+                  stroke="#94A3B8"
                   fontSize={11}
                   fontWeight="bold"
                   tickLine={false}
@@ -276,11 +254,11 @@ export default function AdminAnalyticsCharts({ analytics }) {
                 <Tooltip
                   formatter={(val) => [formatCurrency(val), 'Total Volume']}
                   contentStyle={{
-                    backgroundColor: 'var(--bg-surface)',
-                    color: 'var(--text-primary)',
+                    backgroundColor: '#13141D',
+                    color: '#FFFFFF',
                     borderRadius: '16px',
-                    border: '1px solid var(--clay-border)',
-                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
                     fontSize: '12px',
                     fontWeight: 'bold',
                   }}
@@ -289,7 +267,7 @@ export default function AdminAnalyticsCharts({ analytics }) {
                   {analytics.categoryDistribution.slice(0, 6).map((entry, index) => (
                     <Cell
                       key={`bar-${index}`}
-                      fill={CANDY_PIE_COLORS[index % CANDY_PIE_COLORS.length]}
+                      fill={PROFESSIONAL_COLORS[index % PROFESSIONAL_COLORS.length]}
                     />
                   ))}
                 </Bar>

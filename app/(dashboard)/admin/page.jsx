@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ShieldAlert,
   Users,
   Layers,
   RefreshCw,
@@ -12,7 +11,6 @@ import {
   BarChart3,
   Activity,
   Database,
-  Sparkles,
   ShieldCheck,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -22,9 +20,9 @@ const AdminAnalyticsCharts = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="clay-card p-12 text-center text-[var(--text-muted)]">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto text-violet-500 mb-3" />
-        <p className="text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+      <div className="fintech-card p-12 text-center text-slate-500 dark:text-slate-400 rounded-3xl">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto text-teal-600 dark:text-teal-400 mb-3" />
+        <p className="text-sm font-bold">
           Compiling Platform Analytics...
         </p>
       </div>
@@ -103,7 +101,7 @@ export default function AdminPage() {
   const [categories, setCategories] = useState([]);
   const [newCatName, setNewCatName] = useState('');
   const [newCatIcon, setNewCatIcon] = useState('Layers');
-  const [newCatColor, setNewCatColor] = useState('#7C3AED');
+  const [newCatColor, setNewCatColor] = useState('#0F766E');
   const [savingCategory, setSavingCategory] = useState(false);
   const [categoryMsg, setCategoryMsg] = useState('');
   const [categoryError, setCategoryError] = useState('');
@@ -367,25 +365,18 @@ export default function AdminPage() {
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="clay-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 clay-orb flex items-center justify-center text-white shrink-0">
-            <ShieldCheck className="h-7 w-7" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs font-bold mb-1">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>Platform Console &bull; Administrator Access</span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="clay-badge-pill bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 text-xs font-bold">
-                Platform Console
-              </span>
-              <span className="text-xs text-[var(--text-muted)] font-medium">Administrator Access</span>
-            </div>
-            <h1
-              className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight mt-1"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
-            >
-              Command Center
-            </h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Command Center
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            System health, database telemetry, directory management, and backups.
+          </p>
         </div>
 
         <button
@@ -396,10 +387,9 @@ export default function AdminPage() {
             if (activeTab === 'health') fetchHealth();
             if (activeTab === 'activities') fetchActivities();
           }}
-          className="clay-btn-secondary px-5 py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 self-stretch sm:self-auto cursor-pointer"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="fintech-btn-secondary px-5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 self-start sm:self-auto cursor-pointer"
         >
-          <RefreshCw className="h-4 w-4 text-violet-500" />
+          <RefreshCw className="h-4 w-4 text-teal-600 dark:text-teal-400" />
           <span>Sync All Data</span>
         </button>
       </div>
@@ -408,8 +398,8 @@ export default function AdminPage() {
       <AdminOverviewCards overview={overview} loadingOverview={loadingOverview} />
 
       {/* 3. SUB-SYSTEM NAVIGATION TABS */}
-      <div className="clay-card p-2 sm:p-2.5 rounded-[24px]">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <div className="fintech-card p-1.5 rounded-2xl">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5">
           {navTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.icon;
@@ -417,14 +407,13 @@ export default function AdminPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-muted)]'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
                 }`}
-                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
-                <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-violet-500'}`} />
+                <Icon className={`h-4 w-4 ${isActive ? 'text-teal-400 dark:text-teal-600' : 'text-slate-400'}`} />
                 <span className="truncate">{tab.label}</span>
               </button>
             );
@@ -449,9 +438,9 @@ export default function AdminPage() {
       {activeTab === 'analytics' && (
         <div className="space-y-6 animate-fadeIn">
           {loadingAnalytics ? (
-            <div className="clay-card p-12 text-center text-[var(--text-muted)]">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto text-violet-500 mb-3" />
-              <p className="text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <div className="fintech-card p-12 text-center text-slate-500 dark:text-slate-400 rounded-3xl">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto text-teal-600 dark:text-teal-400 mb-3" />
+              <p className="text-sm font-bold">
                 Aggregating Platform Analytics...
               </p>
             </div>

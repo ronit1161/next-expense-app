@@ -13,7 +13,6 @@ import {
   HandCoins,
   Receipt,
   CheckCircle2,
-  Sparkles,
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -236,109 +235,95 @@ export default function DebtsPage() {
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="clay-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#0EA5E9] to-[#3B82F6] clay-orb flex items-center justify-center text-white shrink-0">
-            <HandCoins className="h-7 w-7" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs font-bold mb-1">
+            <HandCoins className="h-3.5 w-3.5" />
+            <span>Peer Ledger &bull; Lending &amp; Borrowing</span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="clay-badge-pill bg-[#0EA5E9]/10 text-[#0284C7] dark:text-[#38BDF8] border border-[#0EA5E9]/20 text-xs font-bold">
-                Peer Ledger
-              </span>
-              <span className="text-xs text-[var(--text-muted)] font-medium">Lending &amp; Debts</span>
-            </div>
-            <h1
-              className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight mt-1"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
-            >
-              Peer Debt &amp; Lending
-            </h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Peer Debt &amp; Lending
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Track money lent out to peers and obligations you need to settle.
+          </p>
         </div>
 
         <button
           onClick={openAddLoanModal}
-          className="clay-btn-primary px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 text-white self-stretch sm:self-auto cursor-pointer"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="fintech-btn-primary px-5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 self-start sm:self-auto cursor-pointer"
         >
-          <Plus className="h-5 w-5 stroke-[2.5]" />
+          <Plus className="h-4 w-4 stroke-[2.5]" />
           <span>Record Peer Loan</span>
         </button>
       </div>
 
       {/* ALERTS */}
       {successMsg && (
-        <div className="clay-card p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold text-sm flex items-center justify-between animate-scaleIn">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center justify-between rounded-2xl animate-fadeIn">
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
             <span>{successMsg}</span>
           </div>
-          <button onClick={() => setSuccessMsg('')} className="p-1 rounded-lg hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
-            <X className="h-4 w-4" />
+          <button onClick={() => setSuccessMsg('')} className="p-1 rounded-lg hover:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="clay-card p-4 bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 font-bold text-sm flex items-center justify-between animate-scaleIn">
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-between rounded-2xl animate-fadeIn">
           <span>{error}</span>
-          <button onClick={() => setError('')} className="p-1 rounded-lg hover:bg-rose-500/20">
-            <X className="h-4 w-4" />
+          <button onClick={() => setError('')} className="p-1 rounded-lg hover:bg-rose-500/15 text-rose-600 dark:text-rose-400">
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
 
       {/* 2. RECEIVABLE VS PAYABLE DUAL TILES */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Receivable (Lent) */}
-        <div className="clay-card p-6 sm:p-7 relative overflow-hidden group">
-          <div className="flex items-center justify-between pb-3 mb-2 border-b border-[var(--clay-border)]">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 clay-orb flex items-center justify-center text-white">
-                <ArrowUpRight className="h-5 w-5 stroke-[2.5]" />
+        <div className="fintech-card p-6 rounded-3xl relative overflow-hidden group">
+          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100 dark:border-white/5">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />
               </div>
-              <span className="text-sm font-bold text-[var(--text-secondary)]">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Outstanding Receivable
               </span>
             </div>
-            <span className="clay-badge-pill bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">
               To Receive
             </span>
           </div>
-          <div
-            className="text-3xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight my-2"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
-          >
+          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight my-1 tabular-nums">
             {formatCurrency(summary.totalReceivable)}
           </div>
-          <p className="text-xs text-[var(--text-muted)] font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Total capital lent out and owed to you by contacts
           </p>
         </div>
 
         {/* Payable (Borrowed) */}
-        <div className="clay-card p-6 sm:p-7 relative overflow-hidden group">
-          <div className="flex items-center justify-between pb-3 mb-2 border-b border-[var(--clay-border)]">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-rose-400 to-pink-600 clay-orb flex items-center justify-center text-white">
-                <ArrowDownLeft className="h-5 w-5 stroke-[2.5]" />
+        <div className="fintech-card p-6 rounded-3xl relative overflow-hidden group">
+          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100 dark:border-white/5">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                <ArrowDownLeft className="h-4 w-4 stroke-[2.5]" />
               </div>
-              <span className="text-sm font-bold text-[var(--text-secondary)]">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Outstanding Payable
               </span>
             </div>
-            <span className="clay-badge-pill bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-[11px] font-bold">
               To Repay
             </span>
           </div>
-          <div
-            className="text-3xl sm:text-5xl font-black text-rose-600 dark:text-rose-400 tracking-tight my-2"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
-          >
+          <div className="text-3xl sm:text-4xl font-black text-rose-600 dark:text-rose-400 tracking-tight my-1 tabular-nums">
             {formatCurrency(summary.totalPayable)}
           </div>
-          <p className="text-xs text-[var(--text-muted)] font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Total debt obligations you have borrowed and need to return
           </p>
         </div>
@@ -346,53 +331,51 @@ export default function DebtsPage() {
 
       {/* 3. TABS & FILTER TOOLBAR */}
       <div className="space-y-6">
-        <div className="clay-card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--bg-muted)] clay-sunken">
+        <div className="fintech-card p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
             <button
               onClick={() => setActiveTab('loans')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'loans'
-                  ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
-              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               Active Ledgers ({loans.length})
             </button>
             <button
               onClick={() => setActiveTab('contacts')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'contacts'
-                  ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
-              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               Directory ({contacts.length})
             </button>
           </div>
 
           {activeTab === 'loans' && (
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="clay-input py-2.5 px-4 text-xs font-bold rounded-2xl cursor-pointer"
+                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-slate-900 dark:focus:ring-white transition"
               >
-                <option value="">All Types</option>
-                <option value="LENT">Lent (Receivable)</option>
-                <option value="BORROWED">Borrowed (Payable)</option>
+                <option value="" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">All Types</option>
+                <option value="LENT" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Lent (Receivable)</option>
+                <option value="BORROWED" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Borrowed (Payable)</option>
               </select>
 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="clay-input py-2.5 px-4 text-xs font-bold rounded-2xl cursor-pointer"
+                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-slate-900 dark:focus:ring-white transition"
               >
-                <option value="">All Statuses</option>
-                <option value="PENDING">Pending</option>
-                <option value="PARTIAL">Partial</option>
-                <option value="SETTLED">Settled</option>
+                <option value="" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">All Statuses</option>
+                <option value="PENDING" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Pending</option>
+                <option value="PARTIAL" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Partial</option>
+                <option value="SETTLED" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Settled</option>
               </select>
             </div>
           )}
@@ -404,25 +387,21 @@ export default function DebtsPage() {
         ) : activeTab === 'contacts' ? (
           <ContactsDirectoryTab contacts={contacts} />
         ) : loans.length === 0 ? (
-          <div className="clay-card p-12 text-center space-y-4">
-            <div className="h-16 w-16 rounded-full bg-violet-100 dark:bg-violet-900/30 clay-orb flex items-center justify-center text-violet-500 mx-auto">
-              <Receipt className="h-8 w-8" />
+          <div className="fintech-card p-12 text-center space-y-4 rounded-3xl">
+            <div className="h-14 w-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600 dark:text-teal-400 mx-auto">
+              <Receipt className="h-7 w-7" />
             </div>
             <div>
-              <h3
-                className="text-lg font-bold text-[var(--text-primary)]"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
-              >
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 No Peer Ledgers Found
               </h3>
-              <p className="text-sm text-[var(--text-muted)] mt-1 max-w-sm mx-auto">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
                 No recorded lending or borrowing entries match your filters.
               </p>
             </div>
             <button
               onClick={openAddLoanModal}
-              className="clay-btn-primary px-6 py-3 rounded-2xl text-xs font-bold inline-flex items-center gap-2 text-white cursor-pointer"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
+              className="fintech-btn-primary px-5 py-2.5 rounded-xl text-xs font-bold inline-flex items-center gap-2 cursor-pointer"
             >
               <Plus className="h-4 w-4 stroke-[2.5]" />
               <span>Log First Peer Loan</span>

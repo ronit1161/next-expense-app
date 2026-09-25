@@ -7,15 +7,15 @@ import { ArrowRight, RefreshCw, Sparkles, TrendingUp } from 'lucide-react';
 import { getDashboardDataAction } from '@/actions/dashboard-actions';
 import { DashboardSkeleton, Skeleton } from '@/components/ui/skeletons';
 import DashboardSummaryCards from '@/components/dashboard/DashboardSummaryCards';
+import DashboardRecentTransactions from '@/components/dashboard/DashboardRecentTransactions';
 import DashboardInsightsCard from '@/components/dashboard/DashboardInsightsCard';
 import DashboardCategoryBreakdown from '@/components/dashboard/DashboardCategoryBreakdown';
 
-// Dynamic lazy-loaded chart to avoid bundle bloat and improve initial paint
 const SpendingTrendChart = dynamic(
   () => import('@/components/dashboard/SpendingTrendChart'),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-56 sm:h-64 w-full rounded-[24px]" />,
+    loading: () => <Skeleton className="h-56 w-full rounded-2xl" />,
   }
 );
 
@@ -44,6 +44,7 @@ function getGreeting() {
 export default function DashboardPage() {
   const [summary, setSummary] = useState(null);
   const [analytics, setAnalytics] = useState(null);
+  const [recentExpenses, setRecentExpenses] = useState([]);
   const [insights, setInsights] = useState([]);
   const [dismissedInsights, setDismissedInsights] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,6 +63,7 @@ export default function DashboardPage() {
       if (res.success) {
         setSummary(res.data.summary);
         setAnalytics(res.data.analytics);
+        setRecentExpenses(res.data.recentExpenses || []);
         setInsights(res.data.insights || []);
       } else {
         setError(res.error || 'Failed to retrieve financial logs.');
@@ -88,20 +90,22 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="clay-card p-8 sm:p-10 text-center max-w-md mx-auto my-12 space-y-4 rounded-[36px]">
-        <div className="h-14 w-14 mx-auto rounded-full bg-gradient-to-br from-rose-400 to-red-600 text-white flex items-center justify-center font-heading font-black text-xl clay-orb shadow-lg">
+      <div className="fintech-card p-8 sm:p-10 text-center max-w-md mx-auto my-12 space-y-4 rounded-3xl">
+        <div className="h-12 w-12 mx-auto rounded-2xl bg-rose-500/15 text-rose-500 border border-rose-500/20 flex items-center justify-center font-heading font-black text-xl">
           !
         </div>
         <div>
-          <h3 className="text-base font-heading font-black text-charcoal">Failed to Load Overview</h3>
-          <p className="text-xs text-pencil mt-1">{error}</p>
+          <h3 className="text-base font-heading font-black text-[var(--text-primary)]">
+            Failed to Load Overview
+          </h3>
+          <p className="text-xs text-[var(--text-muted)] mt-1">{error}</p>
         </div>
         <button
           onClick={() => {
             setLoading(true);
             fetchDashboardData();
           }}
-          className="clay-btn-primary py-3 px-6 text-xs font-heading font-black flex items-center justify-center gap-2 mx-auto rounded-2xl cursor-pointer"
+          className="fintech-btn-primary py-2.5 px-6 text-xs font-bold flex items-center justify-center gap-2 mx-auto cursor-pointer shadow-sm"
         >
           <RefreshCw className="h-4 w-4" />
           <span>Try Again</span>
@@ -111,75 +115,78 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8 pb-16 animate-fadeIn">
-      {/* 1. TOP CLAY HERO BANNER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-7 pb-16 animate-fadeIn">
+      {/* 1. TOP HERO GREETING (DESKTOP VIEW) */}
+      <div className="hidden sm:flex sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 text-xs font-heading font-black mb-1">
-            <Sparkles className="h-3.5 w-3.5 text-purple-600" />
-            <span>Overview &bull; {currentMonthName} {currentYear}</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-muted)] text-[11px] font-bold">
+            <Sparkles className="h-3 w-3 text-[var(--brand-accent)]" />
+            <span>Active Cycle &bull; {currentMonthName} {currentYear}</span>
           </div>
-          <h1 className="font-heading font-black text-3xl sm:text-4xl tracking-tight text-charcoal bg-gradient-to-r from-purple-800 via-pink-600 to-indigo-600 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent">
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[var(--text-primary)]">
             Good {greeting}!
           </h1>
-          <p className="text-sm font-medium text-pencil">
-            Here is your financial pulse and monthly pacing overview.
+          <p className="text-xs text-[var(--text-muted)] font-medium">
+            Here is your live cash flow and financial pulse.
           </p>
         </div>
 
         <Link
           href="/expenses"
-          className="clay-btn-secondary px-5 py-3 text-xs font-heading font-extrabold flex items-center gap-2 self-start sm:self-auto rounded-[20px] shadow-sm hover:text-purple-600 group"
+          className="fintech-btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer"
         >
-          <span>View All Activity</span>
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 text-purple-600" />
+          <span>All Transactions</span>
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
 
-      {/* 2. SUMMARY METRIC TILES */}
+      {/* 2. FINTECH HERO MESH CARD + ACTION BUTTONS + METRICS */}
       <DashboardSummaryCards summary={summary} />
 
-      {/* 3. SMART SPENDING OBSERVATIONS */}
-      <DashboardInsightsCard
-        insights={insights}
-        dismissedInsights={dismissedInsights}
-        onDismiss={dismissInsight}
-      />
+      {/* 3. RECENT TRANSACTIONS STREAM (MATCHING REFERENCE PHONE 1) */}
+      <DashboardRecentTransactions transactions={recentExpenses} />
 
-      {/* 4. ASYMMETRIC 8:4 BENTO GRID - TRAJECTORY & CATEGORY BREAKDOWN */}
+      {/* 4. ASYMMETRIC BENTO GRID - TREND CHART & CATEGORIES (MATCHING REFERENCE PHONE 3) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column (8 cols): Trajectory & Monthly Velocity */}
-        <div className="lg:col-span-8 clay-card p-6 sm:p-8 space-y-4 rounded-[32px]">
-          <div className="flex items-center justify-between pb-3 border-b border-purple-500/10">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-600 text-white flex items-center justify-center clay-orb shadow-md">
-                <TrendingUp className="h-5 w-5" />
+        {/* Left Column (7 cols): Vertical Bar Analytics */}
+        <div className="lg:col-span-7 fintech-card p-6 sm:p-7 rounded-[28px] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border-clay)]">
+            <div className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-xl bg-[var(--bg-recessed)] flex items-center justify-center text-[var(--text-primary)]">
+                <TrendingUp className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="font-heading font-black text-base text-charcoal">
-                  Spending Trajectory
+                <h2 className="font-heading font-black text-base text-[var(--text-primary)]">
+                  Analytics &amp; Trends
                 </h2>
-                <p className="text-xs text-pencil">
-                  6-month monetary volume & velocity
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  6-month transaction flow
                 </p>
               </div>
             </div>
-            <span className="font-heading text-xs font-extrabold px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
-              6-Month Trend
+            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[var(--bg-recessed)] text-[var(--text-muted)] border border-[var(--border-clay)]">
+              6-Month
             </span>
           </div>
 
           <SpendingTrendChart data={analytics?.monthlyTrend || []} />
         </div>
 
-        {/* Right Column (4 cols): Category Breakdown */}
-        <div className="lg:col-span-4">
+        {/* Right Column (5 cols): Category Breakdown Matrix */}
+        <div className="lg:col-span-5">
           <DashboardCategoryBreakdown
             categoryBreakdown={analytics?.categoryBreakdown || []}
             totalMonthSpent={summary?.monthSpent || 0}
           />
         </div>
       </div>
+
+      {/* 5. FINANCIAL INTELLIGENCE OBSERVATIONS */}
+      <DashboardInsightsCard
+        insights={insights}
+        dismissedInsights={dismissedInsights}
+        onDismiss={dismissInsight}
+      />
     </div>
   );
 }

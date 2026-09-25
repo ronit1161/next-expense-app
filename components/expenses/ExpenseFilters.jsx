@@ -20,27 +20,27 @@ export default function ExpenseFilters({
   return (
     <div className="space-y-3 w-full min-w-0">
       <div className="flex items-center gap-2.5 w-full min-w-0">
-        {/* Horizontal Category Strip */}
+        {/* Horizontal Category Pill Strip */}
         <div className="flex-1 min-w-0 flex items-center gap-2 overflow-x-auto py-1 scrollbar-none no-scrollbar">
           <button
             onClick={() => onCategoryChange('')}
-            className={`px-4 py-2 text-xs font-heading font-black uppercase whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-2xl ${
+            className={`px-3.5 py-1.5 text-xs font-heading font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-full ${
               categoryId === ''
-                ? 'clay-btn-primary'
-                : 'clay-btn-secondary'
+                ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-xs'
+                : 'fintech-btn-secondary'
             }`}
           >
-            All Sectors
+            All
           </button>
 
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => onCategoryChange(String(cat.id))}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-heading font-black whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-2xl ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-heading font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-full ${
                 categoryId === String(cat.id)
-                  ? 'clay-btn-primary'
-                  : 'clay-btn-secondary'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-xs'
+                  : 'fintech-btn-secondary'
               }`}
             >
               <CategoryIcon iconName={cat.icon} className="h-3.5 w-3.5" />
@@ -52,10 +52,10 @@ export default function ExpenseFilters({
         {/* Date Filter Drawer Button */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`p-3 text-xs font-heading font-black flex items-center justify-center shrink-0 transition-all cursor-pointer rounded-2xl shadow-sm ${
+          className={`h-9 w-9 text-xs font-bold flex items-center justify-center shrink-0 transition-all cursor-pointer rounded-full ${
             showFilters || startDate || endDate
-              ? 'clay-btn-primary'
-              : 'clay-btn-secondary'
+              ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-xs'
+              : 'fintech-btn-secondary'
           }`}
           title="Date Filter"
           aria-label="Toggle date filter"
@@ -66,40 +66,40 @@ export default function ExpenseFilters({
 
       {/* Date Filter Drawer */}
       {showFilters && (
-        <div className="clay-card p-5 space-y-4 rounded-[28px] animate-fadeIn">
+        <div className="fintech-card p-4 space-y-4 rounded-2xl animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-heading font-black text-charcoal uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="clay-input block w-full py-2.5 px-3.5 text-xs font-medium rounded-xl"
+                className="fintech-input block w-full py-2 px-3 text-xs font-medium rounded-xl"
               />
             </div>
             <div>
-              <label className="text-xs font-heading font-black text-charcoal uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                 End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="clay-input block w-full py-2.5 px-3.5 text-xs font-medium rounded-xl"
+                className="fintech-input block w-full py-2 px-3 text-xs font-medium rounded-xl"
               />
             </div>
           </div>
 
           {hasActiveFilters && (
-            <div className="flex justify-end pt-3 border-t border-purple-500/10">
+            <div className="flex justify-end pt-2 border-t border-[var(--border-clay)]">
               <button
                 onClick={onResetFilters}
-                className="clay-btn-secondary px-4 py-2 text-xs font-heading font-black flex items-center gap-1.5 text-rose-600 rounded-xl"
+                className="text-xs font-bold text-rose-500 hover:underline flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                <span>Reset All Filters</span>
+                <span>Reset Filters</span>
               </button>
             </div>
           )}

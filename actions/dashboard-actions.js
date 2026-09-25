@@ -33,7 +33,7 @@ export async function getDashboardDataAction() {
     const endOfPrev = new Date(prevYear, prevMonth, 0, 23, 59, 59, 999);
 
     // Run all required queries in parallel in a single round-trip
-    const [categories, trendExpenses, budgets, loans, prevMonthSum] = await Promise.all([
+    const [categories, trendExpenses, budgets, loans, prevMonthSum, recentExpensesRaw] = await Promise.all([
       prisma.category.findMany(),
       prisma.expense.findMany({
         where: {
@@ -70,6 +70,12 @@ export async function getDashboardDataAction() {
           expenseDate: { gte: startOfPrev, lte: endOfPrev },
         },
         _sum: { amount: true },
+      }),
+      prisma.expense.findMany({
+        where: { userId: user.id },
+        orderBy: [{ expenseDate: 'desc' }, { createdAt: 'desc' }],
+        take: 5,
+        include: { category: true },
       }),
     ]);
 
@@ -255,6 +261,16 @@ export async function getDashboardDataAction() {
             totalPayable: payable,
           },
         },
+        recentExpenses: recentExpensesRaw.map((e) => ({
+          id: e.id,
+          amount: Number(e.amount),
+          description: e.description,
+          expenseDate: e.expenseDate.toISOString(),
+          paymentMethod: e.paymentMethod,
+          categoryName: e.category.name,
+          categoryIcon: e.category.icon,
+          categoryColor: e.category.color,
+        })),
         insights,
       },
     };

@@ -10,9 +10,9 @@ export default function DashboardInsightsCard({ insights = [], dismissedInsights
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 px-1">
-        <Sparkles className="h-4 w-4 text-purple-600" />
-        <span className="font-heading text-xs font-black uppercase tracking-wider text-charcoal">
-          Smart Observations &amp; Insights
+        <Sparkles className="h-4 w-4 text-[var(--brand-accent)]" />
+        <span className="font-heading text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
+          Financial Intelligence &amp; Observations
         </span>
       </div>
 
@@ -20,19 +20,19 @@ export default function DashboardInsightsCard({ insights = [], dismissedInsights
         {activeInsights.map((insight, idx) => (
           <div
             key={idx}
-            className="clay-card p-4 rounded-[24px] flex items-start justify-between gap-3 text-xs bg-white/80 dark:bg-[#231D35]/80"
+            className="p-4 rounded-2xl flex items-start justify-between gap-3 text-xs bg-[var(--bg-card)] border border-[var(--border-clay)] shadow-xs"
           >
             <div className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white clay-orb shrink-0 shadow-sm mt-0.5">
-                <Sparkles className="h-4 w-4" />
+              <div className="h-7 w-7 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                <Sparkles className="h-3.5 w-3.5" />
               </div>
-              <p className="text-xs text-charcoal leading-relaxed font-medium">
+              <p className="text-xs text-[var(--text-primary)] leading-relaxed font-medium">
                 {insight.message}
               </p>
             </div>
             <button
               onClick={() => onDismiss(idx)}
-              className="text-pencil hover:text-charcoal p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer shrink-0 transition-colors"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 rounded-lg hover:bg-[var(--bg-recessed)] cursor-pointer shrink-0 transition-colors"
               aria-label="Dismiss observation"
             >
               <X className="h-3.5 w-3.5" />

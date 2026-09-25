@@ -1,76 +1,66 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, PieChart } from 'lucide-react';
+import { Plus, PieChart, Layers } from 'lucide-react';
+import CategoryIcon from '@/components/ui/CategoryIcon';
 import { formatCurrency } from '@/lib/utils';
-
-const CATEGORY_GRADIENTS = [
-  'from-purple-500 to-indigo-600',
-  'from-pink-500 to-rose-600',
-  'from-blue-400 to-cyan-600',
-  'from-emerald-400 to-teal-600',
-  'from-amber-400 to-orange-500',
-  'from-violet-400 to-purple-700',
-];
 
 export default function DashboardCategoryBreakdown({ categoryBreakdown = [], totalMonthSpent = 0 }) {
   const totalMonth = totalMonthSpent || 1;
 
   return (
-    <div className="clay-card p-6 sm:p-7 rounded-[32px] space-y-4 h-full flex flex-col justify-between">
+    <div className="fintech-card p-6 sm:p-7 rounded-[28px] space-y-5 h-full flex flex-col justify-between">
       <div>
-        <div className="flex items-center justify-between pb-3 border-b border-purple-500/10">
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--border-clay)]">
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-400 to-purple-600 flex items-center justify-center text-white clay-orb shadow-sm">
-              <PieChart className="h-4 w-4 stroke-[2.5]" />
+            <div className="h-8 w-8 rounded-xl bg-[var(--bg-recessed)] flex items-center justify-center text-[var(--text-primary)]">
+              <PieChart className="h-4 w-4" />
             </div>
             <div>
-              <h2 className="font-heading font-black text-base text-charcoal">
+              <h2 className="font-heading font-black text-base text-[var(--text-primary)]">
                 Category Split
               </h2>
-              <p className="text-[11px] text-pencil">Expenditure breakdown</p>
+              <p className="text-[11px] text-[var(--text-muted)]">Sectors breakdown</p>
             </div>
           </div>
-          <span className="font-heading text-[11px] font-bold text-pencil uppercase px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-900/30">
+          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase px-2.5 py-0.5 rounded-full bg-[var(--bg-recessed)] border border-[var(--border-clay)]">
             {categoryBreakdown.length} Sectors
           </span>
         </div>
 
         {categoryBreakdown.length > 0 ? (
-          <div className="space-y-4 pt-4">
-            {categoryBreakdown.map((cat, idx) => {
+          /* 2-Column Fintech Grid matching Reference Phone 3 */
+          <div className="grid grid-cols-2 gap-3 pt-4">
+            {categoryBreakdown.map((cat) => {
               const percent = Math.round((cat.total / totalMonth) * 100);
-              const grad = CATEGORY_GRADIENTS[idx % CATEGORY_GRADIENTS.length];
 
               return (
-                <div key={cat.categoryId} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-heading font-extrabold text-charcoal flex items-center gap-2">
-                      <span className={`h-2.5 w-2.5 rounded-full bg-gradient-to-br ${grad} inline-block`} />
+                <div
+                  key={cat.categoryId}
+                  className="p-3.5 rounded-2xl bg-[var(--bg-recessed)] border border-[var(--border-clay)] flex flex-col justify-between gap-2 hover:border-[var(--border-subtle)] transition-all"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[11px] font-bold text-[var(--text-muted)] truncate block">
                       {cat.categoryName}
                     </span>
-                    <div className="flex items-center gap-2 font-medium">
-                      <span className="text-[11px] text-pencil">{percent}%</span>
-                      <span className="font-heading font-bold text-charcoal">{formatCurrency(cat.total)}</span>
-                    </div>
+                    <span className="text-[10px] font-bold text-[var(--brand-accent)] shrink-0">
+                      {percent}%
+                    </span>
                   </div>
-                  {/* Soft Rounded Progress Groove */}
-                  <div className="neu-groove h-2">
-                    <div
-                      className={`h-full rounded-full bg-gradient-to-r ${grad} transition-all duration-500 shadow-sm`}
-                      style={{ width: `${Math.min(100, percent)}%` }}
-                    />
-                  </div>
+
+                  <span className="font-heading font-black text-sm sm:text-base text-[var(--text-primary)] tabular-nums block">
+                    {formatCurrency(cat.total)}
+                  </span>
                 </div>
               );
             })}
           </div>
         ) : (
-          <div className="p-6 text-center space-y-3 mt-4 rounded-2xl bg-[#EFEBF5] dark:bg-[#1C172C]">
-            <p className="text-xs text-pencil font-medium">No expenditures recorded yet</p>
+          <div className="p-8 text-center space-y-3 mt-4 rounded-2xl bg-[var(--bg-recessed)]">
+            <p className="text-xs text-[var(--text-muted)] font-medium">No expenditures recorded yet</p>
             <Link
               href="/expenses?action=add"
-              className="clay-btn-primary px-4 py-2 text-xs font-heading font-black rounded-xl inline-flex items-center gap-1.5"
+              className="fintech-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Log First Expense</span>
@@ -79,9 +69,9 @@ export default function DashboardCategoryBreakdown({ categoryBreakdown = [], tot
         )}
       </div>
 
-      <div className="pt-3 border-t border-purple-500/10 flex items-center justify-between text-xs font-medium text-pencil">
+      <div className="pt-3 border-t border-[var(--border-clay)] flex items-center justify-between text-xs font-medium text-[var(--text-muted)]">
         <span>Total Aggregated:</span>
-        <span className="font-heading font-black text-sm text-purple-700 dark:text-purple-300">
+        <span className="font-heading font-black text-sm text-[var(--text-primary)]">
           {formatCurrency(totalMonthSpent)}
         </span>
       </div>
