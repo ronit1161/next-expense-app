@@ -6,13 +6,13 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   viewportFit: 'cover',
-  themeColor: '#EAE6DF',
+  themeColor: '#F4F1FA',
 };
 
 export const metadata = {
-  title: 'ExpenseWise — Personal Finance Journal',
+  title: 'ExpenseWise — Digital Clay Finance Journal',
   description:
-    'A thoughtfully designed personal finance journal for daily expense tracking, budget monitoring, and financial clarity.',
+    'A delightfully tactile, high-fidelity personal finance journal for daily expense tracking, budget monitoring, and playful financial clarity.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -56,9 +56,17 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] antialiased selection:bg-[#0047FF] selection:text-white"
+        className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] antialiased selection:bg-[#7C3AED] selection:text-white relative"
         suppressHydrationWarning
       >
+        {/* Ambient Floating Clay Blobs */}
+        <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10" aria-hidden="true">
+          <div className="absolute -top-[10%] -left-[10%] h-[60vh] w-[60vh] rounded-full bg-[#8B5CF6]/15 dark:bg-[#8B5CF6]/20 blur-3xl animate-clay-float" />
+          <div className="absolute top-[30%] -right-[15%] h-[55vh] w-[55vh] rounded-full bg-[#EC4899]/15 dark:bg-[#EC4899]/20 blur-3xl animate-clay-float-delayed animation-delay-2000" />
+          <div className="absolute -bottom-[10%] left-[25%] h-[50vh] w-[50vh] rounded-full bg-[#0EA5E9]/15 dark:bg-[#0EA5E9]/20 blur-3xl animate-clay-float-slow animation-delay-4000" />
+          <div className="absolute top-[60%] left-[5%] h-[40vh] w-[40vh] rounded-full bg-[#10B981]/10 dark:bg-[#10B981]/15 blur-3xl animate-clay-breathe" />
+        </div>
+
         <ThemeProvider>{children}</ThemeProvider>
         <script
           dangerouslySetInnerHTML={{

@@ -19,31 +19,31 @@ export default function ExpenseFilters({
 
   return (
     <div className="space-y-3 w-full min-w-0">
-      <div className="flex items-center gap-2 w-full min-w-0">
+      <div className="flex items-center gap-2.5 w-full min-w-0">
         {/* Horizontal Category Strip */}
-        <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none no-scrollbar">
+        <div className="flex-1 min-w-0 flex items-center gap-2 overflow-x-auto py-1 scrollbar-none no-scrollbar">
           <button
             onClick={() => onCategoryChange('')}
-            className={`px-3 py-1.5 text-xs font-black uppercase whitespace-nowrap shrink-0 transition-all cursor-pointer border-2 ${
+            className={`px-4 py-2 text-xs font-heading font-black uppercase whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-2xl ${
               categoryId === ''
-                ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+                ? 'clay-btn-primary'
+                : 'clay-btn-secondary'
             }`}
           >
-            ALL SECTORS
+            All Sectors
           </button>
 
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => onCategoryChange(String(cat.id))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase whitespace-nowrap shrink-0 transition-all cursor-pointer border-2 ${
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-heading font-black whitespace-nowrap shrink-0 transition-all cursor-pointer rounded-2xl ${
                 categoryId === String(cat.id)
-                  ? 'bg-[#FF3000] text-white border-[#FF3000]'
-                  : 'border-black dark:border-white/30 text-charcoal hover:border-[#FF3000] hover:text-[#FF3000]'
+                  ? 'clay-btn-primary'
+                  : 'clay-btn-secondary'
               }`}
             >
-              <CategoryIcon iconName={cat.icon} className="h-3 w-3" />
+              <CategoryIcon iconName={cat.icon} className="h-3.5 w-3.5" />
               <span>{cat.name}</span>
             </button>
           ))}
@@ -52,10 +52,10 @@ export default function ExpenseFilters({
         {/* Date Filter Drawer Button */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`p-2 border-2 text-xs font-black flex items-center justify-center shrink-0 transition-all cursor-pointer relative ${
+          className={`p-3 text-xs font-heading font-black flex items-center justify-center shrink-0 transition-all cursor-pointer rounded-2xl shadow-sm ${
             showFilters || startDate || endDate
-              ? 'bg-[#FF3000] text-white border-[#FF3000]'
-              : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+              ? 'clay-btn-primary'
+              : 'clay-btn-secondary'
           }`}
           title="Date Filter"
           aria-label="Toggle date filter"
@@ -66,40 +66,40 @@ export default function ExpenseFilters({
 
       {/* Date Filter Drawer */}
       {showFilters && (
-        <div className="border-4 border-black dark:border-white/30 p-4 space-y-3 bg-[var(--bg-surface)] animate-fadeIn">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="clay-card p-5 space-y-4 rounded-[28px] animate-fadeIn">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] font-black text-charcoal uppercase tracking-widest block mb-1">
-                START DATE
+              <label className="text-xs font-heading font-black text-charcoal uppercase tracking-wider block mb-1.5">
+                Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono"
+                className="clay-input block w-full py-2.5 px-3.5 text-xs font-medium rounded-xl"
               />
             </div>
             <div>
-              <label className="text-[10px] font-black text-charcoal uppercase tracking-widest block mb-1">
-                END DATE
+              <label className="text-xs font-heading font-black text-charcoal uppercase tracking-wider block mb-1.5">
+                End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono"
+                className="clay-input block w-full py-2.5 px-3.5 text-xs font-medium rounded-xl"
               />
             </div>
           </div>
 
           {hasActiveFilters && (
-            <div className="flex justify-end pt-2 border-t border-black/10 dark:border-white/10">
+            <div className="flex justify-end pt-3 border-t border-purple-500/10">
               <button
                 onClick={onResetFilters}
-                className="swiss-btn px-3 py-1.5 text-xs font-black flex items-center gap-1.5 text-[#FF3000]"
+                className="clay-btn-secondary px-4 py-2 text-xs font-heading font-black flex items-center gap-1.5 text-rose-600 rounded-xl"
               >
-                <RotateCcw className="h-3 w-3" />
-                <span>RESET ALL FILTERS</span>
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>Reset All Filters</span>
               </button>
             </div>
           )}

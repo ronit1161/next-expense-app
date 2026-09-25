@@ -7,13 +7,14 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from 'recharts';
 
 export default function SpendingTrendChart({ data = [] }) {
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-44 sm:h-56 md:h-64 items-center justify-center text-xs font-mono text-pencil uppercase border-2 border-dashed border-black/20 dark:border-white/20">
-        NO TRAJECTORY DATA RECORDED
+      <div className="flex h-44 sm:h-56 md:h-64 items-center justify-center text-xs text-pencil font-medium rounded-2xl bg-[#EFEBF5]/50 dark:bg-[#1C172C]/50">
+        No trajectory records available yet
       </div>
     );
   }
@@ -26,23 +27,24 @@ export default function SpendingTrendChart({ data = [] }) {
           margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
         >
           <defs>
-            <linearGradient id="swissRedGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#FF3000" stopOpacity={0.25} />
-              <stop offset="95%" stopColor="#FF3000" stopOpacity={0.0} />
+            <linearGradient id="clayVioletGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="#EC4899" stopOpacity={0.0} />
             </linearGradient>
           </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(139, 92, 246, 0.08)" vertical={false} />
           <XAxis
             dataKey="period"
             stroke="var(--text-muted)"
-            fontSize={10}
-            fontWeight={700}
-            fontFamily="Inter, sans-serif"
-            tickLine={true}
-            axisLine={{ stroke: 'var(--border-main)', strokeWidth: 1.5 }}
+            fontSize={11}
+            fontWeight={600}
+            fontFamily="DM Sans, sans-serif"
+            tickLine={false}
+            axisLine={false}
             tickFormatter={(v) => {
               const parts = v.split('-');
               if (parts.length === 2) {
-                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 const monthIdx = parseInt(parts[1], 10) - 1;
                 return months[monthIdx] || v;
               }
@@ -51,13 +53,13 @@ export default function SpendingTrendChart({ data = [] }) {
           />
           <YAxis
             stroke="var(--text-muted)"
-            fontSize={10}
-            fontWeight={700}
-            fontFamily="Inter, sans-serif"
-            tickLine={true}
-            axisLine={{ stroke: 'var(--border-main)', strokeWidth: 1.5 }}
+            fontSize={11}
+            fontWeight={600}
+            fontFamily="DM Sans, sans-serif"
+            tickLine={false}
+            axisLine={false}
             tickFormatter={(v) => {
-              if (v >= 1000) return `₹${(v / 1000).toFixed(0)}K`;
+              if (v >= 1000) return `₹${(v / 1000).toFixed(0)}k`;
               return `₹${v}`;
             }}
           />
@@ -65,11 +67,11 @@ export default function SpendingTrendChart({ data = [] }) {
             content={({ active, payload, label }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="border-2 border-black dark:border-white bg-[var(--bg-surface)] p-3 text-xs shadow-none">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                      PERIOD // {label}
+                  <div className="clay-card p-3 rounded-2xl text-xs bg-white/95 dark:bg-[#231D35]/95 shadow-lg border border-purple-500/20">
+                    <p className="font-heading font-black text-[11px] uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                      {label}
                     </p>
-                    <p className="text-sm font-black text-charcoal tabular-nums mt-1">
+                    <p className="font-heading font-black text-sm text-charcoal tabular-nums mt-0.5">
                       ₹{Number(payload[0].value).toLocaleString('en-IN')}
                     </p>
                   </div>
@@ -79,13 +81,13 @@ export default function SpendingTrendChart({ data = [] }) {
             }}
           />
           <Area
-            type="linear"
+            type="monotone"
             dataKey="amount"
-            stroke="#FF3000"
-            strokeWidth={3}
-            fill="url(#swissRedGradient)"
-            dot={{ r: 4, fill: '#000000', stroke: '#FF3000', strokeWidth: 2 }}
-            activeDot={{ r: 6, fill: '#FF3000', stroke: '#000000', strokeWidth: 2 }}
+            stroke="#7C3AED"
+            strokeWidth={3.5}
+            fill="url(#clayVioletGrad)"
+            dot={{ r: 4, fill: '#FFFFFF', stroke: '#7C3AED', strokeWidth: 3 }}
+            activeDot={{ r: 6, fill: '#DB2777', stroke: '#FFFFFF', strokeWidth: 3 }}
           />
         </AreaChart>
       </ResponsiveContainer>

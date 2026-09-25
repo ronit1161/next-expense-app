@@ -9,7 +9,7 @@ export default function ThemeToggle({ className = '', variant = 'sidebar' }) {
   if (!mounted) {
     return (
       <div
-        className={`h-9 w-9 border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] opacity-50 ${className}`}
+        className={`h-11 w-11 rounded-2xl bg-[#EFEBF5] dark:bg-[#1C172C] opacity-50 ${className}`}
         aria-hidden="true"
       />
     );
@@ -22,12 +22,12 @@ export default function ThemeToggle({ className = '', variant = 'sidebar' }) {
       <button
         onClick={toggleTheme}
         aria-label={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        className={`flex h-7 w-7 items-center justify-center border border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white transition-colors cursor-pointer ${className}`}
+        className={`flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 dark:bg-white/10 backdrop-blur-md border border-white/60 dark:border-white/10 text-charcoal hover:-translate-y-0.5 active:scale-90 shadow-sm transition-all cursor-pointer ${className}`}
       >
         {isDark ? (
-          <Sun className="h-3.5 w-3.5 text-white" />
+          <Sun className="h-4 w-4 text-amber-400" />
         ) : (
-          <Moon className="h-3.5 w-3.5 text-black" />
+          <Moon className="h-4 w-4 text-indigo-600" />
         )}
       </button>
     );
@@ -37,17 +37,17 @@ export default function ThemeToggle({ className = '', variant = 'sidebar' }) {
     return (
       <button
         onClick={toggleTheme}
-        className={`flex items-center gap-2 px-3 py-1.5 border-2 border-black dark:border-white/30 text-xs font-black uppercase text-charcoal hover:bg-black hover:text-white cursor-pointer transition-all ${className}`}
+        className={`clay-btn-secondary px-4 py-2 text-xs font-black uppercase text-charcoal flex items-center gap-2 cursor-pointer ${className}`}
       >
         {isDark ? (
           <>
-            <Sun className="h-3.5 w-3.5" />
-            <span>LIGHT MODE</span>
+            <Sun className="h-4 w-4 text-amber-400" />
+            <span>Light Mode</span>
           </>
         ) : (
           <>
-            <Moon className="h-3.5 w-3.5" />
-            <span>DARK MODE</span>
+            <Moon className="h-4 w-4 text-indigo-600" />
+            <span>Dark Mode</span>
           </>
         )}
       </button>
@@ -59,18 +59,24 @@ export default function ThemeToggle({ className = '', variant = 'sidebar' }) {
     <button
       onClick={toggleTheme}
       aria-label={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-      className={`border-2 border-black dark:border-white/20 p-2 flex items-center justify-between w-full text-xs font-black text-charcoal bg-[var(--bg-subtle)] transition-all cursor-pointer hover:bg-black hover:text-white group ${className}`}
+      className={`clay-btn-secondary p-2.5 flex items-center justify-between w-full text-xs font-extrabold text-charcoal cursor-pointer group rounded-[20px] ${className}`}
     >
-      <div className="flex items-center gap-2">
-        <div className="h-5 w-5 flex items-center justify-center bg-black text-white dark:bg-white dark:text-black">
-          {isDark ? <Sun className="h-3 w-3" /> : <Moon className="h-3 w-3" />}
+      <div className="flex items-center gap-2.5">
+        <div className="h-7 w-7 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-400 to-indigo-600 text-white shadow-sm">
+          {isDark ? <Sun className="h-3.5 w-3.5 text-amber-200" /> : <Moon className="h-3.5 w-3.5" />}
         </div>
-        <span className="text-[10px] uppercase tracking-wider">
-          {isDark ? 'LIGHT MODE' : 'DARK MODE'}
+        <span className="font-heading font-extrabold text-xs tracking-wide">
+          {isDark ? 'Light Mode' : 'Dark Mode'}
         </span>
       </div>
 
-      <span className="text-[9px] font-mono px-1 border border-current uppercase">
+      <span
+        className={`text-[10px] font-heading font-black px-2.5 py-1 rounded-full ${
+          isDark
+            ? 'bg-amber-400/20 text-amber-300'
+            : 'bg-purple-600/15 text-purple-700'
+        }`}
+      >
         {isDark ? 'ON' : 'OFF'}
       </span>
     </button>

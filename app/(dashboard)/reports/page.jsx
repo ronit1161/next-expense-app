@@ -7,6 +7,7 @@ import {
   PieChart,
   Target,
   Users2,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { downloadCSV } from '@/lib/utils';
 import { getExpensesAction } from '@/actions/expense-actions';
@@ -149,42 +150,41 @@ export default function ReportsPage() {
   };
 
   const navTabs = [
-    { id: 'expenses', label: '04.1 ITEM STATEMENT', icon: FileText },
-    { id: 'categories', label: '04.2 SECTOR AGGREGATES', icon: PieChart },
-    { id: 'budgets', label: '04.3 BUDGET AUDIT', icon: Target },
-    { id: 'loans', label: '04.4 PEER EXPOSURE', icon: Users2 },
+    { id: 'expenses', label: 'Item Statement', icon: FileText, gradient: 'from-blue-400 to-indigo-600' },
+    { id: 'categories', label: 'Sector Split', icon: PieChart, gradient: 'from-purple-400 to-purple-600' },
+    { id: 'budgets', label: 'Budget Audit', icon: Target, gradient: 'from-pink-400 to-pink-600' },
+    { id: 'loans', label: 'Peer Debts', icon: Users2, gradient: 'from-amber-400 to-orange-500' },
   ];
 
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                04. REPORTS // FINANCIAL STATEMENTS
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              STATEMENTS &amp; LEDGER EXPORT
-            </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-300 text-xs font-heading font-black mb-1">
+            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+            <span>Financial Statements</span>
           </div>
-
-          <button
-            onClick={handleExportCSV}
-            disabled={!data || data.length === 0}
-            className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-2 self-start sm:self-auto disabled:opacity-30 cursor-pointer"
-          >
-            <Download className="h-4 w-4" />
-            <span>EXPORT CSV LEDGER</span>
-          </button>
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-charcoal">
+            Reports &amp; Data Export
+          </h1>
+          <p className="text-sm font-medium text-pencil">
+            Analyze historical records and export clean CSV ledgers.
+          </p>
         </div>
+
+        <button
+          onClick={handleExportCSV}
+          disabled={!data || data.length === 0}
+          className="clay-btn-primary px-5 py-2.5 text-xs font-heading font-black flex items-center gap-2 self-start sm:self-auto disabled:opacity-40 rounded-[20px] cursor-pointer shadow-md"
+        >
+          <Download className="h-4 w-4" />
+          <span>Export CSV Ledger</span>
+        </button>
       </div>
 
       {/* 2. REPORT TYPE TAB SELECTOR */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {navTabs.map((tab) => {
           const isActive = reportType === tab.id;
           const Icon = tab.icon;
@@ -192,14 +192,20 @@ export default function ReportsPage() {
             <button
               key={tab.id}
               onClick={() => setReportType(tab.id)}
-              className={`p-3 border-2 text-xs font-black uppercase flex items-center justify-between transition-all cursor-pointer ${
+              className={`p-4 rounded-[24px] text-xs font-heading font-extrabold flex items-center justify-between transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                  : 'border-black dark:border-white/30 bg-[var(--bg-surface)] text-charcoal hover:bg-black hover:text-white'
+                  ? 'clay-btn-primary scale-102 shadow-md'
+                  : 'clay-card hover:-translate-y-1 text-charcoal'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <Icon className={`h-4 w-4 ${isActive ? 'text-[#FF3000]' : ''}`} />
+              <div className="flex items-center gap-3">
+                <div
+                  className={`h-9 w-9 rounded-xl flex items-center justify-center text-white shrink-0 bg-gradient-to-br ${tab.gradient} ${
+                    isActive ? 'clay-orb shadow-sm' : 'opacity-85'
+                  }`}
+                >
+                  <Icon className="h-4 w-4 stroke-[2.5]" />
+                </div>
                 <span>{tab.label}</span>
               </div>
             </button>

@@ -1,4 +1,4 @@
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, User, Wallet, PiggyBank, HandCoins, ArrowUpRight } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
@@ -11,87 +11,116 @@ export default function AdminUserInspectModal({
   if (!inspectingUser) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[var(--bg-surface)] border-4 border-black dark:border-white p-6 space-y-5 animate-scaleIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4 animate-fadeIn">
+      <div className="clay-surface w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 animate-scaleIn rounded-[36px]">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b-2 border-black dark:border-white/20">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-black text-sm">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--clay-border)]">
+          <div className="flex items-center gap-3.5">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 clay-orb flex items-center justify-center text-white font-black text-lg shrink-0">
               {inspectingUser.name ? inspectingUser.name[0].toUpperCase() : 'U'}
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000] block">
-                06.1 USER ACTIVITY PROFILE
+              <span className="text-xs font-bold text-violet-600 dark:text-violet-400 block">
+                User Activity Profile
               </span>
-              <h2 className="text-base font-black uppercase text-charcoal">
+              <h2
+                className="text-xl font-black text-[var(--text-primary)]"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
                 {inspectingUser.name}
               </h2>
-              <p className="text-xs font-mono text-pencil uppercase">
-                {inspectingUser.email} • JOINED {formatDate(inspectingUser.createdAt)}
+              <p className="text-xs text-[var(--text-muted)] font-medium">
+                {inspectingUser.email} • Joined {formatDate(inspectingUser.createdAt)}
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 border border-black dark:border-white text-pencil hover:text-charcoal cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[var(--bg-muted)] hover:bg-[var(--clay-border)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {loadingInspect ? (
-          <div className="py-16 text-center text-pencil">
-            <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#FF3000] mb-2" />
-            <p className="text-xs font-mono uppercase font-black">EXTRACTING FULL USER LEDGER...</p>
+          <div className="py-16 text-center text-[var(--text-muted)]">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto text-violet-500 mb-2" />
+            <p className="text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              Extracting user ledger records...
+            </p>
           </div>
         ) : inspectDetail ? (
           <div className="space-y-6">
             {/* Summary Metrics */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] p-3 text-center">
-                <span className="text-[10px] font-black text-pencil uppercase">TOTAL OUTFLOW</span>
-                <p className="text-base font-black text-charcoal font-mono tabular-nums mt-1">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-4 rounded-2xl bg-[var(--bg-muted)] clay-sunken text-center">
+                <span className="text-xs font-bold text-[var(--text-muted)] block">Total Outflow</span>
+                <p
+                  className="text-lg sm:text-xl font-black text-[var(--text-primary)] mt-1"
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
+                >
                   {formatCurrency(inspectDetail.user?.totalExpenseSum || 0)}
                 </p>
               </div>
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] p-3 text-center">
-                <span className="text-[10px] font-black text-pencil uppercase">TOTAL ENTRIES</span>
-                <p className="text-base font-black text-charcoal font-mono tabular-nums mt-1">
+              <div className="p-4 rounded-2xl bg-[var(--bg-muted)] clay-sunken text-center">
+                <span className="text-xs font-bold text-[var(--text-muted)] block">Total Entries</span>
+                <p
+                  className="text-lg sm:text-xl font-black text-[var(--text-primary)] mt-1"
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
+                >
                   {inspectDetail.expenses?.length || 0}
                 </p>
               </div>
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] p-3 text-center">
-                <span className="text-[10px] font-black text-pencil uppercase">BUDGETS SET</span>
-                <p className="text-base font-black text-charcoal font-mono tabular-nums mt-1">
+              <div className="p-4 rounded-2xl bg-[var(--bg-muted)] clay-sunken text-center">
+                <span className="text-xs font-bold text-[var(--text-muted)] block">Budgets Set</span>
+                <p
+                  className="text-lg sm:text-xl font-black text-[var(--text-primary)] mt-1"
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
+                >
                   {inspectDetail.budgets?.length || 0}
                 </p>
               </div>
             </div>
 
             {/* Expenses History */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-black text-charcoal uppercase tracking-widest">
-                RECENT RECORDED EXPENSES ({inspectDetail.expenses?.length || 0})
+            <div className="space-y-3">
+              <h4
+                className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                Recent Recorded Expenses ({inspectDetail.expenses?.length || 0})
               </h4>
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] max-h-52 overflow-y-auto divide-y divide-black/10 dark:divide-white/10">
+              <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
                 {!inspectDetail.expenses || inspectDetail.expenses.length === 0 ? (
-                  <p className="p-4 text-xs font-mono text-pencil text-center uppercase">NO EXPENSES RECORDED</p>
+                  <p className="p-6 text-xs text-[var(--text-muted)] text-center rounded-2xl bg-[var(--bg-muted)]">
+                    No expenses recorded by this user yet.
+                  </p>
                 ) : (
                   inspectDetail.expenses.map((e) => (
-                    <div key={e.id} className="p-2.5 flex items-center justify-between text-xs font-mono">
-                      <div className="flex items-center gap-2.5">
-                        <div className="h-6 w-6 bg-black text-white dark:bg-white dark:text-black flex items-center justify-center shrink-0">
-                          <CategoryIcon iconName={e.categoryIcon} className="h-3.5 w-3.5" />
+                    <div
+                      key={e.id}
+                      className="p-3 rounded-2xl bg-[var(--bg-muted)] clay-sunken flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-400 to-purple-600 clay-orb flex items-center justify-center text-white shrink-0">
+                          <CategoryIcon iconName={e.categoryIcon} className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="font-bold text-charcoal uppercase">{e.description || e.categoryName}</p>
-                          <p className="text-[10px] text-pencil uppercase">
+                          <p className="font-bold text-[var(--text-primary)]">
+                            {e.description || e.categoryName}
+                          </p>
+                          <p className="text-[11px] text-[var(--text-muted)]">
                             {e.categoryName} • {formatDate(e.expenseDate)} • {e.paymentMethod}
                           </p>
                         </div>
                       </div>
-                      <span className="font-black text-[#FF3000]">-{formatCurrency(e.amount)}</span>
+                      <span
+                        className="font-black text-rose-600 dark:text-rose-400 text-sm"
+                        style={{ fontFamily: 'Nunito, sans-serif' }}
+                      >
+                        -{formatCurrency(e.amount)}
+                      </span>
                     </div>
                   ))
                 )}
@@ -99,23 +128,31 @@ export default function AdminUserInspectModal({
             </div>
 
             {/* Budgets & Goals */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-black text-charcoal uppercase tracking-widest">
-                CONFIGURED MONTHLY BUDGETS ({inspectDetail.budgets?.length || 0})
+            <div className="space-y-3">
+              <h4
+                className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                Configured Monthly Budgets ({inspectDetail.budgets?.length || 0})
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {!inspectDetail.budgets || inspectDetail.budgets.length === 0 ? (
-                  <p className="text-xs font-mono text-pencil col-span-2 border-2 border-dashed border-black/20 p-3 text-center uppercase">
-                    NO MONTHLY BUDGETS CONFIGURED
+                  <p className="text-xs text-[var(--text-muted)] col-span-2 p-4 text-center rounded-2xl bg-[var(--bg-muted)]">
+                    No monthly budgets configured.
                   </p>
                 ) : (
                   inspectDetail.budgets.map((b) => (
                     <div
                       key={b.id}
-                      className="border-2 border-black dark:border-white/20 p-2.5 flex items-center justify-between text-xs font-mono"
+                      className="p-3 rounded-2xl bg-[var(--bg-muted)] clay-sunken flex items-center justify-between text-xs"
                     >
-                      <span className="font-black text-charcoal uppercase">{b.categoryName}</span>
-                      <span className="font-black text-charcoal">{formatCurrency(b.amount)}/MO</span>
+                      <span className="font-bold text-[var(--text-primary)]">{b.categoryName}</span>
+                      <span
+                        className="font-black text-violet-600 dark:text-violet-400"
+                        style={{ fontFamily: 'Nunito, sans-serif' }}
+                      >
+                        {formatCurrency(b.amount)}/mo
+                      </span>
                     </div>
                   ))
                 )}
@@ -123,25 +160,38 @@ export default function AdminUserInspectModal({
             </div>
 
             {/* Peer Debt Ledgers */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-black text-charcoal uppercase tracking-widest">
-                PEER DEBT LEDGERS ({inspectDetail.loans?.length || 0})
+            <div className="space-y-3">
+              <h4
+                className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                Peer Debt Ledgers ({inspectDetail.loans?.length || 0})
               </h4>
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] max-h-44 overflow-y-auto divide-y divide-black/10 dark:divide-white/10">
+              <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
                 {!inspectDetail.loans || inspectDetail.loans.length === 0 ? (
-                  <p className="p-4 text-xs font-mono text-pencil text-center uppercase">NO PEER DEBTS FOUND</p>
+                  <p className="p-6 text-xs text-[var(--text-muted)] text-center rounded-2xl bg-[var(--bg-muted)]">
+                    No peer debts logged by this user.
+                  </p>
                 ) : (
                   inspectDetail.loans.map((l) => (
-                    <div key={l.id} className="p-2.5 flex items-center justify-between text-xs font-mono">
+                    <div
+                      key={l.id}
+                      className="p-3 rounded-2xl bg-[var(--bg-muted)] clay-sunken flex items-center justify-between text-xs"
+                    >
                       <div>
-                        <p className="font-black text-charcoal uppercase">{l.contactName}</p>
-                        <p className="text-[10px] text-pencil uppercase">
-                          {l.type === 'GIVEN' ? 'LENT' : 'BORROWED'} • {formatDate(l.loanDate)}
+                        <p className="font-bold text-[var(--text-primary)]">{l.contactName}</p>
+                        <p className="text-[11px] text-[var(--text-muted)]">
+                          {l.type === 'GIVEN' || l.type === 'LENT' ? 'Lent' : 'Borrowed'} • {formatDate(l.loanDate)}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-black text-charcoal">{formatCurrency(l.amount)}</p>
-                        <span className="text-[9px] font-black border border-current px-1 uppercase">
+                        <p
+                          className="font-black text-[var(--text-primary)]"
+                          style={{ fontFamily: 'Nunito, sans-serif' }}
+                        >
+                          {formatCurrency(l.amount)}
+                        </p>
+                        <span className="clay-badge-pill text-[10px] font-bold bg-violet-500/10 text-violet-600 dark:text-violet-400">
                           {l.status}
                         </span>
                       </div>

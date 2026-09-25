@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { ArrowRight, RefreshCw } from 'lucide-react';
+import { ArrowRight, RefreshCw, Sparkles, TrendingUp } from 'lucide-react';
 import { getDashboardDataAction } from '@/actions/dashboard-actions';
 import { DashboardSkeleton, Skeleton } from '@/components/ui/skeletons';
 import DashboardSummaryCards from '@/components/dashboard/DashboardSummaryCards';
@@ -15,30 +15,30 @@ const SpendingTrendChart = dynamic(
   () => import('@/components/dashboard/SpendingTrendChart'),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-56 sm:h-64 w-full" />,
+    loading: () => <Skeleton className="h-56 sm:h-64 w-full rounded-[24px]" />,
   }
 );
 
 const MONTH_NAMES = [
-  'JANUARY',
-  'FEBRUARY',
-  'MARCH',
-  'APRIL',
-  'MAY',
-  'JUNE',
-  'JULY',
-  'AUGUST',
-  'SEPTEMBER',
-  'OCTOBER',
-  'NOVEMBER',
-  'DECEMBER',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 function getGreeting() {
   const hour = new Date().getHours();
-  if (hour < 12) return 'MORNING';
-  if (hour < 17) return 'AFTERNOON';
-  return 'EVENING';
+  if (hour < 12) return 'Morning';
+  if (hour < 17) return 'Afternoon';
+  return 'Evening';
 }
 
 export default function DashboardPage() {
@@ -88,23 +88,23 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="border-4 border-black dark:border-white/30 p-8 text-center max-w-md mx-auto my-12 space-y-4 bg-[var(--bg-surface)]">
-        <div className="h-10 w-10 mx-auto bg-[#FF3000] text-white flex items-center justify-center font-black">
+      <div className="clay-card p-8 sm:p-10 text-center max-w-md mx-auto my-12 space-y-4 rounded-[36px]">
+        <div className="h-14 w-14 mx-auto rounded-full bg-gradient-to-br from-rose-400 to-red-600 text-white flex items-center justify-center font-heading font-black text-xl clay-orb shadow-lg">
           !
         </div>
         <div>
-          <h3 className="text-sm font-black uppercase text-charcoal">FAILED TO LOAD OVERVIEW</h3>
-          <p className="text-xs font-mono text-pencil mt-1">{error}</p>
+          <h3 className="text-base font-heading font-black text-charcoal">Failed to Load Overview</h3>
+          <p className="text-xs text-pencil mt-1">{error}</p>
         </div>
         <button
           onClick={() => {
             setLoading(true);
             fetchDashboardData();
           }}
-          className="swiss-btn-black py-2.5 px-5 text-xs font-black uppercase flex items-center justify-center gap-2 mx-auto cursor-pointer"
+          className="clay-btn-primary py-3 px-6 text-xs font-heading font-black flex items-center justify-center gap-2 mx-auto rounded-2xl cursor-pointer"
         >
-          <RefreshCw className="h-3.5 w-3.5" />
-          <span>TRY AGAIN</span>
+          <RefreshCw className="h-4 w-4" />
+          <span>Try Again</span>
         </button>
       </div>
     );
@@ -112,29 +112,28 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
-      {/* 1. TOP SWISS HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                01. OVERVIEW // EXECUTIVE DASHBOARD
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              GOOD {greeting} • {currentMonthName} {currentYear}
-            </h1>
+      {/* 1. TOP CLAY HERO BANNER */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 text-xs font-heading font-black mb-1">
+            <Sparkles className="h-3.5 w-3.5 text-purple-600" />
+            <span>Overview &bull; {currentMonthName} {currentYear}</span>
           </div>
-
-          <Link
-            href="/expenses"
-            className="swiss-btn px-4 py-2 text-xs font-black flex items-center gap-2 self-start sm:self-auto group"
-          >
-            <span>ACTIVITY TIMELINE</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-[#FF3000]" />
-          </Link>
+          <h1 className="font-heading font-black text-3xl sm:text-4xl tracking-tight text-charcoal bg-gradient-to-r from-purple-800 via-pink-600 to-indigo-600 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent">
+            Good {greeting}!
+          </h1>
+          <p className="text-sm font-medium text-pencil">
+            Here is your financial pulse and monthly pacing overview.
+          </p>
         </div>
+
+        <Link
+          href="/expenses"
+          className="clay-btn-secondary px-5 py-3 text-xs font-heading font-extrabold flex items-center gap-2 self-start sm:self-auto rounded-[20px] shadow-sm hover:text-purple-600 group"
+        >
+          <span>View All Activity</span>
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 text-purple-600" />
+        </Link>
       </div>
 
       {/* 2. SUMMARY METRIC TILES */}
@@ -147,21 +146,26 @@ export default function DashboardPage() {
         onDismiss={dismissInsight}
       />
 
-      {/* 4. ASYMMETRIC 8:4 GRID - TRAJECTORY & CATEGORY BREAKDOWN */}
+      {/* 4. ASYMMETRIC 8:4 BENTO GRID - TRAJECTORY & CATEGORY BREAKDOWN */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (8 cols): Trajectory & Monthly Velocity */}
-        <div className="lg:col-span-8 border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-3">
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                01.2 ANALYTICS
-              </span>
-              <h2 className="text-sm font-black uppercase tracking-tight text-charcoal">
-                SPENDING TRAJECTORY // 6-MONTH TREND
-              </h2>
+        <div className="lg:col-span-8 clay-card p-6 sm:p-8 space-y-4 rounded-[32px]">
+          <div className="flex items-center justify-between pb-3 border-b border-purple-500/10">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-600 text-white flex items-center justify-center clay-orb shadow-md">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="font-heading font-black text-base text-charcoal">
+                  Spending Trajectory
+                </h2>
+                <p className="text-xs text-pencil">
+                  6-month monetary volume & velocity
+                </p>
+              </div>
             </div>
-            <span className="text-[10px] font-mono text-pencil uppercase">
-              MONTHLY VELOCITY
+            <span className="font-heading text-xs font-extrabold px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
+              6-Month Trend
             </span>
           </div>
 

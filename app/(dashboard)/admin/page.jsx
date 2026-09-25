@@ -12,6 +12,8 @@ import {
   BarChart3,
   Activity,
   Database,
+  Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -20,9 +22,11 @@ const AdminAnalyticsCharts = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="border-4 border-black dark:border-white/20 p-12 text-center text-pencil bg-[var(--bg-surface)]">
-        <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#FF3000] mb-2" />
-        <p className="text-xs font-mono uppercase font-black">COMPILING PLATFORM ANALYTICS...</p>
+      <div className="clay-card p-12 text-center text-[var(--text-muted)]">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto text-violet-500 mb-3" />
+        <p className="text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          Compiling Platform Analytics...
+        </p>
       </div>
     ),
   }
@@ -99,7 +103,7 @@ export default function AdminPage() {
   const [categories, setCategories] = useState([]);
   const [newCatName, setNewCatName] = useState('');
   const [newCatIcon, setNewCatIcon] = useState('Layers');
-  const [newCatColor, setNewCatColor] = useState('#000000');
+  const [newCatColor, setNewCatColor] = useState('#7C3AED');
   const [savingCategory, setSavingCategory] = useState(false);
   const [categoryMsg, setCategoryMsg] = useState('');
   const [categoryError, setCategoryError] = useState('');
@@ -246,7 +250,7 @@ export default function AdminPage() {
         color: newCatColor,
       });
       if (res.success) {
-        setCategoryMsg('CATEGORY INITIALIZED');
+        setCategoryMsg('Category added successfully!');
         setNewCatName('');
         fetchCategories();
       } else {
@@ -261,7 +265,7 @@ export default function AdminPage() {
 
   // Delete Category Handler
   const handleDeleteCategory = async (catId) => {
-    if (!confirm('CONFIRM DELETE: Remove this global category?')) return;
+    if (!confirm('Are you sure you want to remove this global category?')) return;
     try {
       const res = await deleteCategoryAction(catId);
       if (res.success) {
@@ -308,7 +312,7 @@ export default function AdminPage() {
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        setExportSuccessMsg('PLATFORM JSON SNAPSHOT DOWNLOADED');
+        setExportSuccessMsg('Platform JSON Snapshot Downloaded!');
       } else {
         alert(res.error || 'Failed to generate backup.');
       }
@@ -340,7 +344,7 @@ export default function AdminPage() {
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        setExportSuccessMsg(`MASTER CSV (${res.count} RECORDS) DOWNLOADED`);
+        setExportSuccessMsg(`Master CSV (${res.count} Records) Downloaded!`);
       } else {
         alert(res.error || 'Failed to generate CSV.');
       }
@@ -352,70 +356,80 @@ export default function AdminPage() {
   };
 
   const navTabs = [
-    { id: 'users', label: '06.1 DIRECTORY', icon: Users },
-    { id: 'analytics', label: '06.2 ANALYTICS', icon: BarChart3 },
-    { id: 'health', label: '06.3 HEALTH', icon: Activity },
-    { id: 'backup', label: '06.4 BACKUPS', icon: Database },
-    { id: 'activities', label: '06.5 STREAM', icon: Clock },
-    { id: 'categories', label: '06.6 CATEGORIES', icon: Layers },
+    { id: 'users', label: 'Directory', icon: Users },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'health', label: 'Health', icon: Activity },
+    { id: 'backup', label: 'Backups', icon: Database },
+    { id: 'activities', label: 'Stream', icon: Clock },
+    { id: 'categories', label: 'Categories', icon: Layers },
   ];
 
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="clay-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 clay-orb flex items-center justify-center text-white shrink-0">
+            <ShieldCheck className="h-7 w-7" />
+          </div>
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                06. ADMIN // PLATFORM CONSOLE
+            <div className="flex items-center gap-2">
+              <span className="clay-badge-pill bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 text-xs font-bold">
+                Platform Console
               </span>
+              <span className="text-xs text-[var(--text-muted)] font-medium">Administrator Access</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              STAFF COMMAND CENTER
+            <h1
+              className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight mt-1"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
+            >
+              Command Center
             </h1>
           </div>
-
-          <button
-            onClick={() => {
-              fetchOverview();
-              if (activeTab === 'users') fetchUsers();
-              if (activeTab === 'analytics') fetchAnalytics();
-              if (activeTab === 'health') fetchHealth();
-              if (activeTab === 'activities') fetchActivities();
-            }}
-            className="swiss-btn px-4 py-2 text-xs font-black flex items-center gap-2 self-start sm:self-auto cursor-pointer"
-          >
-            <RefreshCw className="h-3.5 w-3.5 text-[#FF3000]" />
-            <span>SYNC ALL DATA</span>
-          </button>
         </div>
+
+        <button
+          onClick={() => {
+            fetchOverview();
+            if (activeTab === 'users') fetchUsers();
+            if (activeTab === 'analytics') fetchAnalytics();
+            if (activeTab === 'health') fetchHealth();
+            if (activeTab === 'activities') fetchActivities();
+          }}
+          className="clay-btn-secondary px-5 py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 self-stretch sm:self-auto cursor-pointer"
+          style={{ fontFamily: 'Nunito, sans-serif' }}
+        >
+          <RefreshCw className="h-4 w-4 text-violet-500" />
+          <span>Sync All Data</span>
+        </button>
       </div>
 
       {/* 2. EXECUTIVE KPI TILES */}
       <AdminOverviewCards overview={overview} loadingOverview={loadingOverview} />
 
       {/* 3. SUB-SYSTEM NAVIGATION TABS */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-        {navTabs.map((tab) => {
-          const isActive = activeTab === tab.id;
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`p-2.5 border-2 text-xs font-black uppercase flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                  : 'border-black dark:border-white/30 bg-[var(--bg-surface)] text-charcoal hover:bg-black hover:text-white'
-              }`}
-            >
-              <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#FF3000]' : ''}`} />
-              <span className="truncate">{tab.label}</span>
-            </button>
-          );
-        })}
+      <div className="clay-card p-2 sm:p-2.5 rounded-[24px]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          {navTabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-muted)]'
+                }`}
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-violet-500'}`} />
+                <span className="truncate">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* 4. ACTIVE TAB CONTENT */}
@@ -435,9 +449,11 @@ export default function AdminPage() {
       {activeTab === 'analytics' && (
         <div className="space-y-6 animate-fadeIn">
           {loadingAnalytics ? (
-            <div className="border-4 border-black dark:border-white/20 p-12 text-center text-pencil bg-[var(--bg-surface)]">
-              <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#FF3000] mb-2" />
-              <p className="text-xs font-mono uppercase font-black">AGGREGATING PLATFORM ANALYTICS...</p>
+            <div className="clay-card p-12 text-center text-[var(--text-muted)]">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto text-violet-500 mb-3" />
+              <p className="text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                Aggregating Platform Analytics...
+              </p>
             </div>
           ) : (
             <AdminAnalyticsCharts analytics={analytics} />

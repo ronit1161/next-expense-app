@@ -1,30 +1,35 @@
 import Link from 'next/link';
-import { Compass } from 'lucide-react';
+import { Compass, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#EAE6DF] px-4 py-12">
-      <div className="w-full max-w-md neu-card p-8 text-center space-y-6">
-        <div className="h-16 w-16 mx-auto rounded-2xl neu-inset flex items-center justify-center text-[#0047FF]">
-          <Compass className="h-8 w-8 animate-pulse" />
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md clay-card p-8 sm:p-10 text-center space-y-6 rounded-[36px] animate-scaleIn">
+        <div className="h-20 w-20 mx-auto rounded-3xl bg-gradient-to-br from-violet-400 to-indigo-600 clay-orb flex items-center justify-center text-white shadow-xl">
+          <Compass className="h-10 w-10 animate-spin" style={{ animationDuration: '12s' }} />
         </div>
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#7D8494]">
-            404 • Page Uncharted
+          <span className="clay-badge-pill bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-bold">
+            404 • Page Not Found
           </span>
-          <h1 className="text-2xl font-bold tracking-tight text-[#1E2025] mt-1">
-            Ledger Entry Not Found
+          <h1
+            className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] mt-3"
+            style={{ fontFamily: 'Nunito, sans-serif' }}
+          >
+            Lost in Zero Gravity
           </h1>
-          <p className="text-xs text-[#7D8494] mt-2 leading-relaxed">
-            The page you are looking for doesn't exist or has been archived.
+          <p className="text-sm text-[var(--text-muted)] mt-2 leading-relaxed">
+            The page or ledger entry you are looking for does not exist or has been shifted.
           </p>
         </div>
         <div>
           <Link
             href="/dashboard"
-            className="neu-btn-blue inline-flex items-center justify-center px-6 py-2.5 text-xs font-semibold cursor-pointer"
+            className="clay-btn-primary inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl text-xs font-bold text-white cursor-pointer"
+            style={{ fontFamily: 'Nunito, sans-serif' }}
           >
-            Return to Dashboard
+            <ArrowLeft className="h-4 w-4" />
+            <span>Return to Dashboard</span>
           </Link>
         </div>
       </div>

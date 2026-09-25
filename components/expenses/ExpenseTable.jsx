@@ -7,6 +7,7 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  Calendar,
 } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -35,20 +36,22 @@ export default function ExpenseTable({
   return (
     <div className="space-y-6">
       {expenses.length === 0 ? (
-        <div className="border-4 border-black dark:border-white/20 p-8 sm:p-12 text-center space-y-4 bg-[var(--bg-surface)]">
-          <CreditCard className="h-8 w-8 text-pencil mx-auto" />
+        <div className="clay-card p-8 sm:p-12 text-center space-y-4 rounded-[32px]">
+          <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 text-white flex items-center justify-center clay-orb shadow-md">
+            <CreditCard className="h-8 w-8" />
+          </div>
           <div>
-            <h3 className="text-sm font-black uppercase text-charcoal">NO TRANSACTIONS LOGGED</h3>
-            <p className="text-xs font-mono text-pencil mt-1 max-w-xs mx-auto uppercase">
-              NO ACTIVITY FOUND FOR THE SELECTED FILTERS.
+            <h3 className="text-base font-heading font-black text-charcoal">No Transactions Logged</h3>
+            <p className="text-xs text-pencil mt-1 max-w-xs mx-auto">
+              No activity found for the selected filters. Log your first expense!
             </p>
           </div>
           <button
             onClick={onOpenAdd}
-            className="swiss-btn-accent px-4 py-2.5 text-xs font-black uppercase cursor-pointer"
+            className="clay-btn-primary px-5 py-3 text-xs font-heading font-black rounded-2xl cursor-pointer shadow-md inline-flex items-center gap-2"
           >
-            <Plus className="h-4 w-4 mr-1 stroke-[3]" />
-            <span>RECORD FIRST EXPENSE</span>
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>Record First Expense</span>
           </button>
         </div>
       ) : (
@@ -57,37 +60,42 @@ export default function ExpenseTable({
           const dayTotal = dayExpenses.reduce((sum, item) => sum + item.amount, 0);
 
           return (
-            <div key={dateStr} className="space-y-2">
-              {/* Date Group Header - Swiss Crisp Border */}
-              <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-1 px-1">
-                <span className="text-xs font-black text-charcoal uppercase tracking-wider">
-                  {formatDate(dateStr).toUpperCase()}
-                </span>
-                <span className="text-xs font-black text-charcoal tabular-nums font-mono">
-                  TOTAL: {formatCurrency(dayTotal)}
+            <div key={dateStr} className="space-y-3">
+              {/* Date Group Header */}
+              <div className="flex items-center justify-between px-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+                    <Calendar className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-heading font-black text-charcoal uppercase tracking-wider">
+                    {formatDate(dateStr)}
+                  </span>
+                </div>
+                <span className="text-xs font-heading font-black text-purple-700 dark:text-purple-300 tabular-nums">
+                  Day Total: {formatCurrency(dayTotal)}
                 </span>
               </div>
 
               {/* Day Items List */}
-              <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-surface)] divide-y-2 divide-black/10 dark:divide-white/10">
+              <div className="clay-card p-2 rounded-[28px] divide-y divide-purple-500/10">
                 {dayExpenses.map((exp) => (
                   <div
                     key={exp.id}
-                    className="p-3.5 flex items-center justify-between hover:bg-[var(--bg-subtle)] transition-colors gap-3"
+                    className="p-3.5 flex items-center justify-between hover:bg-white/60 dark:hover:bg-white/5 rounded-2xl transition-all gap-3"
                   >
                     {/* Left: Icon & Description */}
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="flex h-8 w-8 items-center justify-center border border-black dark:border-white/40 bg-black text-white dark:bg-white dark:text-black shrink-0">
-                        <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4" />
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-400 to-indigo-600 text-white shrink-0 clay-orb shadow-sm">
+                        <CategoryIcon iconName={exp.categoryIcon} className="h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs sm:text-sm font-black text-charcoal truncate uppercase">
+                        <p className="text-sm font-heading font-black text-charcoal truncate">
                           {exp.description || exp.categoryName}
                         </p>
-                        <div className="flex items-center gap-2 mt-0.5 text-[10px] font-mono text-pencil uppercase">
-                          <span className="font-bold text-charcoal">{exp.categoryName}</span>
-                          <span>•</span>
-                          <span className="border border-current px-1">
+                        <div className="flex items-center gap-2 mt-0.5 text-xs text-pencil font-medium">
+                          <span className="font-heading font-bold text-purple-600 dark:text-purple-400">{exp.categoryName}</span>
+                          <span>&bull;</span>
+                          <span className="px-2 py-0.5 rounded-full bg-[#EFEBF5] dark:bg-[#1C172C] text-[10px] font-heading font-bold">
                             {exp.paymentMethod.replace('_', ' ')}
                           </span>
                         </div>
@@ -96,26 +104,26 @@ export default function ExpenseTable({
 
                     {/* Right: Amount & Actions */}
                     <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-xs sm:text-sm font-black text-charcoal tabular-nums font-mono">
+                      <span className="text-sm sm:text-base font-heading font-black text-charcoal tabular-nums">
                         -{formatCurrency(exp.amount)}
                       </span>
 
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => onOpenEdit(exp)}
-                          className="p-1.5 border border-black/20 dark:border-white/20 hover:border-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer"
+                          className="h-8 w-8 rounded-xl bg-white dark:bg-[#2B243D] flex items-center justify-center text-pencil hover:text-purple-600 hover:scale-110 active:scale-95 shadow-sm transition-all cursor-pointer"
                           aria-label="Edit record"
                           title="Edit record"
                         >
-                          <Pencil className="h-3 w-3" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </button>
                         <button
                           onClick={() => onDelete(exp.id)}
-                          className="p-1.5 border border-black/20 dark:border-white/20 hover:border-[#FF3000] hover:bg-[#FF3000] hover:text-white transition-colors cursor-pointer"
+                          className="h-8 w-8 rounded-xl bg-white dark:bg-[#2B243D] flex items-center justify-center text-pencil hover:text-rose-600 hover:scale-110 active:scale-95 shadow-sm transition-all cursor-pointer"
                           aria-label="Delete record"
                           title="Delete record"
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     </div>
@@ -129,27 +137,27 @@ export default function ExpenseTable({
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-2 border-black dark:border-white/20 p-3 bg-[var(--bg-surface)]">
+        <div className="clay-card p-3 rounded-[24px] flex items-center justify-between">
           <button
             disabled={page <= 1}
             onClick={() => onPageChange(Math.max(1, page - 1))}
-            className="swiss-btn px-3 py-1.5 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+            className="clay-btn-secondary px-4 py-2 text-xs font-heading font-black rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
           >
-            <ChevronLeft className="h-3.5 w-3.5" />
-            <span>PREVIOUS</span>
+            <ChevronLeft className="h-4 w-4" />
+            <span>Previous</span>
           </button>
 
-          <span className="text-xs font-mono font-bold text-pencil uppercase">
-            PAGE {page} OF {totalPages}
+          <span className="text-xs font-heading font-bold text-pencil">
+            Page {page} of {totalPages}
           </span>
 
           <button
             disabled={page >= totalPages}
             onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-            className="swiss-btn px-3 py-1.5 text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+            className="clay-btn-secondary px-4 py-2 text-xs font-heading font-black rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
           >
-            <span>NEXT</span>
-            <ChevronRight className="h-3.5 w-3.5" />
+            <span>Next</span>
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       )}

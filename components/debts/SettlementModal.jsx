@@ -1,14 +1,14 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, Receipt, CheckCircle, Calendar, CreditCard, History, IndianRupee } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
 const PAYMENT_METHODS = [
   { label: 'UPI / QR', value: 'UPI' },
-  { label: 'CASH', value: 'CASH' },
-  { label: 'CREDIT CARD', value: 'CREDIT_CARD' },
-  { label: 'DEBIT CARD', value: 'DEBIT_CARD' },
-  { label: 'NET BANKING', value: 'NET_BANKING' },
+  { label: 'Cash', value: 'CASH' },
+  { label: 'Credit Card', value: 'CREDIT_CARD' },
+  { label: 'Debit Card', value: 'DEBIT_CARD' },
+  { label: 'Net Banking', value: 'NET_BANKING' },
 ];
 
 export default function SettlementModal({
@@ -30,43 +30,62 @@ export default function SettlementModal({
 }) {
   if (!isOpen || !selectedLoan) return null;
 
+  const isLent = selectedLoan.type === 'LENT';
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-md border-4 border-black dark:border-white bg-[var(--bg-surface)] p-6 space-y-5 animate-scaleIn max-h-[92vh] overflow-y-auto">
-        <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-3">
-          <div>
-            <span className="text-[10px] font-black text-[#FF3000] uppercase tracking-widest block">
-              05.B SETTLEMENT AUDIT
-            </span>
-            <h3 className="text-xl font-black uppercase tracking-tight text-charcoal">
-              {selectedLoan.contactName}
-            </h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4 animate-fadeIn">
+      <div className="clay-surface w-full max-w-lg p-6 sm:p-8 space-y-6 animate-scaleIn max-h-[90vh] overflow-y-auto rounded-[36px]">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--clay-border)]">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 clay-orb flex items-center justify-center text-white shrink-0">
+              <Receipt className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                Settlement &amp; Audit
+              </span>
+              <h3
+                className="text-xl font-black text-[var(--text-primary)]"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                {selectedLoan.contactName}
+              </h3>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-black dark:border-white text-pencil hover:text-charcoal cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[var(--bg-muted)] hover:bg-[var(--clay-border)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Remaining Balance Stat */}
-        <div className="border-2 border-black dark:border-white/20 p-4 flex items-center justify-between bg-[var(--bg-subtle)]">
+        {/* Outstanding Balance Banner */}
+        <div className="p-5 rounded-2xl bg-[var(--bg-muted)] clay-sunken flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-black uppercase text-pencil block">
-              OUTSTANDING BALANCE
+            <span className="text-xs font-bold text-[var(--text-muted)] block">
+              Outstanding Balance
             </span>
-            <span className="text-xl font-black text-charcoal font-mono tabular-nums">
+            <span
+              className={`text-2xl font-black ${
+                isLent ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+              }`}
+              style={{ fontFamily: 'Nunito, sans-serif' }}
+            >
               {formatCurrency(selectedLoan.remainingAmount)}
             </span>
           </div>
-          <span className="text-xs font-mono text-pencil uppercase">
-            TOTAL: {formatCurrency(selectedLoan.amount)}
-          </span>
+          <div className="text-right">
+            <span className="text-xs font-bold text-[var(--text-muted)] block">Principal</span>
+            <span className="text-sm font-bold text-[var(--text-secondary)]">
+              {formatCurrency(selectedLoan.amount)}
+            </span>
+          </div>
         </div>
 
         {settleError && (
-          <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 p-3 text-xs font-black text-[#FF3000] uppercase">
+          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-bold animate-fadeIn">
             {settleError}
           </div>
         )}
@@ -75,8 +94,8 @@ export default function SettlementModal({
         {selectedLoan.remainingAmount > 0 ? (
           <form onSubmit={onRecordSettlement} className="space-y-4">
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                REPAYMENT AMOUNT (INR ₹) *
+              <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                Repayment Amount (₹) *
               </label>
               <input
                 type="number"
@@ -85,19 +104,20 @@ export default function SettlementModal({
                 max={selectedLoan.remainingAmount}
                 value={settleAmount}
                 onChange={(e) => setSettleAmount(e.target.value)}
-                className="swiss-input block w-full py-2.5 px-3 text-lg font-black font-mono text-charcoal"
+                className="clay-input block w-full px-4 py-3.5 text-xl font-black text-[var(--text-primary)] rounded-2xl"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                  METHOD
+                <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                  Payment Method
                 </label>
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="swiss-input block w-full py-2 px-2.5 text-xs font-mono font-bold uppercase cursor-pointer"
+                  className="clay-input block w-full py-3 px-3.5 text-xs font-bold rounded-2xl cursor-pointer"
                 >
                   {PAYMENT_METHODS.map((m) => (
                     <option key={m.value} value={m.value}>
@@ -108,71 +128,85 @@ export default function SettlementModal({
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                  SETTLEMENT DATE
+                <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                  Settlement Date
                 </label>
                 <input
                   type="date"
                   required
                   value={settlementDate}
                   onChange={(e) => setSettlementDate(e.target.value)}
-                  className="swiss-input block w-full py-2 px-2.5 text-xs font-mono"
+                  className="clay-input block w-full py-3 px-3.5 text-xs font-semibold rounded-2xl"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                NOTES // REMARKS
+              <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                Notes / Remarks
               </label>
               <input
                 type="text"
-                placeholder="e.g. PARTIAL CASH RETURN"
+                placeholder="e.g. Partial repayment via Google Pay"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono uppercase"
+                className="clay-input block w-full px-4 py-3.5 text-sm font-semibold rounded-2xl"
               />
             </div>
 
-            <div className="pt-2 flex items-center justify-end gap-2 border-t border-black/10 dark:border-white/10">
+            <div className="pt-4 flex items-center justify-end gap-3 border-t border-[var(--clay-border)]">
               <button
                 type="button"
                 onClick={onClose}
-                className="swiss-btn px-4 py-2 text-xs font-black"
+                className="clay-btn-secondary px-5 py-3 rounded-2xl text-xs font-bold cursor-pointer"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
-                CANCEL
+                Cancel
               </button>
               <button
                 type="submit"
                 disabled={settleSaving}
-                className="swiss-btn-accent px-5 py-2 text-xs font-black disabled:opacity-40"
+                className="clay-btn-primary px-7 py-3 rounded-2xl text-xs font-bold text-white disabled:opacity-50 cursor-pointer"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
-                {settleSaving ? 'PROCESSING...' : 'RECORD REPAYMENT'}
+                {settleSaving ? 'Recording...' : 'Record Repayment'}
               </button>
             </div>
           </form>
         ) : (
-          <div className="border-2 border-black bg-black text-white p-4 text-center text-xs font-black uppercase">
-            THIS PEER LOAN IS 100% SETTLED.
+          <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-2">
+            <CheckCircle className="h-8 w-8 text-emerald-500 mx-auto" />
+            <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+              Loan 100% Settled
+            </h4>
+            <p className="text-xs text-[var(--text-muted)]">
+              All obligations on this peer ledger entry have been completely balanced.
+            </p>
           </div>
         )}
 
         {/* Settlement Audit History */}
         {settlementHistory.length > 0 && (
-          <div className="pt-3 border-t-2 border-black dark:border-white/20 space-y-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-pencil block">
-              SETTLEMENT AUDIT TRAIL ({settlementHistory.length})
-            </span>
-            <div className="space-y-1.5 max-h-36 overflow-y-auto border border-black/10 dark:border-white/10 p-2 bg-[var(--bg-subtle)]">
+          <div className="pt-4 border-t border-[var(--clay-border)] space-y-3">
+            <div className="flex items-center gap-2">
+              <History className="h-4 w-4 text-violet-500" />
+              <span className="text-xs font-bold text-[var(--text-secondary)]">
+                Audit Trail ({settlementHistory.length})
+              </span>
+            </div>
+            <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
               {settlementHistory.map((s) => (
-                <div key={s.id} className="flex items-center justify-between text-xs font-mono p-1.5 border-b border-black/10 dark:border-white/10 last:border-b-0">
+                <div
+                  key={s.id}
+                  className="flex items-center justify-between text-xs p-3 rounded-xl bg-[var(--bg-muted)] clay-sunken"
+                >
                   <div>
-                    <p className="font-bold text-charcoal uppercase">
-                      +{formatCurrency(s.amount)} ({s.paymentMethod})
+                    <p className="font-bold text-[var(--text-primary)]">
+                      +{formatCurrency(s.amount)} <span className="text-[var(--text-muted)] font-normal">({s.paymentMethod})</span>
                     </p>
-                    {s.notes && <p className="text-[9px] text-pencil uppercase">{s.notes}</p>}
+                    {s.notes && <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{s.notes}</p>}
                   </div>
-                  <span className="text-[10px] text-pencil">{formatDate(s.settlementDate)}</span>
+                  <span className="text-[11px] text-[var(--text-muted)] font-medium">{formatDate(s.settlementDate)}</span>
                 </div>
               ))}
             </div>

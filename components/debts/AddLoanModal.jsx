@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, HandCoins, ArrowUpRight, ArrowDownLeft, Calendar, FileText, User, IndianRupee } from 'lucide-react';
 
 export default function AddLoanModal({
   isOpen,
@@ -24,151 +24,176 @@ export default function AddLoanModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 animate-fadeIn">
-      <div className="w-full max-w-md border-4 border-black dark:border-white bg-[var(--bg-surface)] p-6 space-y-5 animate-scaleIn max-h-[92vh] overflow-y-auto">
-        <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-3">
-          <div>
-            <span className="text-[10px] font-black text-[#FF3000] uppercase tracking-widest block">
-              05.A PEER LEDGER ENTRY
-            </span>
-            <h3 className="text-xl font-black uppercase tracking-tight text-charcoal">
-              RECORD PEER LOAN
-            </h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4 animate-fadeIn">
+      <div className="clay-surface w-full max-w-lg p-6 sm:p-8 space-y-6 animate-scaleIn max-h-[90vh] overflow-y-auto rounded-[36px]">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--clay-border)]">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 clay-orb flex items-center justify-center text-white shrink-0">
+              <HandCoins className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-violet-600 dark:text-violet-400">
+                Peer Ledger Entry
+              </span>
+              <h3
+                className="text-xl font-black text-[var(--text-primary)]"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                Record Peer Loan
+              </h3>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-black dark:border-white text-pencil hover:text-charcoal cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[var(--bg-muted)] hover:bg-[var(--clay-border)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {loanError && (
-          <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 p-3 text-xs font-black text-[#FF3000] uppercase">
+          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-bold animate-fadeIn">
             {loanError}
           </div>
         )}
 
-        <form onSubmit={onSave} className="space-y-4">
+        <form onSubmit={onSave} className="space-y-5">
           {/* Classification Switcher */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-              CLASSIFICATION *
+            <label className="text-xs font-bold text-[var(--text-secondary)] block mb-2">
+              Loan Classification *
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3 p-1.5 rounded-2xl bg-[var(--bg-muted)] clay-sunken">
               <button
                 type="button"
                 onClick={() => setLoanType('LENT')}
-                className={`py-2 px-3 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+                className={`py-3 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   loanType === 'LENT'
-                    ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                    : 'border-black/20 dark:border-white/20 text-charcoal hover:border-black'
+                    ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
-                I LENT (RECEIVABLE)
+                <ArrowUpRight className="h-4 w-4" />
+                <span>I Lent (Receivable)</span>
               </button>
               <button
                 type="button"
                 onClick={() => setLoanType('BORROWED')}
-                className={`py-2 px-3 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+                className={`py-3 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   loanType === 'BORROWED'
-                    ? 'bg-[#FF3000] text-white border-[#FF3000]'
-                    : 'border-black/20 dark:border-white/20 text-charcoal hover:border-black'
+                    ? 'bg-gradient-to-br from-rose-500 to-pink-600 text-white shadow-md'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
-                I BORROWED (PAYABLE)
+                <ArrowDownLeft className="h-4 w-4" />
+                <span>I Borrowed (Payable)</span>
               </button>
             </div>
           </div>
 
           {/* Contact Input */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-              CONTACT PERSON *
+            <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+              Contact Person *
             </label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. ALEX MERCER"
-              value={contactName}
-              onChange={(e) => setContactName(e.target.value)}
-              className="swiss-input block w-full py-2 px-3 text-xs font-mono uppercase"
-            />
+            <div className="relative">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
+              <input
+                type="text"
+                required
+                placeholder="e.g. Alex Mercer"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                className="clay-input block w-full pl-11 pr-4 py-3.5 text-sm font-semibold rounded-2xl"
+              />
+            </div>
           </div>
 
           {/* Principal Amount */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-              PRINCIPAL AMOUNT (INR ₹) *
+            <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+              Principal Amount (₹) *
             </label>
-            <input
-              type="number"
-              step="any"
-              inputMode="decimal"
-              required
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="swiss-input block w-full py-2.5 px-3 text-lg font-black font-mono text-charcoal"
-            />
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base font-bold text-[var(--text-muted)]">₹</span>
+              <input
+                type="number"
+                step="any"
+                inputMode="decimal"
+                required
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="clay-input block w-full pl-11 pr-4 py-3.5 text-xl font-black text-[var(--text-primary)] rounded-2xl"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              />
+            </div>
           </div>
 
           {/* Loan Date & Due Date */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                LOAN DATE *
+              <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                Loan Date *
               </label>
               <input
                 type="date"
                 required
                 value={loanDate}
                 onChange={(e) => setLoanDate(e.target.value)}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono"
+                className="clay-input block w-full py-3 px-4 text-xs font-semibold rounded-2xl"
               />
             </div>
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                DUE DATE (OPTIONAL)
+              <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+                Due Date (Optional)
               </label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono"
+                className="clay-input block w-full py-3 px-4 text-xs font-semibold rounded-2xl"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-              REASON // NOTES (OPTIONAL)
+            <label className="text-xs font-bold text-[var(--text-secondary)] block mb-1.5">
+              Reason / Notes (Optional)
             </label>
-            <input
-              type="text"
-              placeholder="e.g. EMERGENCY CASH, SHARED TRIP"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="swiss-input block w-full py-2 px-3 text-xs font-mono uppercase"
-            />
+            <div className="relative">
+              <FileText className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
+              <input
+                type="text"
+                placeholder="e.g. Emergency cash, shared vacation dinner"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="clay-input block w-full pl-11 pr-4 py-3.5 text-sm font-semibold rounded-2xl"
+              />
+            </div>
           </div>
 
           {/* Actions */}
-          <div className="pt-2 flex items-center justify-end gap-2 border-t-2 border-black dark:border-white/20">
+          <div className="pt-4 flex items-center justify-end gap-3 border-t border-[var(--clay-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="swiss-btn px-4 py-2 text-xs font-black"
+              className="clay-btn-secondary px-5 py-3 rounded-2xl text-xs font-bold cursor-pointer"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              CANCEL
+              Cancel
             </button>
             <button
               type="submit"
               disabled={loanSaving}
-              className="swiss-btn-accent px-5 py-2 text-xs font-black disabled:opacity-40"
+              className="clay-btn-primary px-7 py-3 rounded-2xl text-xs font-bold text-white disabled:opacity-50 cursor-pointer"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              {loanSaving ? 'COMMITTING...' : 'RECORD LOAN'}
+              {loanSaving ? 'Saving...' : 'Record Loan'}
             </button>
           </div>
         </form>

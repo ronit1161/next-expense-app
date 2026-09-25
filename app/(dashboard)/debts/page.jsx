@@ -6,6 +6,14 @@ import {
   CreditCard,
   RefreshCw,
   X,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Users,
+  Wallet,
+  HandCoins,
+  Receipt,
+  CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -136,11 +144,11 @@ export default function DebtsPage() {
     setLoanError('');
 
     if (!contactName.trim()) {
-      setLoanError('PLEASE SPECIFY A CONTACT NAME.');
+      setLoanError('Please specify a contact name.');
       return;
     }
     if (!amount || Number(amount) <= 0) {
-      setLoanError('PLEASE SPECIFY A VALID LOAN AMOUNT.');
+      setLoanError('Please specify a valid loan amount.');
       return;
     }
 
@@ -156,8 +164,8 @@ export default function DebtsPage() {
       });
 
       if (res.success) {
-        setSuccessMsg('PEER LEDGER RECORD LOGGED');
-        setTimeout(() => setSuccessMsg(''), 3000);
+        setSuccessMsg('Peer loan record successfully saved!');
+        setTimeout(() => setSuccessMsg(''), 3500);
         closeAddLoanModal();
         fetchLedgerData();
       } else {
@@ -175,11 +183,11 @@ export default function DebtsPage() {
     setSettleError('');
 
     if (!settleAmount || Number(settleAmount) <= 0) {
-      setSettleError('PLEASE ENTER A VALID REPAYMENT AMOUNT.');
+      setSettleError('Please enter a valid repayment amount.');
       return;
     }
     if (Number(settleAmount) > selectedLoan.remainingAmount) {
-      setSettleError(`AMOUNT CANNOT EXCEED OUTSTANDING ${formatCurrency(selectedLoan.remainingAmount)}`);
+      setSettleError(`Amount cannot exceed outstanding balance of ${formatCurrency(selectedLoan.remainingAmount)}`);
       return;
     }
 
@@ -194,8 +202,8 @@ export default function DebtsPage() {
       });
 
       if (res.success) {
-        setSuccessMsg('SETTLEMENT AUDITED & LOGGED');
-        setTimeout(() => setSuccessMsg(''), 3000);
+        setSuccessMsg('Repayment recorded & audited successfully!');
+        setTimeout(() => setSuccessMsg(''), 3500);
         closeSettlementModal();
         fetchLedgerData();
       } else {
@@ -209,11 +217,11 @@ export default function DebtsPage() {
   };
 
   const handleDeleteLoan = async (id) => {
-    if (!confirm('CONFIRM DELETE: Remove this peer loan ledger record?')) return;
+    if (!confirm('Are you sure you want to remove this peer loan record?')) return;
     try {
       const res = await deleteLoanAction(id);
       if (res.success) {
-        setSuccessMsg('LEDGER RECORD DELETED');
+        setSuccessMsg('Peer loan record deleted.');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchLedgerData();
       } else {
@@ -228,132 +236,163 @@ export default function DebtsPage() {
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="clay-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#0EA5E9] to-[#3B82F6] clay-orb flex items-center justify-center text-white shrink-0">
+            <HandCoins className="h-7 w-7" />
+          </div>
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                05. PEER LEDGERS // LENDING &amp; EXPOSURE
+            <div className="flex items-center gap-2">
+              <span className="clay-badge-pill bg-[#0EA5E9]/10 text-[#0284C7] dark:text-[#38BDF8] border border-[#0EA5E9]/20 text-xs font-bold">
+                Peer Ledger
               </span>
+              <span className="text-xs text-[var(--text-muted)] font-medium">Lending &amp; Debts</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              PEER DEBT &amp; LENDING
+            <h1
+              className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight mt-1"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
+            >
+              Peer Debt &amp; Lending
             </h1>
           </div>
-
-          <button
-            onClick={openAddLoanModal}
-            className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
-          >
-            <Plus className="h-4 w-4 stroke-[3]" />
-            <span>RECORD PEER LOAN</span>
-          </button>
         </div>
+
+        <button
+          onClick={openAddLoanModal}
+          className="clay-btn-primary px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 text-white self-stretch sm:self-auto cursor-pointer"
+          style={{ fontFamily: 'Nunito, sans-serif' }}
+        >
+          <Plus className="h-5 w-5 stroke-[2.5]" />
+          <span>Record Peer Loan</span>
+        </button>
       </div>
 
       {/* ALERTS */}
       {successMsg && (
-        <div className="border-2 border-black bg-black text-white p-3 text-xs font-black uppercase tracking-wider animate-fadeIn flex items-center justify-between">
-          <span>{successMsg}</span>
-          <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
-            <X className="h-3.5 w-3.5" />
+        <div className="clay-card p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold text-sm flex items-center justify-between animate-scaleIn">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            <span>{successMsg}</span>
+          </div>
+          <button onClick={() => setSuccessMsg('')} className="p-1 rounded-lg hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 text-[#FF3000] p-3 text-xs font-black uppercase tracking-wider animate-fadeIn">
-          {error}
+        <div className="clay-card p-4 bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 font-bold text-sm flex items-center justify-between animate-scaleIn">
+          <span>{error}</span>
+          <button onClick={() => setError('')} className="p-1 rounded-lg hover:bg-rose-500/20">
+            <X className="h-4 w-4" />
+          </button>
         </div>
       )}
 
       {/* 2. RECEIVABLE VS PAYABLE DUAL TILES */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Receivable (Lent) */}
-        <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-2">
-          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-2">
-            <span className="text-xs font-black uppercase tracking-widest text-charcoal">
-              05.A OUTSTANDING RECEIVABLE (LENT OUT)
-            </span>
-            <span className="text-[10px] font-mono px-1 border border-black dark:border-white uppercase font-bold">
-              TO RECEIVE
+        <div className="clay-card p-6 sm:p-7 relative overflow-hidden group">
+          <div className="flex items-center justify-between pb-3 mb-2 border-b border-[var(--clay-border)]">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 clay-orb flex items-center justify-center text-white">
+                <ArrowUpRight className="h-5 w-5 stroke-[2.5]" />
+              </div>
+              <span className="text-sm font-bold text-[var(--text-secondary)]">
+                Outstanding Receivable
+              </span>
+            </div>
+            <span className="clay-badge-pill bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+              To Receive
             </span>
           </div>
-          <div className="text-3xl sm:text-5xl font-black text-charcoal tabular-nums font-mono pt-2">
+          <div
+            className="text-3xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight my-2"
+            style={{ fontFamily: 'Nunito, sans-serif' }}
+          >
             {formatCurrency(summary.totalReceivable)}
           </div>
-          <p className="text-[10px] font-mono text-pencil uppercase pt-1">
-            AGGREGATE CAPITAL OWED TO YOU BY RECIPIENTS
+          <p className="text-xs text-[var(--text-muted)] font-medium">
+            Total capital lent out and owed to you by contacts
           </p>
         </div>
 
         {/* Payable (Borrowed) */}
-        <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-2">
-          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-2">
-            <span className="text-xs font-black uppercase tracking-widest text-[#FF3000]">
-              05.B OUTSTANDING PAYABLE (BORROWED)
-            </span>
-            <span className="text-[10px] font-mono px-1 bg-[#FF3000] text-white uppercase font-bold">
-              TO REPAY
+        <div className="clay-card p-6 sm:p-7 relative overflow-hidden group">
+          <div className="flex items-center justify-between pb-3 mb-2 border-b border-[var(--clay-border)]">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-rose-400 to-pink-600 clay-orb flex items-center justify-center text-white">
+                <ArrowDownLeft className="h-5 w-5 stroke-[2.5]" />
+              </div>
+              <span className="text-sm font-bold text-[var(--text-secondary)]">
+                Outstanding Payable
+              </span>
+            </div>
+            <span className="clay-badge-pill bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-bold">
+              To Repay
             </span>
           </div>
-          <div className="text-3xl sm:text-5xl font-black text-[#FF3000] tabular-nums font-mono pt-2">
+          <div
+            className="text-3xl sm:text-5xl font-black text-rose-600 dark:text-rose-400 tracking-tight my-2"
+            style={{ fontFamily: 'Nunito, sans-serif' }}
+          >
             {formatCurrency(summary.totalPayable)}
           </div>
-          <p className="text-[10px] font-mono text-pencil uppercase pt-1">
-            AGGREGATE OBLIGATION YOU OWE TO LENDERS
+          <p className="text-xs text-[var(--text-muted)] font-medium">
+            Total debt obligations you have borrowed and need to return
           </p>
         </div>
       </div>
 
       {/* 3. TABS & FILTER TOOLBAR */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black dark:border-white/20 pb-3">
-          <div className="flex items-center gap-2">
+      <div className="space-y-6">
+        <div className="clay-card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--bg-muted)] clay-sunken">
             <button
               onClick={() => setActiveTab('loans')}
-              className={`px-4 py-2 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'loans'
-                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                  : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+                  ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              ACTIVE LEDGERS ({loans.length})
+              Active Ledgers ({loans.length})
             </button>
             <button
               onClick={() => setActiveTab('contacts')}
-              className={`px-4 py-2 text-xs font-black uppercase border-2 transition-all cursor-pointer ${
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'contacts'
-                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                  : 'border-black dark:border-white/30 text-charcoal hover:bg-black hover:text-white'
+                  ? 'bg-gradient-to-br from-[#7C3AED] to-[#6D28D9] text-white clay-pill shadow-md'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              DIRECTORY ({contacts.length})
+              Directory ({contacts.length})
             </button>
           </div>
 
           {activeTab === 'loans' && (
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap">
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="swiss-input py-1.5 px-2.5 text-xs font-mono font-bold uppercase cursor-pointer"
+                className="clay-input py-2.5 px-4 text-xs font-bold rounded-2xl cursor-pointer"
               >
-                <option value="">ALL TYPES</option>
-                <option value="LENT">LENT (RECEIVABLE)</option>
-                <option value="BORROWED">BORROWED (PAYABLE)</option>
+                <option value="">All Types</option>
+                <option value="LENT">Lent (Receivable)</option>
+                <option value="BORROWED">Borrowed (Payable)</option>
               </select>
 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="swiss-input py-1.5 px-2.5 text-xs font-mono font-bold uppercase cursor-pointer"
+                className="clay-input py-2.5 px-4 text-xs font-bold rounded-2xl cursor-pointer"
               >
-                <option value="">ALL STATUSES</option>
-                <option value="PENDING">PENDING</option>
-                <option value="PARTIAL">PARTIAL</option>
-                <option value="SETTLED">SETTLED</option>
+                <option value="">All Statuses</option>
+                <option value="PENDING">Pending</option>
+                <option value="PARTIAL">Partial</option>
+                <option value="SETTLED">Settled</option>
               </select>
             </div>
           )}
@@ -365,26 +404,32 @@ export default function DebtsPage() {
         ) : activeTab === 'contacts' ? (
           <ContactsDirectoryTab contacts={contacts} />
         ) : loans.length === 0 ? (
-          <div className="border-4 border-black dark:border-white/20 p-8 sm:p-12 text-center space-y-4 bg-[var(--bg-surface)]">
-            <CreditCard className="h-8 w-8 text-pencil mx-auto" />
+          <div className="clay-card p-12 text-center space-y-4">
+            <div className="h-16 w-16 rounded-full bg-violet-100 dark:bg-violet-900/30 clay-orb flex items-center justify-center text-violet-500 mx-auto">
+              <Receipt className="h-8 w-8" />
+            </div>
             <div>
-              <h3 className="text-sm font-black uppercase text-charcoal">
-                NO PEER LEDGERS FOUND
+              <h3
+                className="text-lg font-bold text-[var(--text-primary)]"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                No Peer Ledgers Found
               </h3>
-              <p className="text-xs font-mono text-pencil mt-1 max-w-xs mx-auto uppercase">
-                NO RECORDED LENDING OR DEBT ENTRIES MATCHING CRITERIA.
+              <p className="text-sm text-[var(--text-muted)] mt-1 max-w-sm mx-auto">
+                No recorded lending or borrowing entries match your filters.
               </p>
             </div>
             <button
               onClick={openAddLoanModal}
-              className="swiss-btn-accent px-4 py-2.5 text-xs font-black uppercase cursor-pointer"
+              className="clay-btn-primary px-6 py-3 rounded-2xl text-xs font-bold inline-flex items-center gap-2 text-white cursor-pointer"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              <Plus className="h-4 w-4 mr-1 stroke-[3]" />
-              <span>LOG FIRST PEER LOAN</span>
+              <Plus className="h-4 w-4 stroke-[2.5]" />
+              <span>Log First Peer Loan</span>
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loans.map((loan) => (
               <DebtCard
                 key={loan.id}

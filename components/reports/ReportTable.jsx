@@ -2,53 +2,58 @@
 
 import CategoryIcon from '@/components/ui/CategoryIcon';
 import { formatCurrency, formatDate } from '@/lib/utils';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, FileText } from 'lucide-react';
 
 export default function ReportTable({ reportType, data = [], error, onRetry }) {
   return (
-    <div className="border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] overflow-hidden">
-      <div className="px-5 py-3.5 flex items-center justify-between border-b-2 border-black dark:border-white/20 bg-[var(--bg-subtle)]">
-        <h3 className="text-xs font-black text-charcoal uppercase tracking-widest">
-          STATEMENT PREVIEW // {data.length} RECORDS
-        </h3>
-        <span className="text-[10px] font-mono font-bold text-pencil">BASE: INR (₹)</span>
+    <div className="clay-card rounded-[32px] overflow-hidden">
+      <div className="px-6 py-4 flex items-center justify-between border-b border-purple-500/10 bg-white/40 dark:bg-black/10">
+        <div className="flex items-center gap-2">
+          <FileText className="h-4 w-4 text-purple-600" />
+          <h3 className="text-xs font-heading font-black text-charcoal tracking-wide">
+            Statement Preview &bull; {data.length} Records
+          </h3>
+        </div>
+        <span className="text-[11px] font-heading font-bold text-pencil">Base Currency: INR (₹)</span>
       </div>
 
       {error ? (
         <div className="p-8 text-center space-y-3">
-          <p className="text-xs text-[#FF3000] font-black uppercase">{error}</p>
+          <p className="text-xs text-rose-600 font-heading font-black">{error}</p>
           <button
             onClick={onRetry}
-            className="swiss-btn-accent inline-flex items-center gap-1.5 px-4 py-2 text-xs font-black cursor-pointer"
+            className="clay-btn-primary inline-flex items-center gap-2 px-5 py-2 text-xs font-heading font-black rounded-xl cursor-pointer"
           >
-            <RefreshCw className="h-3 w-3" />
-            <span>RETRY QUERY</span>
+            <RefreshCw className="h-3.5 w-3.5" />
+            <span>Retry Query</span>
           </button>
         </div>
       ) : data.length === 0 ? (
-        <div className="p-12 text-center text-xs font-mono text-pencil uppercase">
-          NO REPORT DATA AVAILABLE FOR SPECIFIED TIMEFRAME.
+        <div className="p-12 text-center text-xs text-pencil font-medium">
+          No report records found for the selected timeframe.
         </div>
       ) : (
         <>
           {/* MOBILE VIEW (< 640px): Stacked Statement Cards */}
-          <div className="block sm:hidden divide-y-2 divide-black/10 dark:divide-white/10">
+          <div className="block sm:hidden divide-y divide-purple-500/10">
             {reportType === 'expenses' &&
               data.map((exp, idx) => (
-                <div key={exp.id || `exp-${idx}`} className="p-3.5 space-y-1">
+                <div key={exp.id || `exp-${idx}`} className="p-4 space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <CategoryIcon iconName={exp.categoryIcon} className="h-3.5 w-3.5" />
-                      <span className="font-black text-xs text-charcoal uppercase truncate max-w-[180px]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center text-white clay-orb shadow-sm">
+                        <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4" />
+                      </div>
+                      <span className="font-heading font-black text-xs text-charcoal truncate max-w-[170px]">
                         {exp.description || exp.categoryName}
                       </span>
                     </div>
-                    <span className="text-xs font-black text-charcoal font-mono tabular-nums">
+                    <span className="text-xs font-heading font-black text-charcoal tabular-nums">
                       {formatCurrency(exp.amount)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-pencil uppercase">
-                    <span>{exp.categoryName} • {exp.paymentMethod.replace('_', ' ')}</span>
+                  <div className="flex items-center justify-between text-xs text-pencil font-medium">
+                    <span>{exp.categoryName} &bull; {exp.paymentMethod.replace('_', ' ')}</span>
                     <span>{formatDate(exp.expenseDate)}</span>
                   </div>
                 </div>
@@ -56,9 +61,9 @@ export default function ReportTable({ reportType, data = [], error, onRetry }) {
 
             {reportType === 'categories' &&
               data.map((cat, idx) => (
-                <div key={cat.categoryId || cat.id || `cat-${idx}`} className="p-3.5 flex items-center justify-between">
-                  <span className="font-black text-xs text-charcoal uppercase">{cat.categoryName}</span>
-                  <span className="font-black text-xs text-charcoal font-mono tabular-nums">
+                <div key={cat.categoryId || cat.id || `cat-${idx}`} className="p-4 flex items-center justify-between">
+                  <span className="font-heading font-black text-xs text-charcoal">{cat.categoryName}</span>
+                  <span className="font-heading font-black text-xs text-charcoal tabular-nums">
                     {formatCurrency(cat.total)}
                   </span>
                 </div>
@@ -66,93 +71,95 @@ export default function ReportTable({ reportType, data = [], error, onRetry }) {
 
             {reportType === 'budgets' &&
               data.map((b, idx) => (
-                <div key={b.budgetId || b.id || b.categoryId || `budget-${idx}`} className="p-3.5 space-y-1">
+                <div key={b.budgetId || b.id || b.categoryId || `budget-${idx}`} className="p-4 space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-black text-xs text-charcoal uppercase">{b.categoryName}</span>
-                    <span className={`text-xs font-black font-mono tabular-nums ${b.isOverBudget ? 'text-[#FF3000]' : 'text-charcoal'}`}>
+                    <span className="font-heading font-black text-xs text-charcoal">{b.categoryName}</span>
+                    <span className={`text-xs font-heading font-black px-2 py-0.5 rounded-full ${b.isOverBudget ? 'bg-rose-500 text-white' : 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'}`}>
                       {b.utilizationPercentage}%
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-pencil uppercase">
-                    <span>CAP: {formatCurrency(b.budgetLimit)}</span>
-                    <span>SPENT: {formatCurrency(b.spentAmount)}</span>
+                  <div className="flex items-center justify-between text-xs text-pencil font-medium">
+                    <span>Cap: {formatCurrency(b.budgetLimit)}</span>
+                    <span>Spent: {formatCurrency(b.spentAmount)}</span>
                   </div>
                 </div>
               ))}
 
             {reportType === 'loans' &&
               data.map((l, idx) => (
-                <div key={l.id || `loan-${idx}`} className="p-3.5 space-y-1">
+                <div key={l.id || `loan-${idx}`} className="p-4 space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-black text-xs text-charcoal uppercase">{l.contactName}</span>
-                    <span className={`text-[10px] font-black border px-1 ${l.type === 'LENT' ? 'bg-black text-white' : 'bg-[#FF3000] text-white'}`}>
+                    <span className="font-heading font-black text-xs text-charcoal">{l.contactName}</span>
+                    <span className={`text-[10px] font-heading font-black px-2 py-0.5 rounded-full ${l.type === 'LENT' ? 'bg-emerald-500 text-white' : 'bg-pink-500 text-white'}`}>
                       {l.type}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-pencil uppercase">
-                    <span>PRINCIPAL: {formatCurrency(l.amount)}</span>
-                    <span className="font-black text-charcoal tabular-nums">REM: {formatCurrency(l.remainingAmount)}</span>
+                  <div className="flex items-center justify-between text-xs text-pencil font-medium">
+                    <span>Principal: {formatCurrency(l.amount)}</span>
+                    <span className="font-heading font-black text-charcoal tabular-nums">Rem: {formatCurrency(l.remainingAmount)}</span>
                   </div>
                 </div>
               ))}
           </div>
 
-          {/* DESKTOP/TABLET VIEW (>= 640px): Full Swiss Statement Table */}
+          {/* DESKTOP/TABLET VIEW (>= 640px): Full Statement Table */}
           <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono">
+            <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b-2 border-black dark:border-white/20 text-[10px] font-black uppercase tracking-widest text-charcoal bg-[var(--bg-subtle)]">
+                <tr className="border-b border-purple-500/10 text-[11px] font-heading font-black uppercase tracking-wider text-pencil bg-white/40 dark:bg-black/10">
                   {reportType === 'expenses' && (
                     <>
-                      <th className="py-3 px-5">DETAILS</th>
-                      <th className="py-3 px-4">METHOD</th>
-                      <th className="py-3 px-4">DATE</th>
-                      <th className="py-3 px-5 text-right">AMOUNT</th>
+                      <th className="py-3.5 px-6">Details</th>
+                      <th className="py-3.5 px-4">Method</th>
+                      <th className="py-3.5 px-4">Date</th>
+                      <th className="py-3.5 px-6 text-right">Amount</th>
                     </>
                   )}
                   {reportType === 'categories' && (
                     <>
-                      <th className="py-3 px-5">CATEGORY SECTOR</th>
-                      <th className="py-3 px-5 text-right">AGGREGATE SPEND</th>
+                      <th className="py-3.5 px-6">Sector Category</th>
+                      <th className="py-3.5 px-6 text-right">Aggregate Spend</th>
                     </>
                   )}
                   {reportType === 'budgets' && (
                     <>
-                      <th className="py-3 px-5">CATEGORY</th>
-                      <th className="py-3 px-4">BUDGET CAP</th>
-                      <th className="py-3 px-4">SPENT</th>
-                      <th className="py-3 px-4">REMAINING</th>
-                      <th className="py-3 px-5 text-right">UTILIZATION</th>
+                      <th className="py-3.5 px-6">Category</th>
+                      <th className="py-3.5 px-4">Budget Cap</th>
+                      <th className="py-3.5 px-4">Spent</th>
+                      <th className="py-3.5 px-4">Remaining</th>
+                      <th className="py-3.5 px-6 text-right">Utilization</th>
                     </>
                   )}
                   {reportType === 'loans' && (
                     <>
-                      <th className="py-3 px-5">CONTACT</th>
-                      <th className="py-3 px-4">CLASSIFICATION</th>
-                      <th className="py-3 px-4">PRINCIPAL</th>
-                      <th className="py-3 px-4">REMAINING</th>
-                      <th className="py-3 px-4">DATE</th>
-                      <th className="py-3 px-5 text-right">STATUS</th>
+                      <th className="py-3.5 px-6">Contact</th>
+                      <th className="py-3.5 px-4">Type</th>
+                      <th className="py-3.5 px-4">Principal</th>
+                      <th className="py-3.5 px-4">Remaining</th>
+                      <th className="py-3.5 px-4">Date</th>
+                      <th className="py-3.5 px-6 text-right">Status</th>
                     </>
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/10 dark:divide-white/10">
+              <tbody className="divide-y divide-purple-500/10">
                 {reportType === 'expenses' &&
                   data.map((exp) => (
-                    <tr key={exp.id} className="hover:bg-[var(--bg-subtle)] transition-colors">
-                      <td className="py-3 px-5">
-                        <div className="flex items-center gap-2.5">
-                          <CategoryIcon iconName={exp.categoryIcon} className="h-3.5 w-3.5 shrink-0" />
+                    <tr key={exp.id} className="hover:bg-white/60 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center text-white clay-orb shrink-0 shadow-sm">
+                            <CategoryIcon iconName={exp.categoryIcon} className="h-4 w-4" />
+                          </div>
                           <div>
-                            <p className="font-black text-charcoal uppercase">{exp.description || exp.categoryName}</p>
-                            <p className="text-[10px] text-pencil uppercase">{exp.categoryName}</p>
+                            <p className="font-heading font-black text-charcoal">{exp.description || exp.categoryName}</p>
+                            <p className="text-[11px] text-pencil font-medium">{exp.categoryName}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-4 uppercase">{exp.paymentMethod.replace('_', ' ')}</td>
-                      <td className="py-3 px-4 text-pencil">{formatDate(exp.expenseDate)}</td>
-                      <td className="py-3 px-5 text-right font-black text-charcoal tabular-nums">
+                      <td className="py-3.5 px-4 font-medium text-charcoal">{exp.paymentMethod.replace('_', ' ')}</td>
+                      <td className="py-3.5 px-4 text-pencil font-medium">{formatDate(exp.expenseDate)}</td>
+                      <td className="py-3.5 px-6 text-right font-heading font-black text-charcoal tabular-nums">
                         {formatCurrency(exp.amount)}
                       </td>
                     </tr>
@@ -160,9 +167,9 @@ export default function ReportTable({ reportType, data = [], error, onRetry }) {
 
                 {reportType === 'categories' &&
                   data.map((cat) => (
-                    <tr key={cat.categoryId} className="hover:bg-[var(--bg-subtle)] transition-colors">
-                      <td className="py-3 px-5 font-black text-charcoal uppercase">{cat.categoryName}</td>
-                      <td className="py-3 px-5 text-right font-black text-charcoal tabular-nums">
+                    <tr key={cat.categoryId} className="hover:bg-white/60 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-6 font-heading font-black text-charcoal">{cat.categoryName}</td>
+                      <td className="py-3.5 px-6 text-right font-heading font-black text-charcoal tabular-nums">
                         {formatCurrency(cat.total)}
                       </td>
                     </tr>
@@ -170,19 +177,19 @@ export default function ReportTable({ reportType, data = [], error, onRetry }) {
 
                 {reportType === 'budgets' &&
                   data.map((b) => (
-                    <tr key={b.budgetId} className="hover:bg-[var(--bg-subtle)] transition-colors">
-                      <td className="py-3 px-5 font-black text-charcoal uppercase">{b.categoryName}</td>
-                      <td className="py-3 px-4 tabular-nums">{formatCurrency(b.budgetLimit)}</td>
-                      <td className="py-3 px-4 tabular-nums">{formatCurrency(b.spentAmount)}</td>
-                      <td className="py-3 px-4 tabular-nums font-bold text-charcoal">
+                    <tr key={b.budgetId} className="hover:bg-white/60 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-6 font-heading font-black text-charcoal">{b.categoryName}</td>
+                      <td className="py-3.5 px-4 tabular-nums font-medium">{formatCurrency(b.budgetLimit)}</td>
+                      <td className="py-3.5 px-4 tabular-nums font-medium">{formatCurrency(b.spentAmount)}</td>
+                      <td className="py-3.5 px-4 tabular-nums font-heading font-bold text-emerald-600 dark:text-emerald-400">
                         {formatCurrency(b.remainingAmount)}
                       </td>
-                      <td className="py-3 px-5 text-right tabular-nums">
+                      <td className="py-3.5 px-6 text-right tabular-nums">
                         <span
-                          className={`font-black px-1.5 py-0.5 border ${
+                          className={`font-heading font-black px-2.5 py-0.5 rounded-full ${
                             b.isOverBudget
-                              ? 'bg-[#FF3000] text-white border-[#FF3000]'
-                              : 'bg-black text-white border-black dark:bg-white dark:text-black'
+                              ? 'bg-rose-500 text-white'
+                              : 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'
                           }`}
                         >
                           {b.utilizationPercentage}%
@@ -193,21 +200,21 @@ export default function ReportTable({ reportType, data = [], error, onRetry }) {
 
                 {reportType === 'loans' &&
                   data.map((l) => (
-                    <tr key={l.id} className="hover:bg-[var(--bg-subtle)] transition-colors">
-                      <td className="py-3 px-5 font-black text-charcoal uppercase">{l.contactName}</td>
-                      <td className="py-3 px-4">
+                    <tr key={l.id} className="hover:bg-white/60 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-6 font-heading font-black text-charcoal">{l.contactName}</td>
+                      <td className="py-3.5 px-4">
                         <span
-                          className={`px-1 py-0.5 text-[9px] font-black border ${
-                            l.type === 'LENT' ? 'bg-black text-white' : 'bg-[#FF3000] text-white'
+                          className={`px-2 py-0.5 text-[10px] font-heading font-black rounded-full ${
+                            l.type === 'LENT' ? 'bg-emerald-500 text-white' : 'bg-pink-500 text-white'
                           }`}
                         >
                           {l.type}
                         </span>
                       </td>
-                      <td className="py-3 px-4 tabular-nums">{formatCurrency(l.amount)}</td>
-                      <td className="py-3 px-4 font-black tabular-nums">{formatCurrency(l.remainingAmount)}</td>
-                      <td className="py-3 px-4 text-pencil">{formatDate(l.loanDate)}</td>
-                      <td className="py-3 px-5 text-right font-black uppercase text-charcoal">{l.status}</td>
+                      <td className="py-3.5 px-4 tabular-nums font-medium">{formatCurrency(l.amount)}</td>
+                      <td className="py-3.5 px-4 font-heading font-black tabular-nums">{formatCurrency(l.remainingAmount)}</td>
+                      <td className="py-3.5 px-4 text-pencil font-medium">{formatDate(l.loanDate)}</td>
+                      <td className="py-3.5 px-6 text-right font-heading font-black text-charcoal uppercase">{l.status}</td>
                     </tr>
                   ))}
               </tbody>

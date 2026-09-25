@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Plus, Sparkles, X, RefreshCw } from 'lucide-react';
+import { Plus, Sparkles, X, RefreshCw, Layers } from 'lucide-react';
 import SmsParserModal from '@/components/expenses/SmsParserModal';
 import ExpenseModal from '@/components/expenses/ExpenseModal';
 import ExpenseFilters from '@/components/expenses/ExpenseFilters';
@@ -162,7 +162,7 @@ export default function ExpensesPage() {
 
       if (result.success) {
         closeModal();
-        setSuccessMsg(modalMode === 'add' ? 'ENTRY LOGGED SUCCESSFULLY' : 'ENTRY UPDATED');
+        setSuccessMsg(modalMode === 'add' ? 'Expense logged successfully!' : 'Expense updated!');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchExpenses();
       } else {
@@ -177,11 +177,11 @@ export default function ExpensesPage() {
   };
 
   const handleDeleteExpense = async (id) => {
-    if (!confirm('CONFIRM DELETE: Are you sure you want to remove this ledger entry?')) return;
+    if (!confirm('Are you sure you want to delete this expense entry?')) return;
     try {
       const result = await deleteExpenseAction(id);
       if (result.success) {
-        setSuccessMsg('ENTRY REMOVED');
+        setSuccessMsg('Expense removed');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchExpenses();
       } else {
@@ -196,54 +196,53 @@ export default function ExpensesPage() {
   return (
     <div className="space-y-6 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                02. ACTIVITY // TRANSACTION LEDGER
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              ITEMIZED EXPENDITURES
-            </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 text-xs font-heading font-black mb-1">
+            <Layers className="h-3.5 w-3.5 text-purple-600" />
+            <span>Activity Ledger</span>
           </div>
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-charcoal">
+            Expenses &amp; Activity
+          </h1>
+          <p className="text-sm font-medium text-pencil">
+            Review and itemize all your personal financial transactions.
+          </p>
+        </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            {/* SMS Parser Button */}
-            <button
-              onClick={() => setIsSmsModalOpen(true)}
-              className="swiss-btn px-3 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-[#FF3000]" />
-              <span>PASTE SMS</span>
-            </button>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          {/* SMS Parser Button */}
+          <button
+            onClick={() => setIsSmsModalOpen(true)}
+            className="clay-btn-secondary px-4 py-2.5 text-xs font-heading font-black flex items-center gap-2 rounded-[20px] cursor-pointer"
+          >
+            <Sparkles className="h-4 w-4 text-purple-600" />
+            <span>Paste SMS</span>
+          </button>
 
-            {/* Manual Add Button */}
-            <button
-              onClick={openAddModal}
-              className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer"
-            >
-              <Plus className="h-4 w-4 stroke-[3]" />
-              <span>RECORD ENTRY</span>
-            </button>
-          </div>
+          {/* Manual Add Button */}
+          <button
+            onClick={openAddModal}
+            className="clay-btn-primary px-5 py-2.5 text-xs font-heading font-black flex items-center gap-2 rounded-[20px] cursor-pointer shadow-md"
+          >
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>Record Expense</span>
+          </button>
         </div>
       </div>
 
       {/* SUCCESS / ERROR ALERTS */}
       {successMsg && (
-        <div className="border-2 border-black bg-black text-white dark:border-white dark:bg-white dark:text-black p-3 text-xs font-black uppercase tracking-wider animate-fadeIn flex items-center justify-between">
+        <div className="clay-card bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide flex items-center justify-between">
           <span>{successMsg}</span>
-          <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
-            <X className="h-3.5 w-3.5" />
+          <button onClick={() => setSuccessMsg('')} className="p-1 rounded-full hover:bg-emerald-500/20 cursor-pointer">
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 text-[#FF3000] p-3 text-xs font-black uppercase tracking-wider animate-fadeIn">
+        <div className="clay-card bg-rose-500/15 border border-rose-500/30 text-rose-800 dark:text-rose-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide">
           {error}
         </div>
       )}
@@ -314,7 +313,7 @@ export default function ExpensesPage() {
         categories={categories}
         onBatchCreated={() => {
           fetchExpenses();
-          setSuccessMsg('SMS TRANSACTIONS IMPORTED SUCCESSFULLY');
+          setSuccessMsg('SMS transactions imported successfully!');
           setTimeout(() => setSuccessMsg(''), 3000);
         }}
       />

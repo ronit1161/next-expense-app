@@ -1,44 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --bg-main: #FFFFFF;
-    --bg-surface: #FFFFFF;
-    --bg-subtle: #F2F2F2;
-    --bg-deep: #E5E5E5;
-    --text-primary: #000000;
-    --text-secondary: #4A4A4A;
-    --text-muted: #767676;
-    --border-main: #000000;
-    --border-subtle: #000000;
-    --accent-red: #FF3000;
-    --accent-blue: #000000;
-    --swiss-accent: #FF3000;
-    --swiss-black: #000000;
-    --swiss-white: #FFFFFF;
-    --swiss-muted: #F2F2F2;
+    --bg-canvas: #F4F1FA;
+    --bg-card: rgba(255, 255, 255, 0.75);
+    --bg-card-solid: #FFFFFF;
+    --bg-recessed: #EFEBF5;
+    
+    --text-primary: #332F3A;
+    --text-muted: #635F69;
+    --text-on-accent: #FFFFFF;
+    
+    --clay-violet: #7C3AED;
+    --clay-violet-light: #A78BFA;
+    --clay-pink: #DB2777;
+    --clay-pink-light: #F472B6;
+    --clay-blue: #0EA5E9;
+    --clay-blue-light: #38BDF8;
+    --clay-green: #10B981;
+    --clay-green-light: #34D399;
+    --clay-amber: #F59E0B;
+    --clay-amber-light: #FBBF24;
+    
+    --border-clay: rgba(255, 255, 255, 0.8);
+    --border-subtle: rgba(124, 58, 237, 0.08);
   }
 
-  /* ==========================================================================
-     SWISS INTERNATIONAL HIGH-CONTRAST INVERTED DARK THEME
-     Stark Black Canvas (#0A0A0A) + Crisp White Structure (#FFFFFF) + Swiss Red
-     ========================================================================== */
   .dark {
-    --bg-main: #0A0A0A;
-    --bg-surface: #121212;
-    --bg-subtle: #1C1C1C;
-    --bg-deep: #262626;
-    --text-primary: #FFFFFF;
-    --text-secondary: #A3A3A3;
-    --text-muted: #737373;
-    --border-main: #FFFFFF;
-    --border-subtle: rgba(255, 255, 255, 0.2);
-    --accent-red: #FF3000;
-    --accent-blue: #FF3000;
-    --swiss-accent: #FF3000;
-    --swiss-black: #FFFFFF;
-    --swiss-white: #0A0A0A;
-    --swiss-muted: #1C1C1C;
+    --bg-canvas: #161224;
+    --bg-card: rgba(35, 29, 53, 0.75);
+    --bg-card-solid: #231D35;
+    --bg-recessed: #1C172C;
+    
+    --text-primary: #F4F1FA;
+    --text-muted: #A8A3B5;
+    --text-on-accent: #FFFFFF;
+    
+    --clay-violet: #8B5CF6;
+    --clay-violet-light: #C4B5FD;
+    --clay-pink: #EC4899;
+    --clay-pink-light: #F9A8D4;
+    --clay-blue: #38BDF8;
+    --clay-blue-light: #7DD3FC;
+    --clay-green: #34D399;
+    --clay-green-light: #6EE7B7;
+    --clay-amber: #FBBF24;
+    --clay-amber-light: #FDE68A;
+    
+    --border-clay: rgba(255, 255, 255, 0.12);
+    --border-subtle: rgba(139, 92, 246, 0.15);
   }
 
   html {
@@ -47,406 +58,422 @@
   }
 
   body {
-    background-color: var(--bg-main);
+    background-color: var(--bg-canvas);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    letter-spacing: -0.02em;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  * {
-    border-radius: 0px !important;
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Nunito', 'DM Sans', sans-serif;
   }
 }
 
 /* ==========================================================================
-   SWISS TEXTURE PATTERNS (Grid, Dots, Diagonal, Paper Noise)
+   HIGH-FIDELITY CLAYMORPHISM SHADOW STACKS (4-LAYER LIGHTING)
    ========================================================================== */
 
-.swiss-grid-pattern {
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-}
-.dark .swiss-grid-pattern {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-}
-
-.swiss-dots {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-.dark .swiss-dots {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
-}
-
-.swiss-diagonal {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.05),
-    rgba(0, 0, 0, 0.05) 1px,
-    transparent 1px,
-    transparent 10px
-  );
-}
-.dark .swiss-diagonal {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(255, 255, 255, 0.05) 1px,
-    transparent 1px,
-    transparent 10px
-  );
-}
-
-.swiss-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
-}
-
-/* ==========================================================================
-   DYNAMIC TEXT & COMPONENT ADAPTATIONS
-   ========================================================================== */
-
-.text-charcoal {
-  color: var(--text-primary) !important;
-}
-
-.text-pencil {
-  color: var(--text-secondary) !important;
-}
-
-.text-swiss-red {
-  color: #FF3000 !important;
-}
-
-/* Status Badges */
-.bg-blue-50 {
-  background-color: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-main) !important;
-}
-
-.bg-emerald-50, .bg-emerald-100 {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  border: 1px solid #000000 !important;
-}
-.dark .bg-emerald-50, .dark .bg-emerald-100 {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-  border: 1px solid #FFFFFF !important;
-}
-
-.bg-purple-50, .bg-purple-100 {
-  background-color: #FF3000 !important;
-  color: #FFFFFF !important;
-  border: 1px solid #FF3000 !important;
-}
-
-.bg-amber-50, .bg-amber-100 {
-  background-color: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-main) !important;
-}
-
-.bg-rose-50, .bg-rose-100 {
-  background-color: #FF3000 !important;
-  color: #FFFFFF !important;
-  border: 1px solid #FF3000 !important;
-}
-
-/* Tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead tr {
-  background-color: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
-  border-bottom: 2px solid var(--border-main) !important;
-}
-
-tbody tr {
-  border-bottom: 1px solid var(--border-subtle) !important;
-  transition: background-color 0.1s ease;
-}
-
-tbody tr:hover {
-  background-color: var(--bg-subtle) !important;
-}
-
-option {
-  background-color: var(--bg-surface) !important;
-  color: var(--text-primary) !important;
-}
-
-/* ==========================================================================
-   SWISS CARDS & SURFACES (Architectural Grid Structure, 0px Radius)
-   ========================================================================== */
-
-.swiss-card,
+/* 1. Universal Clay Card */
+.clay-card,
 .neu-card,
-.journal-card {
-  background-color: var(--bg-surface) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+.journal-card,
+.swiss-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  border: 1px solid var(--border-clay);
+  box-shadow: 
+    16px 16px 32px rgba(160, 150, 180, 0.2),
+    -10px -10px 24px rgba(255, 255, 255, 0.9),
+    inset 6px 6px 12px rgba(139, 92, 246, 0.03),
+    inset -6px -6px 12px rgba(255, 255, 255, 1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.dark .clay-card,
+.dark .neu-card,
+.dark .journal-card,
+.dark .swiss-card {
+  box-shadow: 
+    16px 16px 32px rgba(0, 0, 0, 0.4),
+    -10px -10px 24px rgba(255, 255, 255, 0.05),
+    inset 6px 6px 12px rgba(139, 92, 246, 0.08),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.05);
+}
+
+.clay-card:hover,
+.neu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    20px 20px 40px rgba(160, 150, 180, 0.28),
+    -12px -12px 28px rgba(255, 255, 255, 0.95),
+    inset 6px 6px 12px rgba(139, 92, 246, 0.04),
+    inset -6px -6px 12px rgba(255, 255, 255, 1);
+}
+
+.dark .clay-card:hover,
+.dark .neu-card:hover {
+  box-shadow: 
+    20px 20px 40px rgba(0, 0, 0, 0.5),
+    -12px -12px 28px rgba(255, 255, 255, 0.08),
+    inset 6px 6px 12px rgba(139, 92, 246, 0.12),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.08);
+}
+
+/* 2. Deep Clay Container (Surfaces, Modals, Outer Containers) */
+.clay-surface,
 .swiss-card-heavy {
-  background-color: var(--bg-surface) !important;
-  border: 4px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+  background: var(--bg-card-solid);
+  border-radius: 40px;
+  border: 1px solid var(--border-clay);
+  box-shadow: 
+    30px 30px 60px #cdc6d9,
+    -30px -30px 60px #ffffff,
+    inset 10px 10px 20px rgba(139, 92, 246, 0.05),
+    inset -10px -10px 20px rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
 }
 
-.swiss-card-muted,
-.neu-card-sm,
-.journal-card-subtle {
-  background-color: var(--bg-subtle) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+.dark .clay-surface,
+.dark .swiss-card-heavy {
+  box-shadow: 
+    30px 30px 60px rgba(0, 0, 0, 0.6),
+    -20px -20px 50px rgba(255, 255, 255, 0.03),
+    inset 10px 10px 20px rgba(139, 92, 246, 0.08),
+    inset -10px -10px 20px rgba(255, 255, 255, 0.03);
 }
 
-.swiss-inset,
-.neu-inset {
-  background-color: var(--bg-subtle) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+/* 3. Primary Convex Clay Button (Squishable) */
+.clay-btn-primary,
+.neu-btn-blue,
+.swiss-btn-accent,
+.journal-btn-primary {
+  background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%) !important;
+  color: #FFFFFF !important;
+  border-radius: 20px !important;
+  font-family: 'Nunito', sans-serif !important;
+  font-weight: 800 !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 
+    10px 10px 20px rgba(124, 58, 237, 0.35),
+    -6px -6px 14px rgba(255, 255, 255, 0.4),
+    inset 4px 4px 8px rgba(255, 255, 255, 0.4),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.swiss-inset-deep,
-.neu-inset-deep {
-  background-color: var(--bg-deep) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+.clay-btn-primary:hover,
+.neu-btn-blue:hover,
+.swiss-btn-accent:hover,
+.journal-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    14px 14px 26px rgba(124, 58, 237, 0.45),
+    -8px -8px 18px rgba(255, 255, 255, 0.5),
+    inset 4px 4px 8px rgba(255, 255, 255, 0.5),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.clay-btn-primary:active,
+.neu-btn-blue:active,
+.swiss-btn-accent:active,
+.journal-btn-primary:active {
+  transform: scale(0.94) !important;
+  box-shadow: 
+    inset 6px 6px 12px rgba(76, 29, 149, 0.6),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 4. Secondary White/Ghost Clay Button */
+.clay-btn-secondary,
+.neu-btn,
+.swiss-btn,
+.journal-btn-secondary {
+  background: var(--bg-card-solid) !important;
+  color: var(--text-primary) !important;
+  border-radius: 20px !important;
+  font-family: 'Nunito', sans-serif !important;
+  font-weight: 800 !important;
+  border: 1px solid var(--border-clay) !important;
+  box-shadow: 
+    8px 8px 18px rgba(160, 150, 180, 0.2),
+    -6px -6px 14px rgba(255, 255, 255, 0.8),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.6),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark .clay-btn-secondary,
+.dark .neu-btn,
+.dark .swiss-btn,
+.dark .journal-btn-secondary {
+  box-shadow: 
+    8px 8px 18px rgba(0, 0, 0, 0.35),
+    -6px -6px 14px rgba(255, 255, 255, 0.05),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.08),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.clay-btn-secondary:hover,
+.neu-btn:hover,
+.swiss-btn:hover,
+.journal-btn-secondary:hover {
+  transform: translateY(-2px);
+  color: var(--clay-violet) !important;
+}
+
+.clay-btn-secondary:active,
+.neu-btn:active,
+.swiss-btn:active,
+.journal-btn-secondary:active {
+  transform: scale(0.94) !important;
+  box-shadow: 
+    inset 6px 6px 12px #d9d4e3,
+    inset -6px -6px 12px #ffffff !important;
+}
+
+.dark .clay-btn-secondary:active,
+.dark .neu-btn:active,
+.dark .swiss-btn:active,
+.dark .journal-btn-secondary:active {
+  box-shadow: 
+    inset 6px 6px 12px rgba(0, 0, 0, 0.6),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 5. Recessed Clay Input Fields */
+.clay-input,
+.neu-input,
+.swiss-input,
+.journal-input {
+  background: var(--bg-recessed) !important;
+  border-radius: 18px !important;
+  border: 1px solid transparent !important;
+  color: var(--text-primary) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  box-shadow: 
+    inset 6px 6px 12px #d9d4e3,
+    inset -6px -6px 12px #ffffff !important;
+  transition: all 0.25s ease !important;
+}
+
+.dark .clay-input,
+.dark .neu-input,
+.dark .swiss-input,
+.dark .journal-input {
+  box-shadow: 
+    inset 6px 6px 12px rgba(0, 0, 0, 0.5),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.04) !important;
+}
+
+.clay-input:focus,
+.neu-input:focus,
+.swiss-input:focus,
+.journal-input:focus {
+  outline: none !important;
+  background: var(--bg-card-solid) !important;
+  border-color: var(--clay-violet) !important;
+  box-shadow: 
+    0 0 0 4px rgba(124, 58, 237, 0.15),
+    8px 8px 18px rgba(160, 150, 180, 0.15),
+    -6px -6px 14px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 6. Clay Stat Orb & Icon Containers */
+.clay-orb {
+  border-radius: 9999px;
+  box-shadow: 
+    8px 8px 18px rgba(160, 150, 180, 0.25),
+    -6px -6px 14px rgba(255, 255, 255, 0.85),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.6),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-orb:hover {
+  transform: scale(1.08) rotate(3deg);
+}
+
+/* 7. Clay Pill & Badges */
+.clay-pill,
+.neu-pill {
+  border-radius: 9999px;
+  border: 1px solid var(--border-clay);
+  box-shadow: 
+    6px 6px 12px rgba(160, 150, 180, 0.15),
+    -4px -4px 10px rgba(255, 255, 255, 0.8),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dark .clay-pill,
+.dark .neu-pill {
+  box-shadow: 
+    6px 6px 12px rgba(0, 0, 0, 0.3),
+    -4px -4px 10px rgba(255, 255, 255, 0.04),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Progress Bars */
 .neu-groove {
-  background-color: var(--bg-subtle) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+  background: var(--bg-recessed) !important;
+  border-radius: 9999px !important;
+  box-shadow: 
+    inset 3px 3px 6px #d9d4e3,
+    inset -3px -3px 6px #ffffff !important;
   height: 12px;
+  overflow: hidden;
+}
+
+.dark .neu-groove {
+  box-shadow: 
+    inset 3px 3px 6px rgba(0, 0, 0, 0.5),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.04) !important;
 }
 
 .neu-progress-fill {
-  background-color: var(--text-primary) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+  background: linear-gradient(90deg, var(--clay-violet), var(--clay-pink)) !important;
+  border-radius: 9999px !important;
+  box-shadow: 
+    0 2px 8px rgba(124, 58, 237, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
   height: 100%;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .neu-progress-fill-accent {
-  background-color: #FF3000 !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+  background: linear-gradient(90deg, #F59E0B, #EF4444) !important;
+  border-radius: 9999px !important;
+  box-shadow: 
+    0 2px 8px rgba(245, 158, 11, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
   height: 100%;
 }
 
-/* Input Fields */
-.swiss-input,
-.neu-input,
-.journal-input {
-  background-color: var(--bg-surface) !important;
-  border: 2px solid var(--border-main) !important;
-  color: var(--text-primary) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  font-weight: 500;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+/* ==========================================================================
+   ANIMATIONS & FLOATING BLOBS
+   ========================================================================== */
+
+@keyframes clay-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(3deg);
+  }
 }
 
-.swiss-input:focus,
-.neu-input:focus,
-.journal-input:focus {
-  outline: none !important;
-  border-color: #FF3000 !important;
+@keyframes clay-float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-24px) rotate(-3deg);
+  }
 }
 
-/* Buttons */
-.swiss-btn,
-.neu-btn,
-.journal-btn-secondary {
-  background-color: var(--bg-surface) !important;
-  color: var(--text-primary) !important;
-  border: 2px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.15s ease;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+@keyframes clay-float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.05);
+  }
 }
 
-.swiss-btn:hover,
-.neu-btn:hover,
-.journal-btn-secondary:hover {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
-}
-.dark .swiss-btn:hover,
-.dark .neu-btn:hover,
-.dark .journal-btn-secondary:hover {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-  border-color: #FFFFFF !important;
+@keyframes clay-breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
 }
 
-.swiss-btn:active,
-.neu-btn:active,
-.journal-btn-secondary:active {
-  transform: translateY(1px);
+.animate-clay-float {
+  animation: clay-float 8s ease-in-out infinite;
 }
 
-.swiss-btn-sm,
-.neu-btn-sm {
-  background-color: var(--bg-surface) !important;
-  color: var(--text-primary) !important;
-  border: 1.5px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.15s ease;
-  cursor: pointer;
+.animate-clay-float-delayed {
+  animation: clay-float-delayed 10s ease-in-out infinite;
 }
 
-.swiss-btn-sm:hover,
-.neu-btn-sm:hover {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-}
-.dark .swiss-btn-sm:hover,
-.dark .neu-btn-sm:hover {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
+.animate-clay-float-slow {
+  animation: clay-float-slow 12s ease-in-out infinite;
 }
 
-/* Primary Swiss Action Button (Black or Swiss Red Accent) */
-.swiss-btn-accent,
-.neu-btn-blue,
-.journal-btn-primary {
-  background-color: #FF3000 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #FF3000 !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: all 0.15s ease;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.animate-clay-breathe {
+  animation: clay-breathe 6s ease-in-out infinite;
 }
 
-.swiss-btn-accent:hover,
-.neu-btn-blue:hover,
-.journal-btn-primary:hover {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
-}
-.dark .swiss-btn-accent:hover,
-.dark .neu-btn-blue:hover,
-.dark .journal-btn-primary:hover {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-  border-color: #FFFFFF !important;
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 
-.swiss-btn-black {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #000000 !important;
-  border-radius: 0px !important;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: all 0.15s ease;
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
-.swiss-btn-black:hover {
-  background-color: #FF3000 !important;
-  color: #FFFFFF !important;
-  border-color: #FF3000 !important;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Mobile Tab Bar */
-.neu-tabbar {
-  background-color: var(--bg-surface) !important;
-  border-top: 3px solid var(--border-main) !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
+/* Colors & Helpers */
+.text-charcoal {
+  color: var(--text-primary);
 }
 
-.neu-tab-active {
-  background-color: var(--bg-subtle);
-  border-bottom: 3px solid #FF3000 !important;
-  border-radius: 0px !important;
+.text-pencil {
+  color: var(--text-muted);
 }
 
-/* Typography & Numerics */
-.font-numeric {
-  font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
-  font-family: 'Inter', monospace, sans-serif;
+.text-clay-violet {
+  color: var(--clay-violet);
 }
 
-.label-micro {
-  font-size: 0.6875rem; /* 11px */
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+.text-clay-pink {
+  color: var(--clay-pink);
 }
 
-.swiss-header-number {
-  color: #FF3000;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-/* Custom Minimal Scrollbar */
+/* Custom Soft Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-main);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #000000;
-  border-radius: 0px;
+  background: rgba(160, 150, 180, 0.4);
+  border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

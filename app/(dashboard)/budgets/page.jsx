@@ -7,6 +7,7 @@ import {
   RefreshCw,
   Calendar,
   X,
+  PiggyBank,
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -20,18 +21,18 @@ import BudgetCard from '@/components/budgets/BudgetCard';
 import SetBudgetModal from '@/components/budgets/SetBudgetModal';
 
 const MONTHS = [
-  'JANUARY',
-  'FEBRUARY',
-  'MARCH',
-  'APRIL',
-  'MAY',
-  'JUNE',
-  'JULY',
-  'AUGUST',
-  'SEPTEMBER',
-  'OCTOBER',
-  'NOVEMBER',
-  'DECEMBER',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export default function BudgetsPage() {
@@ -106,11 +107,11 @@ export default function BudgetsPage() {
     setModalError('');
 
     if (!amount || Number(amount) <= 0) {
-      setModalError('PLEASE SPECIFY A POSITIVE BUDGET AMOUNT.');
+      setModalError('Please specify a valid positive budget amount.');
       return;
     }
     if (!selectedCategoryId) {
-      setModalError('PLEASE SELECT A CATEGORY.');
+      setModalError('Please select a category.');
       return;
     }
 
@@ -124,7 +125,7 @@ export default function BudgetsPage() {
       });
 
       if (res.success) {
-        setSuccessMsg('BUDGET LIMIT COMMITTED');
+        setSuccessMsg('Budget limit saved successfully!');
         setTimeout(() => setSuccessMsg(''), 3000);
         closeModal();
         fetchBudgets();
@@ -139,11 +140,11 @@ export default function BudgetsPage() {
   };
 
   const handleDeleteBudget = async (id) => {
-    if (!confirm('CONFIRM DELETE: Remove this monthly category budget limit?')) return;
+    if (!confirm('Remove this category budget cap?')) return;
     try {
       const res = await deleteBudgetAction(id);
       if (res.success) {
-        setSuccessMsg('BUDGET LIMIT REMOVED');
+        setSuccessMsg('Budget limit removed');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchBudgets();
       } else {
@@ -162,82 +163,86 @@ export default function BudgetsPage() {
   return (
     <div className="space-y-8 pb-16 animate-fadeIn">
       {/* 1. TOP HEADER BANNER */}
-      <div className="border-b-4 border-black dark:border-white/20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 bg-[#FF3000]"></span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3000]">
-                03. BUDGETS // ALLOCATION CONTROL
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-charcoal">
-              MONTHLY SPENDING CAPS
-            </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 dark:bg-pink-400/20 text-pink-700 dark:text-pink-300 text-xs font-heading font-black mb-1">
+            <PiggyBank className="h-3.5 w-3.5 text-pink-600" />
+            <span>Budget Control</span>
           </div>
-
-          <button
-            onClick={openAddModal}
-            className="swiss-btn-accent px-4 py-2 text-xs font-black flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
-          >
-            <Plus className="h-4 w-4 stroke-[3]" />
-            <span>SET CATEGORY BUDGET</span>
-          </button>
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-charcoal">
+            Monthly Spending Budgets
+          </h1>
+          <p className="text-sm font-medium text-pencil">
+            Set and track spending boundaries for every expenditure sector.
+          </p>
         </div>
+
+        <button
+          onClick={openAddModal}
+          className="clay-btn-primary px-5 py-2.5 text-xs font-heading font-black flex items-center gap-2 self-start sm:self-auto rounded-[20px] cursor-pointer shadow-md"
+        >
+          <Plus className="h-4 w-4 stroke-[3]" />
+          <span>Set Category Budget</span>
+        </button>
       </div>
 
       {/* SUCCESS / ERROR ALERTS */}
       {successMsg && (
-        <div className="border-2 border-black bg-black text-white p-3 text-xs font-black uppercase tracking-wider animate-fadeIn flex items-center justify-between">
+        <div className="clay-card bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide flex items-center justify-between">
           <span>{successMsg}</span>
-          <button onClick={() => setSuccessMsg('')} className="cursor-pointer">
-            <X className="h-3.5 w-3.5" />
+          <button onClick={() => setSuccessMsg('')} className="p-1 rounded-full hover:bg-emerald-500/20 cursor-pointer">
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}
 
       {error && (
-        <div className="border-2 border-[#FF3000] bg-[#FF3000]/10 text-[#FF3000] p-3 text-xs font-black uppercase tracking-wider animate-fadeIn">
+        <div className="clay-card bg-rose-500/15 border border-rose-500/30 text-rose-800 dark:text-rose-300 p-4 rounded-2xl text-xs font-heading font-black tracking-wide">
           {error}
         </div>
       )}
 
       {/* 2. OVERALL AGGREGATE SUMMARY & PERIOD SELECTOR */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
         {/* Aggregate KPI */}
-        <div className="md:col-span-8 border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 space-y-3">
-          <div className="flex items-center justify-between border-b-2 border-black dark:border-white/20 pb-2">
-            <span className="text-xs font-black uppercase tracking-widest text-[#FF3000]">
-              03.0 OVERALL BUDGET HEALTH
-            </span>
-            <span className="text-[10px] font-mono text-pencil uppercase">
-              {budgets.length} ACTIVE CAPS
+        <div className="md:col-span-8 clay-card p-6 sm:p-7 rounded-[32px] space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-purple-500/10">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-400 to-purple-600 flex items-center justify-center text-white clay-orb shadow-sm">
+                <Target className="h-4 w-4" />
+              </div>
+              <span className="font-heading text-xs font-black text-charcoal">
+                Overall Budget Health
+              </span>
+            </div>
+            <span className="font-heading text-xs font-bold text-pencil uppercase px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-900/30">
+              {budgets.length} Active Caps
             </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-2">
-            <div className="text-3xl sm:text-5xl font-black text-charcoal tabular-nums font-mono">
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
+            <div className="font-heading font-black text-3xl sm:text-4xl text-charcoal tabular-nums">
               {formatCurrency(totalSpent)}{' '}
-              <span className="text-lg sm:text-2xl text-pencil font-bold">
+              <span className="text-base sm:text-xl text-pencil font-bold">
                 / {formatCurrency(totalBudgeted)}
               </span>
             </div>
             <span
-              className={`text-sm font-black font-mono uppercase px-2 py-0.5 border-2 ${
+              className={`text-xs font-heading font-black px-3 py-1 rounded-full ${
                 overallUtilization > 100
-                  ? 'bg-[#FF3000] text-white border-[#FF3000]'
-                  : 'bg-black text-white border-black dark:bg-white dark:text-black'
+                  ? 'bg-rose-500 text-white'
+                  : 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'
               }`}
             >
-              {overallUtilization}% UTILIZED
+              {overallUtilization}% Utilized
             </span>
           </div>
 
-          {/* Solid Heavy Progress Bar */}
-          <div className="border-2 border-black dark:border-white/20 bg-[var(--bg-subtle)] h-4 p-0.5 mt-2">
+          {/* Clay Progress Bar */}
+          <div className="neu-groove">
             <div
-              className={`h-full transition-all duration-300 ${
-                overallUtilization > 100 ? 'bg-[#FF3000]' : 'bg-black dark:bg-white'
+              className={`neu-progress-fill ${
+                overallUtilization > 100 ? 'neu-progress-fill-accent' : ''
               }`}
               style={{ width: `${Math.min(100, overallUtilization)}%` }}
             />
@@ -245,22 +250,23 @@ export default function BudgetsPage() {
         </div>
 
         {/* Period Selector Block */}
-        <div className="md:col-span-4 border-4 border-black dark:border-white/20 bg-[var(--bg-surface)] p-6 flex flex-col justify-between space-y-3">
-          <div className="border-b-2 border-black dark:border-white/20 pb-2">
-            <span className="text-xs font-black uppercase tracking-widest text-pencil">
-              TARGET PERIOD
+        <div className="md:col-span-4 clay-card p-6 rounded-[32px] flex flex-col justify-between space-y-3">
+          <div className="flex items-center gap-2 pb-2 border-b border-purple-500/10">
+            <Calendar className="h-4 w-4 text-purple-600" />
+            <span className="font-heading text-xs font-black uppercase tracking-wider text-charcoal">
+              Target Period
             </span>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                MONTH
+              <label className="text-[11px] font-heading font-black uppercase text-pencil block mb-1">
+                Month
               </label>
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono font-bold uppercase cursor-pointer"
+                className="clay-input block w-full py-2 px-3 text-xs font-heading font-bold rounded-xl cursor-pointer"
               >
                 {MONTHS.map((m, idx) => (
                   <option key={m} value={idx + 1}>
@@ -271,13 +277,13 @@ export default function BudgetsPage() {
             </div>
 
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal block mb-1">
-                YEAR
+              <label className="text-[11px] font-heading font-black uppercase text-pencil block mb-1">
+                Year
               </label>
               <select
                 value={year}
                 onChange={(e) => setYear(Number(e.target.value))}
-                className="swiss-input block w-full py-2 px-3 text-xs font-mono font-bold uppercase cursor-pointer"
+                className="clay-input block w-full py-2 px-3 text-xs font-heading font-bold rounded-xl cursor-pointer"
               >
                 {[year - 1, year, year + 1].map((y) => (
                   <option key={y} value={y}>
@@ -294,26 +300,28 @@ export default function BudgetsPage() {
       {loading ? (
         <BudgetMetersSkeleton />
       ) : budgets.length === 0 ? (
-        <div className="border-4 border-black dark:border-white/20 p-8 sm:p-12 text-center space-y-4 bg-[var(--bg-surface)]">
-          <Target className="h-8 w-8 text-pencil mx-auto" />
+        <div className="clay-card p-8 sm:p-12 text-center space-y-4 rounded-[32px]">
+          <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-pink-400 to-purple-600 text-white flex items-center justify-center clay-orb shadow-md">
+            <Target className="h-8 w-8" />
+          </div>
           <div>
-            <h3 className="text-sm font-black uppercase text-charcoal">
-              NO BUDGET CAPS CONFIGURED
+            <h3 className="text-base font-heading font-black text-charcoal">
+              No Budget Caps Configured
             </h3>
-            <p className="text-xs font-mono text-pencil mt-1 max-w-xs mx-auto uppercase">
-              NO SPENDING LIMITS SET FOR {MONTHS[month - 1]} {year}.
+            <p className="text-xs text-pencil mt-1 max-w-xs mx-auto">
+              No spending limits set for {MONTHS[month - 1]} {year}.
             </p>
           </div>
           <button
             onClick={openAddModal}
-            className="swiss-btn-accent px-4 py-2.5 text-xs font-black uppercase cursor-pointer"
+            className="clay-btn-primary px-5 py-3 text-xs font-heading font-black rounded-2xl cursor-pointer shadow-md inline-flex items-center gap-2"
           >
-            <Plus className="h-4 w-4 mr-1 stroke-[3]" />
-            <span>SET FIRST BUDGET CAP</span>
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>Set First Budget Cap</span>
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {budgets.map((budget) => (
             <BudgetCard
               key={budget.budgetId || budget.categoryId}
