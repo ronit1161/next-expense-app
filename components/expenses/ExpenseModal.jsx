@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef } from 'react';
 import {
   X,
   Check,
@@ -13,6 +14,7 @@ import {
   Plus,
 } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
+import SwipeToConfirm from '@/components/ui/SwipeToConfirm';
 import { triggerHaptic } from '@/lib/haptics';
 
 const PAYMENT_METHODS = [
@@ -47,6 +49,20 @@ export default function ExpenseModal({
   if (!isOpen) return null;
 
   const selectedCat = categories.find((c) => String(c.id) === String(selectedCategoryId));
+
+  const formRef = useRef(null);
+
+  const handleSwipeConfirm = () => {
+    if (formRef.current) {
+      if (typeof formRef.current.requestSubmit === 'function') {
+        formRef.current.requestSubmit();
+      } else {
+        onSave({ preventDefault: () => {} });
+      }
+    } else {
+      onSave({ preventDefault: () => {} });
+    }
+  };
 
   const handleAddPreset = (val) => {
     triggerHaptic('selection');
@@ -93,7 +109,7 @@ export default function ExpenseModal({
           </div>
         )}
 
-        <form onSubmit={onSave} className="space-y-3">
+        <form ref={formRef} onSubmit={onSave} className="space-y-3">
           {/* 2. ULTRA-CLEAN HERO AMOUNT CARD */}
           <div className="bg-[var(--bg-recessed)]/60 border border-[var(--border-clay)] rounded-2xl p-3.5 text-center space-y-2">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
@@ -254,24 +270,26 @@ export default function ExpenseModal({
             </div>
           </div>
 
-          {/* 6. BOTTOM ACTION BUTTONS */}
+          {/* 6. BOTTOM ACTION: SWIPE TO RECORD */}
           <div className="pt-2 flex items-center gap-2.5 border-t border-[var(--border-clay)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-[var(--bg-recessed)] hover:bg-[var(--bg-muted)] text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xs font-bold transition-colors cursor-pointer"
+              className="px-3.5 py-3 rounded-2xl bg-[var(--bg-recessed)] hover:bg-[var(--bg-muted)] text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xs font-bold transition-colors cursor-pointer shrink-0"
+              aria-label="Cancel"
             >
               Cancel
             </button>
 
-            <button
-              type="submit"
-              disabled={saving || !amount || Number(amount) <= 0 || !selectedCategoryId}
-              className="fintech-btn-primary flex-1 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md disabled:opacity-40 cursor-pointer transition-all"
-            >
-              <Check className="h-3.5 w-3.5 stroke-[3]" />
-              <span>{saving ? 'Processing...' : modalMode === 'add' ? 'Confirm Record' : 'Save Changes'}</span>
-            </button>
+            <div className="flex-1 min-w-0">
+              <SwipeToConfirm
+                onConfirm={handleSwipeConfirm}
+                disabled={saving || !amount || Number(amount) <= 0 || !selectedCategoryId}
+                disabledText={!amount ? 'Enter amount' : !selectedCategoryId ? 'Select category' : 'Slide to Record'}
+                label={modalMode === 'add' ? 'Slide to Record' : 'Slide to Save'}
+                loading={saving}
+              />
+            </div>
           </div>
         </form>
       </div>
