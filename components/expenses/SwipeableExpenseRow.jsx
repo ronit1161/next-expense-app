@@ -5,6 +5,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import CategoryIcon from '@/components/ui/CategoryIcon';
 import { formatCurrency } from '@/lib/utils';
 import { triggerHaptic } from '@/lib/haptics';
+import { playAudio } from '@/lib/audio';
 
 /**
  * SwipeableExpenseRow:
@@ -94,12 +95,14 @@ export default function SwipeableExpenseRow({
       if (totalDelta > 130) {
         setOffsetX(0);
         triggerHaptic('medium');
+        playAudio('pop');
         if (onSwipeChange) onSwipeChange(expense.id, null);
         onOpenEdit(expense);
         return;
       } else if (totalDelta < -130) {
         setOffsetX(0);
         triggerHaptic('warning');
+        playAudio('delete');
         if (onSwipeChange) onSwipeChange(expense.id, null);
         onDelete(expense.id);
         return;
@@ -109,10 +112,12 @@ export default function SwipeableExpenseRow({
       if (totalDelta > 35) {
         setOffsetX(80);
         triggerHaptic('light');
+        playAudio('snap');
         if (onSwipeChange) onSwipeChange(expense.id, 'edit');
       } else if (totalDelta < -35) {
         setOffsetX(-80);
         triggerHaptic('light');
+        playAudio('snap');
         if (onSwipeChange) onSwipeChange(expense.id, 'delete');
       } else {
         setOffsetX(0);
@@ -192,6 +197,7 @@ export default function SwipeableExpenseRow({
         <button
           onClick={() => {
             closeSwipe();
+            playAudio('delete');
             onDelete(expense.id);
           }}
           className="flex flex-col items-center gap-1 text-white font-bold text-[10px] cursor-pointer active:scale-95 transition-transform"

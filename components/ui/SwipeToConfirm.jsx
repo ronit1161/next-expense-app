@@ -3,12 +3,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronsRight, Check, Loader2 } from 'lucide-react';
 import { triggerHaptic } from '@/lib/haptics';
+import { playAudio } from '@/lib/audio';
 
 /**
  * SwipeToConfirm:
  * Ultra-tactile fintech slider (CashApp/Revolut/CRED style).
  * - Drag thumb from left to right to confirm.
- * - Haptic pulse when snapping to completion.
+ * - Haptic pulse & synthesized mechanical clicks when sliding.
+ * - Warm confirmation chime when snapping to completion.
  * - Full touch and mouse drag support with global release listener.
  * - Keyboard support (Enter/Space) and direct tap fallback for full accessibility.
  */
@@ -27,6 +29,7 @@ export default function SwipeToConfirm({
   const trackRef = useRef(null);
   const startXRef = useRef(0);
   const currentDragXRef = useRef(0);
+  const lastStepRef = useRef(0);
 
   const THUMB_SIZE = 40; // 40px thumb
   const PADDING = 4; // 4px padding inside track
@@ -53,8 +56,10 @@ export default function SwipeToConfirm({
   const handleStart = (clientX) => {
     if (disabled || loading || isConfirmed) return;
     setIsDragging(true);
+    lastStepRef.current = 0;
     startXRef.current = clientX - currentDragXRef.current;
     triggerHaptic('selection');
+    playAudio('tick');
   };
 
   // Drag Move
@@ -67,6 +72,16 @@ export default function SwipeToConfirm({
 
       currentDragXRef.current = boundedX;
       setDragX(boundedX);
+
+      // Micro-ticks while sliding
+      if (maxDrag > 0) {
+        const step = Math.floor((boundedX / maxDrag) * 5);
+        if (step !== lastStepRef.current && step > 0) {
+          lastStepRef.current = step;
+          triggerHaptic('light');
+          playAudio('tick');
+        }
+      }
     },
     [isDragging, getMaxDrag]
   );
@@ -85,12 +100,17 @@ export default function SwipeToConfirm({
       setDragX(maxDrag);
       setIsConfirmed(true);
       triggerHaptic('success');
+      playAudio('success');
       if (onConfirm) onConfirm();
     } else {
       // Released before threshold -> spring back
+      const hadMovement = currentDragXRef.current > 15;
       currentDragXRef.current = 0;
       setDragX(0);
       triggerHaptic('light');
+      if (hadMovement) {
+        playAudio('snap');
+      }
     }
   }, [isDragging, getMaxDrag, disabled, loading, onConfirm]);
 
@@ -128,6 +148,7 @@ export default function SwipeToConfirm({
       e.preventDefault();
       setIsConfirmed(true);
       triggerHaptic('success');
+      playAudio('success');
       if (onConfirm) onConfirm();
     }
   };

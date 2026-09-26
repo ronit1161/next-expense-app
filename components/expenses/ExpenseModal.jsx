@@ -16,6 +16,7 @@ import {
 import CategoryIcon from '@/components/ui/CategoryIcon';
 import SwipeToConfirm from '@/components/ui/SwipeToConfirm';
 import { triggerHaptic } from '@/lib/haptics';
+import { playAudio } from '@/lib/audio';
 
 const PAYMENT_METHODS = [
   { label: 'UPI', value: 'UPI', icon: Zap },
@@ -66,12 +67,14 @@ export default function ExpenseModal({
 
   const handleAddPreset = (val) => {
     triggerHaptic('selection');
+    playAudio('tick');
     const current = parseFloat(amount) || 0;
     setAmount(String(current + val));
   };
 
   const handleClearAmount = () => {
     triggerHaptic('light');
+    playAudio('pop');
     setAmount('');
   };
 
@@ -181,6 +184,7 @@ export default function ExpenseModal({
                     type="button"
                     onClick={() => {
                       triggerHaptic('selection');
+                      playAudio('pop');
                       setSelectedCategoryId(String(c.id));
                     }}
                     className={`py-1.5 px-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer border text-left min-w-0 ${
@@ -254,6 +258,7 @@ export default function ExpenseModal({
                     type="button"
                     onClick={() => {
                       triggerHaptic('selection');
+                      playAudio('tick');
                       setPaymentMethod(method.value);
                     }}
                     className={`py-1 px-2.5 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${

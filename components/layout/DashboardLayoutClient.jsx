@@ -23,6 +23,7 @@ import {
 import { logoutAction } from '@/actions/auth-actions';
 import InstallPwaButton from '@/components/ui/InstallPwaButton';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import SoundToggle from '@/components/ui/SoundToggle';
 
 export default function DashboardLayoutClient({ user, children }) {
   const pathname = usePathname();
@@ -147,8 +148,9 @@ export default function DashboardLayoutClient({ user, children }) {
           </div>
 
           {/* User Profile & Controls */}
-          <div className="pt-4 border-t border-[var(--border-clay)] flex flex-col gap-3">
+          <div className="pt-4 border-t border-[var(--border-clay)] flex flex-col gap-2">
             <ThemeToggle variant="sidebar" />
+            <SoundToggle variant="sidebar" />
             <InstallPwaButton className="w-full justify-center" />
 
             {/* User Account Capsule */}
@@ -197,6 +199,7 @@ export default function DashboardLayoutClient({ user, children }) {
           </div>
 
           <div className="flex items-center gap-2">
+            <SoundToggle variant="header" />
             <ThemeToggle variant="header" />
             <InstallPwaButton variant="header" />
           </div>
@@ -333,6 +336,7 @@ export default function DashboardLayoutClient({ user, children }) {
             </div>
 
             <ThemeToggle variant="sidebar" />
+            <SoundToggle variant="sidebar" />
             <InstallPwaButton className="w-full justify-center py-2.5" />
 
             <div className="pt-3 border-t border-[var(--border-clay)] flex items-center justify-between">
