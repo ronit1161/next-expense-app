@@ -169,10 +169,10 @@ export default function BudgetsPage() {
             <PiggyBank className="h-3.5 w-3.5" />
             <span>Budget Control</span>
           </div>
-          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[#0F172A] dark:text-[#F8FAFC]">
+          <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[var(--text-primary)]">
             Monthly Spending Budgets
           </h1>
-          <p className="text-sm font-medium text-[#64748B]">
+          <p className="text-sm font-medium text-[var(--text-muted)]">
             Set and track spending boundaries for every expenditure sector.
           </p>
         </div>
@@ -206,24 +206,24 @@ export default function BudgetsPage() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
         {/* Aggregate KPI */}
         <div className="md:col-span-8 fintech-card p-6 sm:p-7 rounded-3xl space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/5">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border-clay)]">
             <div className="flex items-center gap-2.5">
               <div className="h-9 w-9 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-xs">
                 <Target className="h-4 w-4 text-teal-400 dark:text-teal-600" />
               </div>
-              <span className="text-xs font-bold text-slate-900 dark:text-white">
+              <span className="text-xs font-bold text-[var(--text-primary)]">
                 Overall Budget Health
               </span>
             </div>
-            <span className="text-xs font-semibold text-slate-500 uppercase px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/5">
+            <span className="text-xs font-semibold text-[var(--text-muted)] uppercase px-2.5 py-0.5 rounded-full bg-[var(--bg-recessed)]">
               {budgets.length} Active Caps
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
-            <div className="font-black text-3xl sm:text-4xl text-slate-900 dark:text-white tabular-nums tracking-tight">
+            <div className="font-black text-3xl sm:text-4xl text-[var(--text-primary)] tabular-nums tracking-tight">
               {formatCurrency(totalSpent)}{' '}
-              <span className="text-base sm:text-xl text-slate-400 font-semibold">
+              <span className="text-base sm:text-xl text-[var(--text-muted)] font-semibold">
                 / {formatCurrency(totalBudgeted)}
               </span>
             </div>
@@ -239,7 +239,7 @@ export default function BudgetsPage() {
           </div>
 
           {/* Progress Bar */}
-          <div className="h-2 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+          <div className="h-2 w-full bg-[var(--bg-recessed)] rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 overallUtilization > 100 ? 'bg-rose-500' : 'bg-gradient-to-r from-teal-500 to-indigo-500'
@@ -251,25 +251,25 @@ export default function BudgetsPage() {
 
         {/* Period Selector Block */}
         <div className="md:col-span-4 fintech-card p-6 rounded-3xl flex flex-col justify-between space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-white/5">
+          <div className="flex items-center gap-2 pb-2 border-b border-[var(--border-clay)]">
             <Calendar className="h-4 w-4 text-teal-600 dark:text-teal-400" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
               Target Period
             </span>
           </div>
 
           <div className="space-y-3">
             <div>
-              <label className="text-[11px] font-semibold uppercase text-slate-400 block mb-1">
+              <label className="text-[11px] font-semibold uppercase text-[var(--text-muted)] block mb-1">
                 Month
               </label>
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
-                className="w-full h-10 px-3 text-xs font-medium rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none"
+                className="w-full h-10 px-3 text-xs font-medium rounded-xl bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-primary)] cursor-pointer focus:outline-none"
               >
                 {MONTHS.map((m, idx) => (
-                  <option key={m} value={idx + 1} className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">
+                  <option key={m} value={idx + 1} className="bg-[var(--bg-card)] text-[var(--text-primary)]">
                     {m}
                   </option>
                 ))}
@@ -277,16 +277,16 @@ export default function BudgetsPage() {
             </div>
 
             <div>
-              <label className="text-[11px] font-semibold uppercase text-slate-400 block mb-1">
+              <label className="text-[11px] font-semibold uppercase text-[var(--text-muted)] block mb-1">
                 Year
               </label>
               <select
                 value={year}
                 onChange={(e) => setYear(Number(e.target.value))}
-                className="w-full h-10 px-3 text-xs font-medium rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none"
+                className="w-full h-10 px-3 text-xs font-medium rounded-xl bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-primary)] cursor-pointer focus:outline-none"
               >
                 {[year - 1, year, year + 1].map((y) => (
-                  <option key={y} value={y} className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">
+                  <option key={y} value={y} className="bg-[var(--bg-card)] text-[var(--text-primary)]">
                     {y}
                   </option>
                 ))}
@@ -305,10 +305,10 @@ export default function BudgetsPage() {
             <Target className="h-7 w-7 text-teal-400 dark:text-teal-600" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-bold text-[var(--text-primary)]">
               No Budget Caps Configured
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+            <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs mx-auto">
               No spending limits set for {MONTHS[month - 1]} {year}.
             </p>
           </div>

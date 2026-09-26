@@ -165,10 +165,10 @@ export default function ReportsPage() {
             <FileSpreadsheet className="h-3.5 w-3.5" />
             <span>Financial Statements</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Reports &amp; Data Export
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-[var(--text-muted)]">
             Analyze historical records and export clean CSV ledgers.
           </p>
         </div>
@@ -194,14 +194,14 @@ export default function ReportsPage() {
               onClick={() => setReportType(tab.id)}
               className={`p-4 rounded-2xl text-xs font-bold flex items-center justify-between transition-all cursor-pointer border ${
                 isActive
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-lg shadow-black/10'
-                  : 'bg-white dark:bg-[#13141D] border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:border-slate-300 dark:hover:border-white/20'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] border-[var(--text-primary)] shadow-lg shadow-black/10'
+                  : 'bg-[var(--bg-card)] border-[var(--border-clay)] text-[var(--text-primary)] hover:border-[var(--border-subtle)]'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div
                   className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                    isActive ? 'bg-white/15 dark:bg-black/10 text-white dark:text-slate-950' : tab.iconColor
+                    isActive ? 'bg-[var(--bg-canvas)]/20 text-[var(--bg-canvas)]' : tab.iconColor
                   }`}
                 >
                   <Icon className="h-4 w-4 stroke-[2.5]" />

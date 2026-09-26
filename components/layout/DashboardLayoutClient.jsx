@@ -214,11 +214,11 @@ export default function DashboardLayoutClient({ user, children }) {
           href="/dashboard"
           className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all ${
             pathname === '/dashboard'
-              ? 'text-[var(--text-primary)]'
-              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              ? 'text-[var(--text-primary)] font-black'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-semibold'
           }`}
         >
-          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/dashboard' ? 'bg-white/15 text-white' : ''}`}>
+          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/dashboard' ? 'bg-[var(--text-primary)]/15 text-[var(--text-primary)] shadow-xs' : ''}`}>
             <Compass className="h-5 w-5" />
           </div>
           <span className="text-[9px] font-bold">Home</span>
@@ -228,11 +228,11 @@ export default function DashboardLayoutClient({ user, children }) {
           href="/expenses"
           className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all ${
             pathname === '/expenses'
-              ? 'text-[var(--text-primary)]'
-              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              ? 'text-[var(--text-primary)] font-black'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-semibold'
           }`}
         >
-          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/expenses' ? 'bg-white/15 text-white' : ''}`}>
+          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/expenses' ? 'bg-[var(--text-primary)]/15 text-[var(--text-primary)] shadow-xs' : ''}`}>
             <Clock className="h-5 w-5" />
           </div>
           <span className="text-[9px] font-bold">Activity</span>
@@ -242,7 +242,7 @@ export default function DashboardLayoutClient({ user, children }) {
         <button
           onClick={handleQuickAdd}
           aria-label="Record Expense"
-          className="fintech-btn-primary flex h-11 w-11 rounded-full items-center justify-center text-white -mt-5 shadow-lg cursor-pointer transition-transform hover:scale-105 active:scale-95"
+          className="fintech-btn-primary flex h-11 w-11 rounded-full items-center justify-center -mt-5 shadow-lg cursor-pointer transition-transform hover:scale-105 active:scale-95"
         >
           <Plus className="h-5 w-5 stroke-[3]" />
         </button>
@@ -251,11 +251,11 @@ export default function DashboardLayoutClient({ user, children }) {
           href="/reports"
           className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all ${
             pathname === '/reports'
-              ? 'text-[var(--text-primary)]'
-              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              ? 'text-[var(--text-primary)] font-black'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-semibold'
           }`}
         >
-          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/reports' ? 'bg-white/15 text-white' : ''}`}>
+          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/reports' ? 'bg-[var(--text-primary)]/15 text-[var(--text-primary)] shadow-xs' : ''}`}>
             <BarChart3 className="h-5 w-5" />
           </div>
           <span className="text-[9px] font-bold">Analytics</span>
@@ -265,11 +265,11 @@ export default function DashboardLayoutClient({ user, children }) {
           onClick={() => setMoreDrawerOpen(true)}
           className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all cursor-pointer ${
             pathname === '/budgets' || pathname === '/debts' || pathname.startsWith('/admin')
-              ? 'text-[var(--text-primary)]'
-              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              ? 'text-[var(--text-primary)] font-black'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-semibold'
           }`}
         >
-          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/budgets' || pathname === '/debts' ? 'bg-white/15 text-white' : ''}`}>
+          <div className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${pathname === '/budgets' || pathname === '/debts' ? 'bg-[var(--text-primary)]/15 text-[var(--text-primary)] shadow-xs' : ''}`}>
             <Menu className="h-5 w-5" />
           </div>
           <span className="text-[9px] font-bold">More</span>

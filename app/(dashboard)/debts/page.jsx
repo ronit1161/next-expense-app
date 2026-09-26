@@ -241,10 +241,10 @@ export default function DebtsPage() {
             <HandCoins className="h-3.5 w-3.5" />
             <span>Peer Ledger &bull; Lending &amp; Borrowing</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Peer Debt &amp; Lending
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-[var(--text-muted)]">
             Track money lent out to peers and obligations you need to settle.
           </p>
         </div>
@@ -284,12 +284,12 @@ export default function DebtsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Receivable (Lent) */}
         <div className="fintech-card p-6 rounded-3xl relative overflow-hidden group">
-          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100 dark:border-white/5">
+          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-[var(--border-clay)]">
             <div className="flex items-center gap-2.5">
               <div className="h-9 w-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />
               </div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-semibold text-[var(--text-muted)]">
                 Outstanding Receivable
               </span>
             </div>
@@ -297,22 +297,22 @@ export default function DebtsPage() {
               To Receive
             </span>
           </div>
-          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight my-1 tabular-nums">
+          <div className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] tracking-tight my-1 tabular-nums">
             {formatCurrency(summary.totalReceivable)}
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-[var(--text-muted)] mt-1">
             Total capital lent out and owed to you by contacts
           </p>
         </div>
 
         {/* Payable (Borrowed) */}
         <div className="fintech-card p-6 rounded-3xl relative overflow-hidden group">
-          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100 dark:border-white/5">
+          <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-[var(--border-clay)]">
             <div className="flex items-center gap-2.5">
               <div className="h-9 w-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400">
                 <ArrowDownLeft className="h-4 w-4 stroke-[2.5]" />
               </div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-semibold text-[var(--text-muted)]">
                 Outstanding Payable
               </span>
             </div>
@@ -323,7 +323,7 @@ export default function DebtsPage() {
           <div className="text-3xl sm:text-4xl font-black text-rose-600 dark:text-rose-400 tracking-tight my-1 tabular-nums">
             {formatCurrency(summary.totalPayable)}
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-[var(--text-muted)] mt-1">
             Total debt obligations you have borrowed and need to return
           </p>
         </div>
@@ -332,13 +332,13 @@ export default function DebtsPage() {
       {/* 3. TABS & FILTER TOOLBAR */}
       <div className="space-y-6">
         <div className="fintech-card p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl">
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--bg-recessed)] border border-[var(--border-clay)]">
             <button
               onClick={() => setActiveTab('loans')}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'loans'
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-sm'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               Active Ledgers ({loans.length})
@@ -347,8 +347,8 @@ export default function DebtsPage() {
               onClick={() => setActiveTab('contacts')}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === 'contacts'
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] shadow-sm'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               Directory ({contacts.length})
@@ -360,22 +360,22 @@ export default function DebtsPage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-slate-900 dark:focus:ring-white transition"
+                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-primary)] cursor-pointer focus:outline-none focus:ring-1 focus:ring-[var(--brand-accent)] transition"
               >
-                <option value="" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">All Types</option>
-                <option value="LENT" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Lent (Receivable)</option>
-                <option value="BORROWED" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Borrowed (Payable)</option>
+                <option value="" className="bg-[var(--bg-card)] text-[var(--text-primary)]">All Types</option>
+                <option value="LENT" className="bg-[var(--bg-card)] text-[var(--text-primary)]">Lent (Receivable)</option>
+                <option value="BORROWED" className="bg-[var(--bg-card)] text-[var(--text-primary)]">Borrowed (Payable)</option>
               </select>
 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-slate-900 dark:focus:ring-white transition"
+                className="py-1.5 px-3 text-xs font-semibold rounded-xl bg-[var(--bg-recessed)] border border-[var(--border-clay)] text-[var(--text-primary)] cursor-pointer focus:outline-none focus:ring-1 focus:ring-[var(--brand-accent)] transition"
               >
-                <option value="" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">All Statuses</option>
-                <option value="PENDING" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Pending</option>
-                <option value="PARTIAL" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Partial</option>
-                <option value="SETTLED" className="bg-white dark:bg-[#13141D] text-slate-900 dark:text-white">Settled</option>
+                <option value="" className="bg-[var(--bg-card)] text-[var(--text-primary)]">All Statuses</option>
+                <option value="PENDING" className="bg-[var(--bg-card)] text-[var(--text-primary)]">Pending</option>
+                <option value="PARTIAL" className="bg-[var(--bg-card)] text-[var(--text-primary)]">Partial</option>
+                <option value="SETTLED" className="bg-[var(--bg-card)] text-[var(--text-primary)]">Settled</option>
               </select>
             </div>
           )}
@@ -392,10 +392,10 @@ export default function DebtsPage() {
               <Receipt className="h-7 w-7" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base font-bold text-[var(--text-primary)]">
                 No Peer Ledgers Found
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+              <p className="text-xs text-[var(--text-muted)] mt-1 max-w-sm mx-auto">
                 No recorded lending or borrowing entries match your filters.
               </p>
             </div>
