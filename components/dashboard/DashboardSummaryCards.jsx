@@ -125,10 +125,10 @@ export default function DashboardSummaryCards({ summary }) {
           onClick={handleQuickAdd}
           className="fintech-action-btn fintech-action-btn-primary hover:scale-102"
         >
-          <div className="h-8 w-8 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center text-white dark:text-slate-900">
+          <div className="h-8 w-8 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center">
             <Plus className="h-4 w-4 stroke-[3]" />
           </div>
-          <span className="text-xs font-heading font-black text-white dark:text-slate-900">Top Up / Add</span>
+          <span className="text-xs font-heading font-black">Record</span>
         </button>
       </div>
 
