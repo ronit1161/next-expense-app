@@ -251,6 +251,7 @@ export async function getDashboardDataAction() {
           payable,
           remainingBudget,
           budgetLimit,
+          userName: user.name || 'ExpenseWise Member',
         },
         analytics: {
           monthlyTrend,

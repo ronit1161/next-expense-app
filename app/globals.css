@@ -377,6 +377,12 @@
   box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.55);
 }
 
+@media (min-width: 768px) {
+  .fintech-bottom-nav {
+    display: none !important;
+  }
+}
+
 /* Text helpers */
 .text-charcoal {
   color: var(--text-primary);
